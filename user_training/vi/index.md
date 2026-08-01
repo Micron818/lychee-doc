@@ -15,6 +15,7 @@
 
 | Nhóm | Trạng thái |
 |------|------------|
+| 00-overview (OV-01～OV-05) | Chưa bắt đầu |
 | 01-getting-started | Chưa bắt đầu |
 | 02-roles | Chưa bắt đầu |
 | 03-process-playbooks (PB-01～PB-06) | Chưa bắt đầu |

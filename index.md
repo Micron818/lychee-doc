@@ -16,9 +16,13 @@ hero:
       link: /user_training/glossary
 features:
   - title: 用户教育训练
-    details: 按角色与端到端剧本组织，面向操作人员与实施培训。
+    details: 整体流程全景 → 角色手册 → 端到端剧本，面向操作人员与实施培训。
     link: /user_training/
     linkText: 进入训练文档
+  - title: 整体流程 OV-01～05
+    details: 跨模块价值链与关账协作概念图；动手前先建立地图。
+    link: /user_training/zh/00-overview/
+    linkText: 查看业务全景
   - title: 流程剧本 PB-01～06
     details: 主数据、销售、采购、生产、关账、导出打印等优先场景。
     link: /user_training/zh/03-process-playbooks/PB-01-master-data-ready

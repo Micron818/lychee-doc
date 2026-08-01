@@ -26,6 +26,18 @@ function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
       ],
     },
     {
+      text: '整体流程',
+      collapsed: false,
+      items: [
+        { text: '本节索引', link: '/user_training/zh/00-overview/' },
+        { text: 'OV-01 系统流程地图', link: '/user_training/zh/00-overview/01-system-process-map' },
+        { text: 'OV-02 销货闭环', link: '/user_training/zh/00-overview/02-order-to-cash' },
+        { text: 'OV-03 采购闭环', link: '/user_training/zh/00-overview/03-procure-to-pay' },
+        { text: 'OV-04 计划生产', link: '/user_training/zh/00-overview/04-plan-to-produce' },
+        { text: 'OV-05 关账协作', link: '/user_training/zh/00-overview/05-period-close-collaboration' },
+      ],
+    },
+    {
       text: '角色手册',
       collapsed: false,
       items: [
