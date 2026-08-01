@@ -1,6 +1,6 @@
 # 用户训练文档写作约定
 
-> 适用于 `project_doc/user_training/` 下全部文档。
+> 适用于 `lychee-doc/user_training/` 下全部文档。
 
 ## 1. 语言
 
@@ -66,8 +66,8 @@
 
 | 文档位置 | 读者 | 内容 |
 |----------|------|------|
-| `project_doc/user_training/` | 用户、实施、培训师 | 操作步骤、验收、禁忌 |
-| `project_doc/system_design/` | 研发 | 技术方案、SPI、架构 |
+| `lychee-doc/user_training/` | 用户、实施、培训师 | 操作步骤、验收、禁忌 |
+| `lychee-doc/system_design/` | 研发 | 技术方案、SPI、架构 |
 | `lychee-backend/docs/` | 研发 | Schema、状态机、实现计划 |
 
 训练文档需要状态规则时，从设计文档**翻译**过来，不整段复制。
@@ -78,4 +78,4 @@
 - [ ] 菜单名与系统 `vi-VN`（或现行越南语）界面文案一致  
 - [ ] 缩写（SO/PO/GR…）保持与中文版相同  
 - [ ] 步骤编号与验收标准与中文版一致（禁止擅自增删业务步骤）  
-- [ ] 更新 `vi/README.md` 同步状态表  
+- [ ] 更新 `vi/index.md` 同步状态表  

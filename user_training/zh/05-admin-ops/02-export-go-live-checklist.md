@@ -55,4 +55,4 @@
 
 ## 规则来源（可选）
 
-`project_doc/system_design/report/README.md` 中 P0/P2「上线前手动操作」章节。
+`system_design/report/index.md` 中 P0/P2「上线前手动操作」章节。

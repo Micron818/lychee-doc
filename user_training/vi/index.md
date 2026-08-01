@@ -23,5 +23,5 @@
 
 ## Liên kết
 
-- Tổng quan（中文）：[`../README.md`](../README.md)  
+- Tổng quan（中文）：[`../`](../)  
 - Quy ước viết：[`../00-conventions.md`](../00-conventions.md)

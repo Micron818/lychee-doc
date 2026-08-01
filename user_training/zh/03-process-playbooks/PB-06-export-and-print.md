@@ -69,4 +69,4 @@
 
 ## 规则来源（可选）
 
-`project_doc/system_design/report/README.md`（仅供培训师了解能力边界，勿整节照念）。
+`system_design/report/index.md`（仅供培训师了解能力边界，勿整节照念）。

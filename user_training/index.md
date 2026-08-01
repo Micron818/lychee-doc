@@ -7,7 +7,18 @@
 ## 目标
 
 面向终端用户与关键管理员，提供可课堂讲授、可自学跟练的操作文档。  
-与 `project_doc/system_design/`（研发设计）、`lychee-backend/docs/`（schema / 实现计划）分离：**本文档只讲「谁、何时、点哪里、结果怎样」**。
+与 [`system_design/`](../system_design/)（研发设计）、`lychee-backend/docs/`（schema / 实现计划）分离：**本文档只讲「谁、何时、点哪里、结果怎样」**。
+
+## 如何浏览（VitePress）
+
+在仓库根目录 `lychee-doc` 执行：
+
+```bash
+pnpm install
+pnpm docs:dev
+```
+
+然后打开本地站点，从 [训练首页](./) 或站点导航「用户训练」进入。正式环境将部署构建产物（见仓库根 [`README.md`](../README.md)）。
 
 ## 语言与版本同步
 
@@ -74,7 +85,7 @@
 
 ### 模块速查
 
-- [模块速查索引](./zh/04-module-quickref/README.md)
+- [模块速查索引](./zh/04-module-quickref/)
 
 ### 运维开通
 
@@ -83,7 +94,7 @@
 
 ## 越南文
 
-见 [`vi/README.md`](./vi/README.md)。目录结构与 `zh/` 镜像；当前为占位，待中文剧本试讲稳定后启动翻译。
+见 [`vi/`](./vi/)。目录结构与 `zh/` 镜像；当前为占位，待中文剧本试讲稳定后启动翻译。
 
 ## 资产
 
