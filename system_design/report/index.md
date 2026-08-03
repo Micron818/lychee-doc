@@ -89,6 +89,7 @@
 - 过期作业清理定时任务（`@Scheduled`，与 OSS 生命周期规则双保险）。
 - 更多清单导出：只需新增一个 Handler + 前端一个按钮，框架零改动。
 - **新单据类 PDF**：复用后端 `*PdfRenderer`/模板 + 前端 `PdfPreview*` 基座（见 04 §6）；禁止再开前端打印页双轨。
+- **请购单打印（仅 Print）**：比照订购单实现 `GET /purchase-requisitions/{id}/pdf` + `PurchaseRequisitionPdfRenderer` + 原页 Modal；无 `ExportHandler` / 无「下载 PDF」（无归档需求时省略导出层）。
 
 ## 关键风险与对策
 
