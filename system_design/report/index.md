@@ -46,7 +46,7 @@
 ### P1 — 订购单打印表单（✅ 已实现，2026-07-31；版式已收敛，见下）
 
 1. ✅ 后端数据组装：`PurchaseOrderPrintService` 一次性聚合公司抬头、供应商、字典、明细等（内部复用，不再对外暴露 `print-data` REST）。
-2. ✅ 入口：列表操作列「打印」与详情抽屉「打印」按钮，新标签打开 `/scm/purchase-orders/print?id={id}`。
+2. ✅ 入口：列表操作列「打印」与详情抽屉「打印」按钮（原页 Modal 预览）。
 
 ### P2 — 订购单服务端 PDF（✅ 已实现，2026-07-31）
 
@@ -61,7 +61,7 @@
 
 1. ✅ 抽出 `PurchaseOrderPdfRenderer`：组模型 + 渲染共用；导出 Handler 与预览接口均委派它。
 2. ✅ `GET /api/v1/scm/purchase-orders/{id}/pdf`：同步直出 `application/pdf`（`Content-Disposition: inline`），不建作业、不落 OSS；权限 `/scm/purchase-orders:read`。删除原 `print-data` REST 端点（service 保留）。
-3. ✅ 打印预览：取 PDF blob → objectURL → iframe；**日常入口为原页 Modal**（列表操作列 / 详情抽屉），避免新标签二次 SPA 引导；`/print?id=` 深链路由保留（fullscreen）。工具条「打印」/`下载 PDF`（导出作业）/关闭；`autoPrint=1` 在 iframe load 后触发。
+3. ✅ 打印预览：取 PDF blob → objectURL → iframe；**唯一入口为原页近全屏 Modal**（列表 / 详情抽屉），已移除 `/print` 深链路由（Modal 已近全屏，无需再二次引导独立页）。工具条「打印」/「下载 PDF」（导出作业）/关闭。
 4. ✅ 版式、草稿水印、页码、三语标签仅维护模板一处；预览成本转移到服务端渲染（单张亚秒级）。
 
 ### 安全加固 — 导出中心访问控制（✅ 已实现，2026-08-03）
