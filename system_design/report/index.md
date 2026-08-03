@@ -61,7 +61,7 @@
 
 1. ✅ 抽出 `PurchaseOrderPdfRenderer`：组模型 + 渲染共用；导出 Handler 与预览接口均委派它。
 2. ✅ `GET /api/v1/scm/purchase-orders/{id}/pdf`：同步直出 `application/pdf`（`Content-Disposition: inline`），不建作业、不落 OSS；权限 `/scm/purchase-orders:read`。删除原 `print-data` REST 端点（service 保留）。
-3. ✅ 打印页：取 PDF blob → objectURL → iframe 内嵌浏览器 PDF 查看器；工具条「打印」调用 `iframe.contentWindow.print()`，「下载 PDF」仍走导出作业；`autoPrint=1` 在 iframe load 后触发；删除 `PrintablePO.tsx`，`print.less` 精简为工具条与框架隐藏。
+3. ✅ 打印预览：取 PDF blob → objectURL → iframe；**日常入口为原页 Modal**（列表操作列 / 详情抽屉），避免新标签二次 SPA 引导；`/print?id=` 深链路由保留（fullscreen）。工具条「打印」/`下载 PDF`（导出作业）/关闭；`autoPrint=1` 在 iframe load 后触发。
 4. ✅ 版式、草稿水印、页码、三语标签仅维护模板一处；预览成本转移到服务端渲染（单张亚秒级）。
 
 ### 安全加固 — 导出中心访问控制（✅ 已实现，2026-08-03）
