@@ -1,7 +1,7 @@
 # Lychee Doc
 
 Lychee ERP 文档仓库：用户教育训练 + 系统设计。  
-浏览站点基于 **VitePress**（SSG）。
+浏览站点基于 **VitePress**（SSG）。流程图使用 Markdown 的 mermaid 围栏代码块，由 `vitepress-plugin-mermaid` 渲染。
 
 ## 目录
 

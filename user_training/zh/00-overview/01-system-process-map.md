@@ -17,27 +17,21 @@
 
 ```mermaid
 flowchart LR
-  ADM[ADM 系统管理]
-  BASIS[BASIS 基础资料]
-  MM[MM 物料]
-  SD[SD 销售]
-  SCM[SCM 采购]
-  WM[WM 仓储]
-  PP[PP 生产计划]
-  FI[FI 财务]
-  REPORT[REPORT 报表]
-
-  ADM -.->|权限与菜单| SD & SCM & WM & PP & FI
-  BASIS --> MM
-  MM --> SD & SCM & PP & WM
-  SD --> WM
+  BASIS[BASIS 基础资料] --> MM[MM 物料]
+  MM --> SD[SD 销售]
+  MM --> SCM[SCM 采购]
+  MM --> PP[PP 生产计划]
+  SD --> WM[WM 仓储]
   SCM --> WM
-  PP --> WM & SCM
-  WM --> FI
+  PP --> WM
+  WM --> FI[FI 财务]
   SD --> FI
   SCM --> FI
-  SD & SCM --> REPORT
+  SD --> R[REPORT 报表]
+  SCM --> R
 ```
+
+> **ADM 系统管理**不画进主链：它为上述模块配置菜单与权限，贯穿全程。
 
 | 模块 | 用户常做的事 | 关键单据/对象（缩写） |
 |------|--------------|----------------------|
@@ -59,23 +53,18 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  MD[主数据<br/>公司/工厂/物料/客户/供应商]
-  OTC[销货<br/>SO → DN]
-  PTP[采购<br/>PR → PO → GR]
-  MFG[计划生产<br/>BOM → MRP → PLO → MO → MOR]
-  STK[库存与期间<br/>现存量 / 流水 / 期末结账]
-  FIN[财务<br/>AP·AR / 收付款 / 成本结算 / 会计期间]
-  EXP[导出与打印<br/>Excel / 打印 / PDF]
-
-  MD --> OTC & PTP & MFG
-  OTC --> STK
+  MD[主数据：公司/工厂/物料/客商]
+  MD --> OTC[销货：SO - DN]
+  MD --> PTP[采购：PR - PO - GR]
+  MD --> MFG[计划生产：BOM - MRP - MO - MOR]
+  OTC --> STK[库存与期间]
   PTP --> STK
   MFG --> STK
+  OTC --> FIN[财务：发票/收付款/成本/期间]
   PTP --> FIN
-  OTC --> FIN
   STK --> FIN
+  MD -.-> EXP[导出与打印]
   PTP -.-> EXP
-  MD -.-> EXP
 ```
 
 ## 4. 角色与剧本对照

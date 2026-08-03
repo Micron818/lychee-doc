@@ -14,7 +14,7 @@ flowchart TB
   WMCHK[仓储：当期收发盘点清完]
   FICHK[财务：发票/成本进度检查]
   WMCLOSE[库存期末结账]
-  COST[成本结算<br/>草稿→定稿→过账]
+  COST[成本结算：草稿-定稿-过账]
   REOPEN[仓储申请重开库存期]
   INV[财务作废成本结算]
   FIClose[会计期间结账]

@@ -1,10 +1,12 @@
 import { defineConfig, type DefaultTheme } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
 /**
  * Lychee Doc — VitePress
  *
  * 内容目录保持 user_training/zh 与 user_training/vi 镜像约定。
  * 站点默认语言为中文；越南文入口挂在导航，待内容就绪后再升级为完整 locales 镜像。
+ * Mermaid：```mermaid 代码块由 vitepress-plugin-mermaid 渲染为流程图。
  */
 function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
   return [
@@ -112,7 +114,8 @@ function systemDesignSidebar(): DefaultTheme.SidebarItem[] {
   ]
 }
 
-export default defineConfig({
+export default withMermaid({
+  ...defineConfig({
   title: 'Lychee ERP 文档',
   description: 'Lychee ERP 用户训练与系统设计文档',
   lang: 'zh-CN',
@@ -123,6 +126,13 @@ export default defineConfig({
   srcExclude: ['README.md', '**/assets/**'],
 
   head: [['meta', { name: 'theme-color', content: '#1a5f4a' }]],
+
+  // pnpm 下预构建 mermaid，避免开发态 ambiguous export
+  vite: {
+    optimizeDeps: {
+      include: ['mermaid'],
+    },
+  },
 
   themeConfig: {
     logo: undefined,
@@ -185,5 +195,14 @@ export default defineConfig({
     darkModeSwitchTitle: '切换到深色',
 
     socialLinks: [],
+  },
+  }),
+  // Mermaid 默认主题；深色模式由插件按 body.dark 切换
+  mermaid: {
+    theme: 'base',
+    flowchart: {
+      htmlLabels: true,
+      curve: 'basis',
+    },
   },
 })
