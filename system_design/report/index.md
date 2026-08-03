@@ -67,7 +67,7 @@
 
 ### 预览基座抽取（✅ 已实现，2026-08-03）
 
-1. ✅ 前端共享：`components/PdfPreview`（`PdfBlobViewer` + `PdfPreviewModal`）+ `utils/blob`；订购单 `print/` 仅为领域适配层。
+1. ✅ 前端共享：`components/PdfPreview`（`PdfBlobViewer` + `PdfPreviewModal`）+ `utils/blob`；订购单 `print/PurchaseOrderPdfPreviewModal.tsx` 为单文件领域适配范本。
 2. ✅ 文档与实现对齐：废弃一期 `/print`、`PrintablePO`、`autoPrint`、`print-data` 现行表述；新单据按 04 §6 清单扩展。
 
 ### 安全加固 — 导出中心访问控制（✅ 已实现，2026-08-03）
