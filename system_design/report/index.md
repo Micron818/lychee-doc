@@ -1,7 +1,7 @@
 # 系统报表与资料导出功能 — 规划文档
 
 > 编写日期：2026-07-31
-> 状态：**P0、P1、P2 已实现**（P0：导出框架 + 供应商 Excel 导出；P1：订购单打印表单；P2：订购单服务端 PDF。前后端编译/类型检查均通过）
+> 状态：**P0、P1、P2 已实现；订购单打印版式已收敛为服务端 PDF 单一来源**（前后端编译/类型检查均通过）
 
 ## 文档索引
 
@@ -19,8 +19,7 @@
 | Excel 生成库 | **Apache Fesod**（`org.apache.fesod:fesod-sheet:2.0.2-incubating`） | EasyExcel → FastExcel 的官方后继，Apache 2.0 许可，注解驱动 + 流式写入低内存，社区活跃（已入 Apache 孵化器） |
 | 导出执行模型 | **统一导出作业框架**（小数据量同步快速返回 + 大数据量异步作业） | 复用 MRP 已验证的 `@Async` + `@TransactionalEventListener` + 手动租户/安全上下文传递范式；一套框架服务所有后续报表 |
 | 文件交付方式 | **上传 OSS + CDN 签名 URL 下载** | 复用现有 `StorageService`；避免长 HTTP 流式响应；天然支持多实例部署与下载中心重复下载 |
-| 订购单打印（一期） | **前端专用打印视图 + `window.print()`** | 零后端依赖、开发最快、antd 生态内解决；ERP 单据打印的主流轻量做法 |
-| 服务端 PDF（二期，可选） | **openhtmltopdf**（`io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.40`）+ Thymeleaf 模板 + 内嵌 Noto Sans CJK 字体 | 需要归档 PDF / 邮件发送 / 批量打印时再引入；HTML+CSS 模板维护成本远低于 JasperReports |
+| 订购单打印 / 归档 | **服务端 PDF 单一来源**（Thymeleaf + openhtmltopdf）；打印页 iframe 预览，下载走导出作业 | 打印件与归档件像素级一致；版式、水印、三语标签单点维护；预览成本转移到服务端渲染 |
 | 后端代码位置 | 新增 Gradle 模块 **`lychee-erp-report`**（作业编排）+ SPI 接口与 Excel 工具置于 `lychee-erp-common`，各领域模块实现自己的导出 Handler | 与现有按领域分模块的结构一致；report 模块不依赖任何领域模块，避免循环依赖 |
 | 前端交互 | 共享 `ExportButton` 组件（`canAction(pathname, 'export')` 权限门控，权限系统已内建 `export` action）+ `useExportJob` 轮询 Hook + 「导出中心」页面 | 复用 MRP 前端的 ProTable `polling` 范式与工具栏按钮范式 |
 
@@ -44,20 +43,26 @@
    - OSS 为 `*/exports/` 前缀配置生命周期规则（30 天自动删除，与 `lychee.export.retention-days` 对齐）。
    - 后台菜单/权限为运行时数据（本专案惯例，无 Liquibase 种子）：在系统管理中新增菜单 `/report/export-jobs`（locale `menu.report.exportJobs`，父级 `menu.report`）并配置 `read`/`delete` 权限；为 `/scm/suppliers` 菜单追加 `export` 动作权限，再授予相应角色。
 
-### P1 — 订购单打印表单（✅ 已实现，2026-07-31）
+### P1 — 订购单打印表单（✅ 已实现，2026-07-31；版式已收敛，见下）
 
-1. ✅ 后端：`GET /api/v1/scm/purchase-orders/{id}/print-data`（沿用 `/scm/purchase-orders:read` 权限）。`PurchaseOrderPrintServiceImpl` 一次性聚合：公司抬头（factory → company 主数据，跨模块直接注入 basis Repository，与 WM 模块惯例一致）、供应商完整信息、币别/付款条件字典解析、状态枚举三语翻译、明细按 `itemNo` 排序且 `fetch(material, unit)` 防 N+1、打印人/打印时间；`DRAFT` 单返回 `draft: true` 供前端加水印，接口不做状态硬限制。
-2. ✅ 前端：`/scm/purchase-orders/print?id={id}` 打印视图页（约定式路由，不加菜单）。`PrintablePO` 纯语义化 `<table>` 版式 + `print.less`（`@page` A4、`thead` 跨页重复、行与签核栏 `break-inside: avoid`）；挂载时给 `body` 加 class 隐藏应用框架（限定作用域，不影响其他页面打印）；草稿对角线水印；`autoPrint=1` 支持打开即弹打印对话框；金额按币别 locale 千分位格式化；document.title 设为单号便于打印存档命名。
-3. ✅ 入口：列表操作列「打印」（`extraActions`）与详情抽屉底部「打印」按钮，均新标签打开；`component.button.print/close` 与 `pages.scm.purchaseOrders.print.*` 三语文案补齐。
+1. ✅ 后端数据组装：`PurchaseOrderPrintService` 一次性聚合公司抬头、供应商、字典、明细等（内部复用，不再对外暴露 `print-data` REST）。
+2. ✅ 入口：列表操作列「打印」与详情抽屉「打印」按钮，新标签打开 `/scm/purchase-orders/print?id={id}`。
 
 ### P2 — 订购单服务端 PDF（✅ 已实现，2026-07-31）
 
-1. ✅ 依赖：`io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.40`（新社区分支，包名仍为 `com.openhtmltopdf`）+ `org.thymeleaf:thymeleaf-spring6`（Spring Boot BOM 管理）。**与 04 文档的偏差**：依赖放在 `lychee-erp-common` 而非 `lychee-erp-report`——Handler 在领域模块、领域模块只依赖 common，与 P0 放置 Fesod 的理由一致。
-2. ✅ 框架扩展（唯一改动点）：`ExportFileFormat` 枚举（副档名 + Content-Type）+ `DataExportHandler.fileFormat()`（默认 XLSX），`ExportJobExecutor` 按格式生成临时文件与 OSS 对象路径。
-3. ✅ 渲染工具：common 新增 `PdfRenderSupport`（独立 `SpringTemplateEngine` + `ClassLoaderTemplateResolver`，`#{key}` 直连既有 i18n 资源；内嵌 Noto Sans（拉丁/越南语）与 Noto Sans SC（简中子集）Regular/Bold 共 4 个字体常驻内存约 18MB，Docker 镜像无需系统字体）。
-4. ✅ scm：`ExportJobType.SCM_PURCHASE_ORDER_PDF` + `PurchaseOrderPdfExportHandler`（权限 `/scm/purchase-orders:export`；`params.ids` 支持单张与批量，批量合并为一份 PDF 每张独立分页；数据组装复用 P1 的 `PurchaseOrderPrintService`；`count()` 以明细行数估算工作量驱动同步/异步分流）+ 模板 `templates/print/purchase-order-pdf.html`（版式移植 P1 打印视图，`-fs-table-paginate` 跨页重复表头、页脚页码 `page/pages` 计数器、草稿水印）。
-5. ✅ 前端：`ExportButton` 支持自定义 `label`；打印视图页工具条与详情抽屉底部新增「下载 PDF」（走导出作业框架，同步小单直接下载、大批量异步 + 导出中心可重复下载）；三语文案。
-6. ⬜ 上线前手动操作：为 `/scm/purchase-orders` 菜单追加 `export` 动作权限并授予角色（同 P0 供应商导出的配置方式）。
+1. ✅ 依赖：`io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.40` + `org.thymeleaf:thymeleaf-spring6`（置于 `lychee-erp-common`）。
+2. ✅ 框架扩展：`ExportFileFormat` + `DataExportHandler.fileFormat()`；`PdfRenderSupport` + 内嵌 Noto 字体。
+3. ✅ scm：`SCM_PURCHASE_ORDER_PDF` Handler + Thymeleaf 模板；「下载 PDF」走导出作业留历史。
+4. ⬜ 上线前：为 `/scm/purchase-orders` 追加 `export` 动作权限。
+
+### 版式收敛 — 打印页改为服务端 PDF 预览（✅ 已实现，2026-08-03）
+
+背景：P1 前端 `PrintablePO` 与 P2 Thymeleaf 模板双轨维护会漂移；要求打印件与归档件像素级一致。
+
+1. ✅ 抽出 `PurchaseOrderPdfRenderer`：组模型 + 渲染共用；导出 Handler 与预览接口均委派它。
+2. ✅ `GET /api/v1/scm/purchase-orders/{id}/pdf`：同步直出 `application/pdf`（`Content-Disposition: inline`），不建作业、不落 OSS；权限 `/scm/purchase-orders:read`。删除原 `print-data` REST 端点（service 保留）。
+3. ✅ 打印页：取 PDF blob → objectURL → iframe 内嵌浏览器 PDF 查看器；工具条「打印」调用 `iframe.contentWindow.print()`，「下载 PDF」仍走导出作业；`autoPrint=1` 在 iframe load 后触发；删除 `PrintablePO.tsx`，`print.less` 精简为工具条与框架隐藏。
+4. ✅ 版式、草稿水印、页码、三语标签仅维护模板一处；预览成本转移到服务端渲染（单张亚秒级）。
 
 ### 安全加固 — 导出中心访问控制（✅ 已实现，2026-08-03）
 
@@ -69,7 +74,7 @@
 4. ✅ Liquibase：`0803-001-export-jobs-owner-index.sql` 增加 `(tenant_id, created_by)` 索引。
 5. 前端零改动：非管理员在导出中心自然只看到自己的作业。
 
-另评估结论（不改动）：P1 浏览器打印与 P2 服务端 PDF 并存（即时打印 vs 归档/批量，场景互补）；打印页 URL 带单据 ID 风险可接受（`read` 权限 + 租户判别列拦截，与列表页可见范围一致）。
+另评估结论：打印页 URL 带单据 ID 风险可接受（`read` 权限 + 租户判别列拦截，与列表页可见范围一致）。
 
 ### 后续按需演进
 
@@ -86,4 +91,4 @@
 | 异步线程租户上下文丢失导致数据串租户 | 严格复制 MRP 范式：事件携带 `tenantId` + `Authentication`，监听器 `finally` 中清理；Handler 内所有查询走 JPA（`@TenantId` 自动过滤） |
 | 签名 URL 泄露 | 下载 URL 每次通过 API 实时签发，有效期 5 分钟；不落库、不返回长效 URL |
 | 租户内越权下载导出文件 | 作业默认仅发起人本人可见（管理员例外）；下载时重验 Handler 业务导出权限；下载留审计日志 |
-| 浏览器打印版式差异 | 打印视图使用表格布局 + 标准打印 CSS（`@page`、`break-inside`），验收覆盖 Chrome/Edge；如客户要求像素级一致再启动 P2 服务端 PDF |
+| 打印/归档版式漂移 | 版式收敛为 Thymeleaf 模板单一来源；打印页 iframe 预览同一 PDF |
