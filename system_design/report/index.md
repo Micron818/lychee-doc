@@ -10,7 +10,7 @@
 | [01-技术选型评估.md](./01-技术选型评估.md) | 需求分类、Excel / PDF / 打印 / 交付方式的方案对比与结论 |
 | [02-导出框架总体设计.md](./02-导出框架总体设计.md) | 异步导出框架：模块划分、作业表、SPI、API、前端组件、OSS 交付 |
 | [03-示例-供应商Excel导出.md](./03-示例-供应商Excel导出.md) | 第一个落地示例：供应商清单导出 Excel 的端到端实现方案 |
-| [04-示例-订购单打印表单.md](./04-示例-订购单打印表单.md) | 第二个落地示例：订购单可打印格式表单（浏览器打印，预留服务端 PDF） |
+| [04-示例-订购单打印表单.md](./04-示例-订购单打印表单.md) | 第二个落地示例：订购单服务端 PDF + 原页 Modal iframe 预览 |
 
 ## 核心决策摘要
 
@@ -19,7 +19,8 @@
 | Excel 生成库 | **Apache Fesod**（`org.apache.fesod:fesod-sheet:2.0.2-incubating`） | EasyExcel → FastExcel 的官方后继，Apache 2.0 许可，注解驱动 + 流式写入低内存，社区活跃（已入 Apache 孵化器） |
 | 导出执行模型 | **统一导出作业框架**（小数据量同步快速返回 + 大数据量异步作业） | 复用 MRP 已验证的 `@Async` + `@TransactionalEventListener` + 手动租户/安全上下文传递范式；一套框架服务所有后续报表 |
 | 文件交付方式 | **上传 OSS + CDN 签名 URL 下载** | 复用现有 `StorageService`；避免长 HTTP 流式响应；天然支持多实例部署与下载中心重复下载 |
-| 订购单打印 / 归档 | **服务端 PDF 单一来源**（Thymeleaf + openhtmltopdf）；打印页 iframe 预览，下载走导出作业 | 打印件与归档件像素级一致；版式、水印、三语标签单点维护；预览成本转移到服务端渲染 |
+| 订购单打印 / 归档 | **服务端 PDF 单一来源**（Thymeleaf + openhtmltopdf）；原页 Modal + iframe 预览，下载走导出作业 | 打印件与归档件像素级一致；版式、水印、三语标签单点维护；预览成本转移到服务端渲染 |
+| 单据 PDF 前端基座 | 共享 `PdfBlobViewer` / `PdfPreviewModal` + `utils/blob`；领域仅薄适配 | 禁止再开 `/print` 深链、前端 HTML 版式或 `autoPrint`；新单据复用同一壳 |
 | 后端代码位置 | 新增 Gradle 模块 **`lychee-erp-report`**（作业编排）+ SPI 接口与 Excel 工具置于 `lychee-erp-common`，各领域模块实现自己的导出 Handler | 与现有按领域分模块的结构一致；report 模块不依赖任何领域模块，避免循环依赖 |
 | 前端交互 | 共享 `ExportButton` 组件（`canAction(pathname, 'export')` 权限门控，权限系统已内建 `export` action）+ `useExportJob` 轮询 Hook + 「导出中心」页面 | 复用 MRP 前端的 ProTable `polling` 范式与工具栏按钮范式 |
 
@@ -61,8 +62,13 @@
 
 1. ✅ 抽出 `PurchaseOrderPdfRenderer`：组模型 + 渲染共用；导出 Handler 与预览接口均委派它。
 2. ✅ `GET /api/v1/scm/purchase-orders/{id}/pdf`：同步直出 `application/pdf`（`Content-Disposition: inline`），不建作业、不落 OSS；权限 `/scm/purchase-orders:read`。删除原 `print-data` REST 端点（service 保留）。
-3. ✅ 打印预览：取 PDF blob → objectURL → iframe；**唯一入口为原页近全屏 Modal**（列表 / 详情抽屉），已移除 `/print` 深链路由（Modal 已近全屏，无需再二次引导独立页）。工具条「打印」/「下载 PDF」（导出作业）/关闭。
+3. ✅ 打印预览：取 PDF blob → objectURL → iframe；**唯一入口为原页近全屏 Modal**（列表 / 详情抽屉），已移除 `/print` 深链路由（Modal 已近全屏，无需再二次引导独立页）。工具条「打印」/「下载 PDF」（导出作业）/关闭；**不提供 autoPrint**。
 4. ✅ 版式、草稿水印、页码、三语标签仅维护模板一处；预览成本转移到服务端渲染（单张亚秒级）。
+
+### 预览基座抽取（✅ 已实现，2026-08-03）
+
+1. ✅ 前端共享：`components/PdfPreview`（`PdfBlobViewer` + `PdfPreviewModal`）+ `utils/blob`；订购单 `print/` 仅为领域适配层。
+2. ✅ 文档与实现对齐：废弃一期 `/print`、`PrintablePO`、`autoPrint`、`print-data` 现行表述；新单据按 04 §6 清单扩展。
 
 ### 安全加固 — 导出中心访问控制（✅ 已实现，2026-08-03）
 
@@ -82,6 +88,7 @@
 - 邮件发送供应商：PDF 已落 OSS，追加邮件通道即可。
 - 过期作业清理定时任务（`@Scheduled`，与 OSS 生命周期规则双保险）。
 - 更多清单导出：只需新增一个 Handler + 前端一个按钮，框架零改动。
+- **新单据类 PDF**：复用后端 `*PdfRenderer`/模板 + 前端 `PdfPreview*` 基座（见 04 §6）；禁止再开前端打印页双轨。
 
 ## 关键风险与对策
 
@@ -91,4 +98,4 @@
 | 异步线程租户上下文丢失导致数据串租户 | 严格复制 MRP 范式：事件携带 `tenantId` + `Authentication`，监听器 `finally` 中清理；Handler 内所有查询走 JPA（`@TenantId` 自动过滤） |
 | 签名 URL 泄露 | 下载 URL 每次通过 API 实时签发，有效期 5 分钟；不落库、不返回长效 URL |
 | 租户内越权下载导出文件 | 作业默认仅发起人本人可见（管理员例外）；下载时重验 Handler 业务导出权限；下载留审计日志 |
-| 打印/归档版式漂移 | 版式收敛为 Thymeleaf 模板单一来源；打印页 iframe 预览同一 PDF |
+| 打印/归档版式漂移 | 版式收敛为 Thymeleaf 模板单一来源；原页 Modal + iframe 预览同一 PDF |
