@@ -110,7 +110,7 @@ lychee-erp-{domain}/src/main/resources/templates/excel/
 |----|------|
 | 内存 | 模板填充会加载整本 workbook；**不适合** 跨多期间/多工厂的大结果集 |
 | **进耗存强制范围** | **系统硬限制：导出必须且仅能指定一个库存期间 + 一个工厂**（见 §4.1.1）。以此把结果集收束到「单期间 × 单工厂」，从源头规避模板 fill OOM |
-| 上限 | 仍复用 `lychee.export.max-rows` 作为兜底；正常按期间+工厂导出不应触顶 |
+| 上限 | **`lychee.export.template-max-rows`（默认 50,000）**：`DataExportHandler.usesExcelTemplate()=true` 时由作业层注入为 `ExportContext.maxRows`；清单类仍用 `max-rows`（200,000） |
 | 与清单导出关系 | 超大纯数据导出仍用 `ExcelWriteSupport`；模板路径专供「汇总表 / 套打」 |
 
 选型文档（01）补充一句结论即可（实施时改 01）：复杂 Excel 套打优先 Fesod Fill；POI 手写仅作 Fesod 无法覆盖时的兜底。
@@ -390,7 +390,7 @@ lychee-frontend
 
 ## 8. 后续演进（本期不做）
 
-- `lychee.export.template-max-rows` 独立配置。
+- ~~`lychee.export.template-max-rows` 独立配置。~~ ✅ 已实现（默认 50,000；Handler 声明 `usesExcelTemplate()`）。
 - 租户级模板：OSS 存储 + 配置表选择 template key，`ExcelTemplateWriteSupport` 增加 `InputStream` 重载即可。
 - 其他套打表（对账单、盘点表）只加模板 + Handler。
 - 若业务要求进耗存同时提供「纯数据清单」与「正式汇总表」：可登记两个 `ExportJobType`，或前端下拉选格式（仍共用作业管线）。
