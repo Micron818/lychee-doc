@@ -1,7 +1,7 @@
 # 系统报表与资料导出功能 — 规划文档
 
-> 编写日期：2026-07-31
-> 状态：**P0、P1、P2 已实现；订购单打印版式已收敛为服务端 PDF 单一来源**（前后端编译/类型检查均通过）
+> 编写日期：2026-07-31（P3：2026-08-05）
+> 状态：**P0、P1、P2、P3 已实现**（Excel 模板填充 + 进耗存汇总导出）
 
 ## 文档索引
 
@@ -11,6 +11,7 @@
 | [02-导出框架总体设计.md](./02-导出框架总体设计.md) | 异步导出框架：模块划分、作业表、SPI、API、前端组件、OSS 交付 |
 | [03-示例-供应商Excel导出.md](./03-示例-供应商Excel导出.md) | 第一个落地示例：供应商清单导出 Excel 的端到端实现方案 |
 | [04-示例-订购单打印表单.md](./04-示例-订购单打印表单.md) | 第二个落地示例：订购单服务端 PDF + 原页 Modal iframe 预览 |
+| [05-Excel模板填充与进耗存汇总导出.md](./05-Excel模板填充与进耗存汇总导出.md) | **P3 执行计划**：Fesod 模板填充基础能力 + 进耗存汇总表示例 |
 
 ## 核心决策摘要
 
@@ -21,14 +22,16 @@
 | 文件交付方式 | **上传 OSS + CDN 签名 URL 下载** | 复用现有 `StorageService`；避免长 HTTP 流式响应；天然支持多实例部署与下载中心重复下载 |
 | 订购单打印 / 归档 | **服务端 PDF 单一来源**（Thymeleaf + openhtmltopdf）；原页 Modal + iframe 预览，下载走导出作业 | 打印件与归档件像素级一致；版式、水印、三语标签单点维护；预览成本转移到服务端渲染 |
 | 单据 PDF 前端基座 | 共享 `PdfBlobViewer` / `PdfPreviewModal` + `utils/blob`；领域仅薄适配 | 禁止再开 `/print` 深链、前端 HTML 版式或 `autoPrint`；新单据复用同一壳 |
+| 固定版式 Excel | **Fesod `withTemplate` + fill**（`ExcelTemplateWriteSupport`） | 与清单流式写入分流；版式在 `.xlsx` 模板维护；作业管线零改动（见 05） |
 | 后端代码位置 | 新增 Gradle 模块 **`lychee-erp-report`**（作业编排）+ SPI 接口与 Excel 工具置于 `lychee-erp-common`，各领域模块实现自己的导出 Handler | 与现有按领域分模块的结构一致；report 模块不依赖任何领域模块，避免循环依赖 |
 | 前端交互 | 共享 `ExportButton` 组件（`canAction(pathname, 'export')` 权限门控，权限系统已内建 `export` action）+ `useExportJob` 轮询 Hook + 「导出中心」页面 | 复用 MRP 前端的 ProTable `polling` 范式与工具栏按钮范式 |
 
 ## 报表需求分类（决定架构分层）
 
-1. **清单类导出**（本期）：列表页当前筛选条件下的全量数据导出 Excel。示例：供应商资料导出。
-2. **单据类打印**（本期）：单张业务单据的固定版式表单。示例：订购单打印。
-3. **统计分析类报表**（后续）：聚合查询 + 前端图表展示。本期不做，但导出框架的 Handler SPI 已为其预留（聚合结果同样可导出 Excel）；届时前端按需引入图表库（如 Ant Design Charts）。
+1. **清单类导出**（已实现）：列表页当前筛选条件下的全量数据导出 Excel。示例：供应商资料导出（`ExcelWriteSupport`）。
+2. **单据类打印**（已实现）：单张业务单据的固定版式表单。示例：订购单 PDF（`PdfRenderSupport`）。
+3. **固定版式 Excel / 模板填充**（P3）：标题区 + 明细列表 + 合计等套打 xlsx。示例：进耗存汇总表（`ExcelTemplateWriteSupport`）。
+4. **统计分析类报表**（后续）：聚合查询 + 前端图表展示。框架 Handler SPI 已预留；届时前端按需引入图表库。
 
 ## 实施阶段
 
@@ -82,12 +85,20 @@
 
 另评估结论：打印页 URL 带单据 ID 风险可接受（`read` 权限 + 租户判别列拦截，与列表页可见范围一致）。
 
+### P3 — Excel 模板填充 + 进耗存汇总导出（✅ 已实现，2026-08-05，见 [05](./05-Excel模板填充与进耗存汇总导出.md)）
+
+1. ✅ common：`ExcelTemplateWriteSupport`（classpath 模板 + Fesod fill + 单元测试）。
+2. ✅ wm：`WM_INVENTORY_BALANCE` Handler + `templates/excel/inventory-balance.xlsx`；**系统强制单一「期间 + 工厂」**；标题区展示期间/工厂。
+3. ✅ 前端：`ExportButton.beforeExport` + 进耗存列表接入 + `ExportJobType` 扩展；三语提示文案。
+4. ⬜ 上线前：运行时为 `/wm/inventory-balances` 追加 `export` 动作权限并授予角色。
+
 ### 后续按需演进
 
 - 批量 PDF 列表入口（订购单列表勾选多单导出）：后端 Handler 已支持 `ids` 批量，前端待解决列表复选框当前仅允许勾选 DRAFT 单（服务于批量删除/审核）的语义冲突后即可开放。
 - 邮件发送供应商：PDF 已落 OSS，追加邮件通道即可。
 - 过期作业清理定时任务（`@Scheduled`，与 OSS 生命周期规则双保险）。
 - 更多清单导出：只需新增一个 Handler + 前端一个按钮，框架零改动。
+- **更多模板 Excel**：复用 `ExcelTemplateWriteSupport` + 领域模板 + Handler（见 05）；大清单仍走 `ExcelWriteSupport`。
 - **新单据类 PDF**：复用后端 `*PdfRenderer`/模板 + 前端 `PdfPreview*` 基座（见 04 §6）；禁止再开前端打印页双轨。
 - **请购单打印（仅 Print）**：比照订购单实现 `GET /purchase-requisitions/{id}/pdf` + `PurchaseRequisitionPdfRenderer` + 原页 Modal；无 `ExportHandler` / 无「下载 PDF」（无归档需求时省略导出层）。
 
