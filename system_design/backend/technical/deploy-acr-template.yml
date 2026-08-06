@@ -1,0 +1,66 @@
+name: Build and Deploy to ACR
+ 
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set-tag.outputs.tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Image Tag
+        id: set-tag
+        run: echo "tag=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+
+      - name: Login to Alibaba Cloud ACR
+        uses: aliyun/acr-login@v1
+        with:
+          login-server: ${{ secrets.ACR_REGISTRY }}
+          region-id: ap-southeast-1
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_URL="${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/${{ secrets.ACR_REPOSITORY }}:${{ steps.set-tag.outputs.tag }}"
+          LATEST_URL="${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/${{ secrets.ACR_REPOSITORY }:latest"
+          
+          docker build -t $IMAGE_URL -t $LATEST_URL .
+          docker push $IMAGE_URL
+          docker push $LATEST_URL
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: 22
+          script: |
+            set -e
+            PROJECT_ROOT="/home/deployer/lychee"
+            INFRA_DIR="${PROJECT_ROOT}/lychee-infra"
+            DEPLOY_DIR="${INFRA_DIR}/deploy"
+            
+            # 登錄 ACR (確保服務器有權限拉取鏡像)
+            docker login --username=${{ secrets.ACR_USERNAME }} --password=${{ secrets.ACR_PASSWORD }} ${{ secrets.ACR_REGISTRY }}
+
+            cd $DEPLOY_DIR
+            
+            # 更新鏡像並重啟
+            # 注意：這裡假設您的 docker-compose.yml 已經配置為使用 ACR 的鏡像地址
+            docker-compose pull backend
+            docker-compose up -d --no-deps backend
+            
+            docker image prune -f
+            echo "Deployment Completed Successfully!"

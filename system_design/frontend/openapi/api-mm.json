@@ -1,0 +1,4045 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:9000",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/api/v1/mm/standard-unit-conversions/{id}": {
+            "get": {
+                "tags": [
+                    "standard-unit-conversion-controller"
+                ],
+                "operationId": "get",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseStandardUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "standard-unit-conversion-controller"
+                ],
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StandardUnitConversionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseStandardUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/{id}": {
+            "get": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "getMaterial",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "updateMaterial",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-unit-conversions/{id}": {
+            "get": {
+                "tags": [
+                    "material-unit-conversion-controller"
+                ],
+                "operationId": "getMaterialUnitConversion",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "material-unit-conversion-controller"
+                ],
+                "operationId": "updateMaterialUnitConversion",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialUnitConversionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-types/{id}": {
+            "get": {
+                "tags": [
+                    "material-type-controller"
+                ],
+                "operationId": "getMaterialType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialTypeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "material-type-controller"
+                ],
+                "operationId": "updateMaterialType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialTypeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialTypeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-factories/{id}": {
+            "get": {
+                "tags": [
+                    "material-factory-controller"
+                ],
+                "operationId": "getMaterialFactory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialFactoryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "material-factory-controller"
+                ],
+                "operationId": "updateMaterialFactory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialFactoryRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialFactoryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-categories/{id}": {
+            "put": {
+                "tags": [
+                    "material-category-controller"
+                ],
+                "operationId": "updateMaterialCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialCategoryRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialCategoryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/standard-unit-conversions": {
+            "post": {
+                "tags": [
+                    "standard-unit-conversion-controller"
+                ],
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StandardUnitConversionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseStandardUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/standard-unit-conversions/page": {
+            "post": {
+                "tags": [
+                    "standard-unit-conversion-controller"
+                ],
+                "operationId": "getPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListStandardUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-sizes/page": {
+            "post": {
+                "tags": [
+                    "product-size-controller"
+                ],
+                "operationId": "getProductSizePage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductSizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-sizes/bulk-update": {
+            "post": {
+                "tags": [
+                    "product-size-controller"
+                ],
+                "operationId": "updateProductSizes",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/BulkUpdateRequestProductSizeRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductSizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-sizes/bulk-create": {
+            "post": {
+                "tags": [
+                    "product-size-controller"
+                ],
+                "operationId": "createProductSizes",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProductSizeRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductSizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/page": {
+            "post": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "getProductModelPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductModelResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/bulk-update": {
+            "post": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "updateProductModels",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/BulkUpdateRequestProductModelRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductModelResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/bulk-create": {
+            "post": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "createProductModels",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProductModelRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductModelResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials": {
+            "post": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "createMaterial",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/{materialId}/images/{imageId}/set-primary": {
+            "post": {
+                "tags": [
+                    "material-image-controller"
+                ],
+                "operationId": "setPrimaryImage",
+                "parameters": [
+                    {
+                        "name": "materialId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "imageId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/{materialId}/images/upload": {
+            "post": {
+                "tags": [
+                    "material-image-controller"
+                ],
+                "operationId": "uploadImage",
+                "parameters": [
+                    {
+                        "name": "materialId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "file"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialImageResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/unassigned/factories/{factoryId}": {
+            "post": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "getUnassignedMaterialSimplePage",
+                "parameters": [
+                    {
+                        "name": "factoryId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialSimpleResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/page": {
+            "post": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "getMaterialPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/page-simple": {
+            "post": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "getMaterialSimplePage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialSimpleResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-units/page": {
+            "post": {
+                "tags": [
+                    "material-unit-controller"
+                ],
+                "operationId": "getMaterialUnitPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialUnitResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-units/bulk-update": {
+            "post": {
+                "tags": [
+                    "material-unit-controller"
+                ],
+                "operationId": "updateMaterialUnits",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/BulkUpdateRequestMaterialUnitRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialUnitResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-units/bulk-create": {
+            "post": {
+                "tags": [
+                    "material-unit-controller"
+                ],
+                "operationId": "createMaterialUnits",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/MaterialUnitRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialUnitResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-unit-conversions": {
+            "post": {
+                "tags": [
+                    "material-unit-conversion-controller"
+                ],
+                "operationId": "createMaterialUnitConversion",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialUnitConversionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-unit-conversions/page": {
+            "post": {
+                "tags": [
+                    "material-unit-conversion-controller"
+                ],
+                "operationId": "getMaterialUnitConversionPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-types": {
+            "post": {
+                "tags": [
+                    "material-type-controller"
+                ],
+                "operationId": "createMaterialType",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialTypeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialTypeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-types/page": {
+            "post": {
+                "tags": [
+                    "material-type-controller"
+                ],
+                "operationId": "getMaterialTypePage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialTypeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-factories/page": {
+            "post": {
+                "tags": [
+                    "material-factory-controller"
+                ],
+                "operationId": "getMaterialFactoryPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialFactoryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-factories/bulk-create": {
+            "post": {
+                "tags": [
+                    "material-factory-controller"
+                ],
+                "operationId": "createMaterialFactoryBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/MaterialFactoryRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialFactoryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-categories": {
+            "post": {
+                "tags": [
+                    "material-category-controller"
+                ],
+                "operationId": "createMaterialCategory",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialCategoryRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialCategoryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-categories/tree": {
+            "post": {
+                "tags": [
+                    "material-category-controller"
+                ],
+                "operationId": "getMaterialCategoryTree",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": {}
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialCategoryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/colors/page": {
+            "post": {
+                "tags": [
+                    "color-controller"
+                ],
+                "operationId": "getColorPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListColorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/colors/bulk-update": {
+            "post": {
+                "tags": [
+                    "color-controller"
+                ],
+                "operationId": "updateColors",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/BulkUpdateRequestColorRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListColorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/colors/bulk-create": {
+            "post": {
+                "tags": [
+                    "color-controller"
+                ],
+                "operationId": "createColors",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ColorRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListColorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-sizes/{id}": {
+            "get": {
+                "tags": [
+                    "product-size-controller"
+                ],
+                "operationId": "getProductSize",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductSizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-sizes/list": {
+            "get": {
+                "tags": [
+                    "product-size-controller"
+                ],
+                "operationId": "getProductSizeList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductSizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/{id}": {
+            "get": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "getProductModel",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductModelResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/list": {
+            "get": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "getProductModelList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductModelResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/{materialId}/images": {
+            "get": {
+                "tags": [
+                    "material-image-controller"
+                ],
+                "operationId": "getImages",
+                "parameters": [
+                    {
+                        "name": "materialId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialImageResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-units/{id}": {
+            "get": {
+                "tags": [
+                    "material-unit-controller"
+                ],
+                "operationId": "getMaterialUnit",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialUnitResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-units/list": {
+            "get": {
+                "tags": [
+                    "material-unit-controller"
+                ],
+                "operationId": "getMaterialUnitList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialUnitResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-unit-conversions/material/{materialId}": {
+            "get": {
+                "tags": [
+                    "material-unit-conversion-controller"
+                ],
+                "operationId": "getMaterialUnitConversionListByMaterial",
+                "parameters": [
+                    {
+                        "name": "materialId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialUnitConversionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-types/list": {
+            "get": {
+                "tags": [
+                    "material-type-controller"
+                ],
+                "operationId": "getMaterialTypeList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMaterialTypeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-factories/lookup": {
+            "get": {
+                "tags": [
+                    "material-factory-controller"
+                ],
+                "operationId": "getMaterialFactoryByFactoryIdAndMaterialId",
+                "parameters": [
+                    {
+                        "name": "factoryId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "materialId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialFactoryBasicResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/colors/{id}": {
+            "get": {
+                "tags": [
+                    "color-controller"
+                ],
+                "operationId": "getColor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseColorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/colors/list": {
+            "get": {
+                "tags": [
+                    "color-controller"
+                ],
+                "operationId": "getColorList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListColorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/standard-unit-conversions/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "standard-unit-conversion-controller"
+                ],
+                "operationId": "deleteBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-sizes/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "product-size-controller"
+                ],
+                "operationId": "deleteProductSizeBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "deleteProductModelBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/{materialId}/images/{imageId}": {
+            "delete": {
+                "tags": [
+                    "material-image-controller"
+                ],
+                "operationId": "deleteImage",
+                "parameters": [
+                    {
+                        "name": "materialId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "imageId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "deleteMaterialBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-units/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "material-unit-controller"
+                ],
+                "operationId": "deleteMaterialUnitBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-unit-conversions/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "material-unit-conversion-controller"
+                ],
+                "operationId": "deleteMaterialUnitConversionBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-types/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "material-type-controller"
+                ],
+                "operationId": "deleteMaterialTypeBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-factories/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "material-factory-controller"
+                ],
+                "operationId": "deleteMaterialFactoryBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/material-categories/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "material-category-controller"
+                ],
+                "operationId": "deleteMaterialCategoryBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/colors/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "color-controller"
+                ],
+                "operationId": "deleteColorBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StandardUnitConversionRequest": {
+                "type": "object",
+                "properties": {
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "toBaseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "conversionRate": {
+                        "type": "number",
+                        "minimum": 0.000001
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "conversionRate",
+                    "toBaseUnitId",
+                    "unitId"
+                ]
+            },
+            "ApiResponseStandardUnitConversionResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/StandardUnitConversionResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "StandardUnitConversionResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "toBaseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "conversionRate": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "toBaseUnitCode": {
+                        "type": "string"
+                    },
+                    "toBaseUnitName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "JsonNullableBigDecimal": {
+                "type": "object",
+                "properties": {
+                    "present": {
+                        "type": "boolean"
+                    },
+                    "undefined": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "MaterialRequest": {
+                "type": "object",
+                "properties": {
+                    "materialCategoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialTypeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "valuationClassId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productModelId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "colorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productSizeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "minLength": 0
+                    },
+                    "specification": {
+                        "type": "string"
+                    },
+                    "baseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "purchaseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "salesUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "$ref": "#/components/schemas/JsonNullableBigDecimal"
+                    }
+                },
+                "required": [
+                    "baseUnitId",
+                    "code",
+                    "materialCategoryId",
+                    "name"
+                ]
+            },
+            "ApiResponseMaterialResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCategoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialTypeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "valuationClassId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productModelId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "colorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productSizeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "specification": {
+                        "type": "string"
+                    },
+                    "baseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "purchaseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "salesUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "type": "number"
+                    },
+                    "lowLevelCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCategoryCode": {
+                        "type": "string"
+                    },
+                    "materialCategoryName": {
+                        "type": "string"
+                    },
+                    "materialTypeCode": {
+                        "type": "string"
+                    },
+                    "materialTypeName": {
+                        "type": "string"
+                    },
+                    "productModelCode": {
+                        "type": "string"
+                    },
+                    "productModelName": {
+                        "type": "string"
+                    },
+                    "colorCode": {
+                        "type": "string"
+                    },
+                    "colorName": {
+                        "type": "string"
+                    },
+                    "productSizeCode": {
+                        "type": "string"
+                    },
+                    "productSizeName": {
+                        "type": "string"
+                    },
+                    "baseUnitCode": {
+                        "type": "string"
+                    },
+                    "baseUnitName": {
+                        "type": "string"
+                    },
+                    "purchaseUnitCode": {
+                        "type": "string"
+                    },
+                    "purchaseUnitName": {
+                        "type": "string"
+                    },
+                    "salesUnitCode": {
+                        "type": "string"
+                    },
+                    "salesUnitName": {
+                        "type": "string"
+                    },
+                    "isManufactured": {
+                        "type": "boolean"
+                    },
+                    "primaryImageUrl": {
+                        "type": "string"
+                    },
+                    "primaryImageThumbnailUrl": {
+                        "type": "string"
+                    }
+                }
+            },
+            "MaterialUnitConversionRequest": {
+                "type": "object",
+                "properties": {
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "toBaseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "conversionRate": {
+                        "type": "number",
+                        "minimum": 0.000001
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "conversionRate",
+                    "materialId",
+                    "toBaseUnitId",
+                    "unitId"
+                ]
+            },
+            "ApiResponseMaterialUnitConversionResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialUnitConversionResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialUnitConversionResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "toBaseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "conversionRate": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "toBaseUnitCode": {
+                        "type": "string"
+                    },
+                    "toBaseUnitName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "MaterialTypeRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "isInventoried": {
+                        "type": "boolean"
+                    },
+                    "isPurchased": {
+                        "type": "boolean"
+                    },
+                    "isSold": {
+                        "type": "boolean"
+                    },
+                    "isManufactured": {
+                        "type": "boolean"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "code",
+                    "isInventoried",
+                    "isManufactured",
+                    "isPurchased",
+                    "isSold",
+                    "name"
+                ]
+            },
+            "ApiResponseMaterialTypeResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialTypeResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialTypeResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "isInventoried": {
+                        "type": "boolean"
+                    },
+                    "isPurchased": {
+                        "type": "boolean"
+                    },
+                    "isSold": {
+                        "type": "boolean"
+                    },
+                    "isManufactured": {
+                        "type": "boolean"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "MaterialFactoryRequest": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "receivingWarehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueWarehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "isBatchMandatory": {
+                        "type": "boolean"
+                    },
+                    "isBackflush": {
+                        "type": "boolean"
+                    },
+                    "underIssueTolerance": {
+                        "type": "number"
+                    },
+                    "underDeliveryTolerance": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "factoryId",
+                    "isBatchMandatory",
+                    "materialId"
+                ]
+            },
+            "ApiResponseMaterialFactoryResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialFactoryResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialFactoryResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "receivingWarehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueWarehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "isBatchMandatory": {
+                        "type": "boolean"
+                    },
+                    "isBackflush": {
+                        "type": "boolean"
+                    },
+                    "underIssueTolerance": {
+                        "type": "number"
+                    },
+                    "underDeliveryTolerance": {
+                        "type": "number"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "factoryCode": {
+                        "type": "string"
+                    },
+                    "factoryName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "MaterialCategoryRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "parentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "code"
+                ]
+            },
+            "ApiResponseMaterialCategoryResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialCategoryResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialCategoryResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "parentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "level": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "children": {
+                        "type": "array",
+                        "items": {}
+                    }
+                }
+            },
+            "ProPageRequest": {
+                "type": "object",
+                "properties": {
+                    "pageNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "params": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    },
+                    "sort": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListStandardUnitConversionResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StandardUnitConversionResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListProductSizeResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductSizeResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductSizeResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BulkUpdateRequestProductSizeRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductSizeRequest"
+                    }
+                },
+                "required": [
+                    "data",
+                    "id"
+                ]
+            },
+            "ProductSizeRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "code"
+                ]
+            },
+            "ApiResponseListProductModelResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductModelResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductModelResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BulkUpdateRequestProductModelRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductModelRequest"
+                    }
+                },
+                "required": [
+                    "data",
+                    "id"
+                ]
+            },
+            "ProductModelRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "code"
+                ]
+            },
+            "ApiResponseVoid": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {},
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseMaterialImageResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialImageResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialImageResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "fileName": {
+                        "type": "string"
+                    },
+                    "fileSize": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "isPrimary": {
+                        "type": "boolean"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "thumbnailUrl": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ApiResponseListMaterialSimpleResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialSimpleResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialSimpleResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "materialTypeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListMaterialResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListMaterialUnitResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialUnitResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialUnitResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BulkUpdateRequestMaterialUnitRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialUnitRequest"
+                    }
+                },
+                "required": [
+                    "data",
+                    "id"
+                ]
+            },
+            "MaterialUnitRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "code"
+                ]
+            },
+            "ApiResponseListMaterialUnitConversionResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialUnitConversionResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListMaterialTypeResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialTypeResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListMaterialFactoryResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialFactoryResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListMaterialCategoryResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "parentId": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "level": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "statusOptionId": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "statusOptionName": {
+                                    "type": "string"
+                                },
+                                "createdAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "updatedAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "createdBy": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "updatedBy": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "createdByName": {
+                                    "type": "string"
+                                },
+                                "updatedByName": {
+                                    "type": "string"
+                                },
+                                "children": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListColorResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ColorResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ColorResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "hexCode": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BulkUpdateRequestColorRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ColorRequest"
+                    }
+                },
+                "required": [
+                    "data",
+                    "id"
+                ]
+            },
+            "ColorRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "hexCode": {
+                        "type": "string",
+                        "maxLength": 9,
+                        "minLength": 0,
+                        "pattern": "^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "code"
+                ]
+            },
+            "ApiResponseProductSizeResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductSizeResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseProductModelResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductModelResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListMaterialImageResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialImageResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseMaterialUnitResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialUnitResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseMaterialFactoryBasicResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialFactoryBasicResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MaterialFactoryBasicResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "receivingWarehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueWarehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "isBatchMandatory": {
+                        "type": "boolean"
+                    },
+                    "isBackflush": {
+                        "type": "boolean"
+                    },
+                    "underIssueTolerance": {
+                        "type": "number"
+                    },
+                    "underDeliveryTolerance": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ApiResponseColorResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ColorResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            }
+        }
+    }
+}

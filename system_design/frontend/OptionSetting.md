@@ -1,0 +1,53 @@
+### 架構速覽
+- 前端技術棧: Umi Max、Ant Design Pro、ProTable、`@umijs/max` request、`useRequest`
+- 型別已備: `typings.d.ts`
+- 後端 API（見 openapi.json）:
+  - 類別: POST `/api/v1/option-categories/page`、POST `/api/v1/option-categories`、PUT `/api/v1/option-categories/{id}`、DELETE `/api/v1/option-categories/{id}`
+  - 明細: POST `/api/v1/option-values/page`、POST `/api/v1/option-values`、PUT `/api/v1/option-values/{id}`、DELETE `/api/v1/option-values/{id}`、GET `/api/v1/option-values/by-category/{categoryId}`
+
+### 執行計劃
+- 頁面與路由
+  - 新增 `src/pages/admin/options/index.tsx`（主從維護頁）
+  - 版面: 左側「分類」ProTable（主表），右側「分類值」ProTable（明細表），上方工具列含新增按鈕
+- Service 分層
+  - `src/services/options/optionCategoryService.ts`
+    - `getOptionCategoriesPage(data: API.PageRequest)`
+    - `createOptionCategory(data: API.OptionCategoryRequest)`
+    - `updateOptionCategory(id: number, data: API.OptionCategoryRequest)`
+    - `deleteOptionCategory(id: number)`
+  - `src/services/options/optionValueService.ts`
+    - `getOptionValuesPage(data: API.PageRequest)`（以 `categoryId_eq` 或 `categoryId_in` 過濾）
+    - `createOptionValue(data: API.OptionValueRequest)`
+    - `updateOptionValue(id: number, data: API.OptionValueRequest)`
+    - `deleteOptionValue(id: number)`
+- 主表（分類）ProTable
+  - request: POST `/api/v1/option-categories/page`
+  - 欄位: `name`, `code`, `isActive`, `defaultValueId`, `updatedAt`
+  - 搜尋: `name_like`, `code_like`, `isActive_eq`（用 `withOperator`）
+  - 操作: 新增/編輯（ModalForm）、刪除（Popconfirm）
+  - 行選擇: 單選後，驅動右側明細表載入
+- 明細表（分類值）ProTable
+  - request: POST `/api/v1/option-values/page`，自動帶入 `categoryId_eq = selectedCategory.id`
+  - 欄位: `name`, `code`, `sortOrder`, `isActive`, `updatedAt`
+  - 搜尋: `name_like`, `code_like`, `isActive_eq`
+  - 操作: 新增/編輯（需綁定 `categoryId`）、刪除；無選取分類時禁用
+- 表單組件
+  - `components/CategoryForm.tsx`、`components/ValueForm.tsx`（使用 `ModalForm` 或 `DrawerForm`）
+  - 表單校驗對齊 OpenAPI：`name`、`code` 必填，`sortOrder` 整數可選
+- 查詢參數規範
+  - 使用既有 `withOperator` 工具統一生成：`field_op`（`_like/_eq/_in/_gte/_lte`）
+  - 明細查詢固定追加 `categoryId_eq`
+- 狀態與互動
+  - `selectedCategory`: 由主表 `onRow` 或 `rowSelection` 控制
+  - 操作成功後 `actionRef.current?.reload()`（主/明細各一個 ref）
+  - 使用 `useRequest` 包裝新增/編輯/刪除，統一 `messageApi` 成功/錯誤提示
+- 顯示優化
+  - `isActive` 用 `Tag` 或 `valueEnum` 顯示，排序使用 `sortOrder`
+  - 明細表工具列顯示目前所屬分類名稱
+- 型別與可維護性
+  - 嚴格使用 `API.*` 型別；Service 返回 `API.Response<...>` 與 `API.PageResponse<...>`
+  - 後續如需共用下拉，抽出 `useOptionValues(categoryCode)` hook
+- 漸進增強
+  - 先以 page API 完成 CRUD 與搜尋；有需要再接 `by-category` GET 供快速載入不分頁列表
+  - 之後可加入拖拽排序以更新 `sortOrder`
+

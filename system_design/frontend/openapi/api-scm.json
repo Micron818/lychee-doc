@@ -1,0 +1,3864 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:9000",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/api/v1/scm/suppliers/{id}": {
+            "get": {
+                "tags": [
+                    "supplier-controller"
+                ],
+                "operationId": "getSupplier",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSupplierResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "supplier-controller"
+                ],
+                "operationId": "updateSupplier",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SupplierRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSupplierResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/{id}": {
+            "get": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "getPurchaseRequisition",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseRequisitionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "updatePurchaseRequisition",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseRequisitionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseRequisitionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "updatePurchaseRequisitionItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseRequisitionItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseRequisitionItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/{id}": {
+            "get": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "getPurchaseOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "updatePurchaseOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "updatePurchaseOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseOrderItemUpdateRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}": {
+            "get": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "getOutsourceOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "updateOutsourceOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OutsourceOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "updateOutsourceOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OutsourceOrderItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/{itemId}/components/{componentId}": {
+            "put": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "updateOutsourceOrderComponent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "componentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OutsourceOrderComponentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderComponentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/suppliers": {
+            "post": {
+                "tags": [
+                    "supplier-controller"
+                ],
+                "operationId": "createSupplier",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SupplierRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSupplierResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/suppliers/page": {
+            "post": {
+                "tags": [
+                    "supplier-controller"
+                ],
+                "operationId": "getSupplierPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListSupplierResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions": {
+            "post": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "createPurchaseRequisition",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseRequisitionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseRequisitionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/{id}/items": {
+            "post": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "createPurchaseRequisitionItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseRequisitionItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseRequisitionItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "getPurchaseRequisitionItemPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPurchaseRequisitionItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/pending-items/page": {
+            "post": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "getPendingPurchaseRequisitionItems",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPurchaseRequisitionItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/page": {
+            "post": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "getPurchaseRequisitionPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPurchaseRequisitionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/bulk-unapprove": {
+            "post": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "unapprovePurchaseRequisitionBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/bulk-approve": {
+            "post": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "approvePurchaseRequisitionBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders": {
+            "post": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "createPurchaseOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePurchaseOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "getPurchaseOrderItemPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPurchaseOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/{id}/items/from-pr": {
+            "post": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "createPurchaseOrderItemsFromPr",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PurchaseOrderItemCreateFromPrRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPurchaseOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/pending-items/page": {
+            "post": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "getPendingPurchaseOrderItems",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPurchaseOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/page": {
+            "post": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "getPurchaseOrderPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPurchaseOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/bulk-unapprove": {
+            "post": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "unapprovePurchaseOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/bulk-approve": {
+            "post": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "approvePurchaseOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "createOutsourceOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OutsourceOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/unpublish": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "unpublishOutsourceOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/pull-from-planned-orders": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "pullFromPlannedOrders",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/publish": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "publishOutsourceOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/pending-issues/allocations": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "suggestPendingIssueAllocations",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": {}
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListAllocationSuggestResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "createOutsourceOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OutsourceOrderItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/{itemId}/components": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "createOutsourceOrderComponent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OutsourceOrderComponentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderComponentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/{itemId}/components/page": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "getOutsourceOrderComponentPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListOutsourceOrderComponentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/{itemId}/components/expand-bom": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "expandBom",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "getOutsourceOrderItemPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListOutsourceOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/close": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "closeOutsourceOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseOutsourceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/pending-items/page": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "getPendingOutsourceOrderItems",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPendingOutsourceOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/page": {
+            "post": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "getOutsourceOrderPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListOutsourceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/suppliers/list": {
+            "get": {
+                "tags": [
+                    "supplier-controller"
+                ],
+                "operationId": "getSupplierList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListOptionValueDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/suppliers/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "supplier-controller"
+                ],
+                "operationId": "deleteSupplierBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "deletePurchaseRequisitionItemBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-requisitions/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "purchase-requisition-controller"
+                ],
+                "operationId": "deletePurchaseRequisitionBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "deletePurchaseOrderItemBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/purchase-orders/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "purchase-order-controller"
+                ],
+                "operationId": "deletePurchaseOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/{itemId}/components/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "deleteOutsourceOrderComponentBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "deleteOutsourceOrderItemBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scm/outsource-orders/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "outsource-order-controller"
+                ],
+                "operationId": "deleteOutsourceOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SupplierRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "taxId": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "addressEn": {
+                        "type": "string"
+                    },
+                    "supplierType": {
+                        "type": "string",
+                        "enum": [
+                            "MATERIAL",
+                            "CONSUMABLE",
+                            "OUTSOURCE"
+                        ]
+                    },
+                    "activeStatus": {
+                        "type": "string",
+                        "enum": [
+                            "ACTIVE",
+                            "INACTIVE"
+                        ]
+                    },
+                    "addressLocal": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 0
+                    },
+                    "email": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "contactPerson": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "contactPhone": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 0
+                    },
+                    "contactEmail": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "activeStatus",
+                    "code",
+                    "name",
+                    "supplierType"
+                ]
+            },
+            "ApiResponseSupplierResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/SupplierResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SupplierResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "taxId": {
+                        "type": "string"
+                    },
+                    "addressEn": {
+                        "type": "string"
+                    },
+                    "supplierType": {
+                        "type": "string",
+                        "enum": [
+                            "MATERIAL",
+                            "CONSUMABLE",
+                            "OUTSOURCE"
+                        ]
+                    },
+                    "activeStatus": {
+                        "type": "string",
+                        "enum": [
+                            "ACTIVE",
+                            "INACTIVE"
+                        ]
+                    },
+                    "addressLocal": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "contactPerson": {
+                        "type": "string"
+                    },
+                    "contactPhone": {
+                        "type": "string"
+                    },
+                    "contactEmail": {
+                        "type": "string"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PurchaseRequisitionRequest": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "requisitionDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "requesterId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "departmentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "factoryId",
+                    "requisitionDate"
+                ]
+            },
+            "ApiResponsePurchaseRequisitionResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PurchaseRequisitionResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PurchaseRequisitionResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "requisitionNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "requisitionDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "requesterId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "departmentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "sourceType": {
+                        "type": "string",
+                        "enum": [
+                            "MRP",
+                            "MANUAL"
+                        ]
+                    },
+                    "mrpRunId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "APPROVED",
+                            "PARTIAL",
+                            "COMPLETED",
+                            "CLOSED"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "requesterName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PurchaseRequisitionItemRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "latestOrderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "suggestedSupplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "materialId",
+                    "requiredDate",
+                    "requiredQuantity"
+                ]
+            },
+            "ApiResponsePurchaseRequisitionItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PurchaseRequisitionItemResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PurchaseRequisitionItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "purchaseRequisitionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "requisitionNo": {
+                        "type": "string"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "latestOrderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "orderedQuantity": {
+                        "type": "number"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "suggestedSupplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "suggestedSupplierCode": {
+                        "type": "string"
+                    },
+                    "suggestedSupplierName": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "APPROVED",
+                            "PARTIAL",
+                            "COMPLETED",
+                            "CLOSED"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PurchaseOrderRequest": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "supplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "paymentTermOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "billingAddress": {
+                        "type": "string"
+                    },
+                    "shippingAddress": {
+                        "type": "string"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "exchangeRate",
+                    "factoryId",
+                    "orderDate",
+                    "supplierId"
+                ]
+            },
+            "ApiResponsePurchaseOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PurchaseOrderResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PurchaseOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "supplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "paymentTermOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "billingAddress": {
+                        "type": "string"
+                    },
+                    "shippingAddress": {
+                        "type": "string"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "APPROVED",
+                            "PARTIAL",
+                            "COMPLETED",
+                            "CLOSED"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "supplierCode": {
+                        "type": "string"
+                    },
+                    "supplierName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "JsonNullableBigDecimal": {
+                "type": "object",
+                "properties": {
+                    "present": {
+                        "type": "boolean"
+                    },
+                    "undefined": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "PurchaseOrderItemUpdateRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "orderedQuantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "expectedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "$ref": "#/components/schemas/JsonNullableBigDecimal"
+                    }
+                },
+                "required": [
+                    "orderedQuantity",
+                    "unitPrice"
+                ]
+            },
+            "ApiResponsePurchaseOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PurchaseOrderItemResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PurchaseOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "purchaseOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderedQuantity": {
+                        "type": "number"
+                    },
+                    "receivedQuantity": {
+                        "type": "number"
+                    },
+                    "invoicedQuantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "expectedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "APPROVED",
+                            "PARTIAL",
+                            "COMPLETED",
+                            "CLOSED"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "type": "number"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "supplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "supplierCode": {
+                        "type": "string"
+                    },
+                    "supplierName": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "draftReceiptQuantity": {
+                        "type": "number"
+                    },
+                    "availableQuantity": {
+                        "type": "number"
+                    },
+                    "maxAllowedQuantity": {
+                        "type": "number"
+                    }
+                }
+            },
+            "OutsourceOrderRequest": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "supplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "factoryId",
+                    "orderDate",
+                    "supplierId"
+                ]
+            },
+            "ApiResponseOutsourceOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/OutsourceOrderResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "OutsourceOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "supplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "ISSUED",
+                            "PARTIAL",
+                            "COMPLETED",
+                            "CLOSED"
+                        ]
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "supplierCode": {
+                        "type": "string"
+                    },
+                    "supplierName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OutsourceOrderItemRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderedQuantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "requiresPhysicalReceipt": {
+                        "type": "boolean"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "materialId",
+                    "orderedQuantity",
+                    "unitId",
+                    "unitPrice"
+                ]
+            },
+            "ApiResponseOutsourceOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/OutsourceOrderItemResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "OutsourceOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "outsourceOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderedQuantity": {
+                        "type": "number"
+                    },
+                    "receivedQuantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "ISSUED",
+                            "PARTIAL",
+                            "COMPLETED",
+                            "CLOSED"
+                        ]
+                    },
+                    "requiresPhysicalReceipt": {
+                        "type": "boolean"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OutsourceOrderComponentRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "isSupplierProvided": {
+                        "type": "boolean"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "materialId",
+                    "requiredQuantity",
+                    "unitId"
+                ]
+            },
+            "ApiResponseOutsourceOrderComponentResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/OutsourceOrderComponentResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "OutsourceOrderComponentResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "outsourceOrderItemId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "issuedQuantity": {
+                        "type": "number"
+                    },
+                    "consumedQuantity": {
+                        "type": "number"
+                    },
+                    "isSupplierProvided": {
+                        "type": "boolean"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "draftIssueQuantity": {
+                        "type": "number"
+                    },
+                    "availableToIssueQuantity": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ProPageRequest": {
+                "type": "object",
+                "properties": {
+                    "pageNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "params": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    },
+                    "sort": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListSupplierResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SupplierResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListPurchaseRequisitionItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PurchaseRequisitionItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListPurchaseRequisitionResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PurchaseRequisitionResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseVoid": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {},
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListPurchaseOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PurchaseOrderItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PrItemConvertDto": {
+                "type": "object",
+                "properties": {
+                    "prItemId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "convertQuantity": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "convertQuantity",
+                    "prItemId"
+                ]
+            },
+            "PurchaseOrderItemCreateFromPrRequest": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PrItemConvertDto"
+                        },
+                        "minItems": 1
+                    }
+                },
+                "required": [
+                    "items"
+                ]
+            },
+            "ApiResponseListPurchaseOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PurchaseOrderResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "Allocation": {
+                "type": "object",
+                "properties": {
+                    "warehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "warehouseCode": {
+                        "type": "string"
+                    },
+                    "warehouseName": {
+                        "type": "string"
+                    },
+                    "batchNo": {
+                        "type": "string"
+                    },
+                    "availableQuantity": {
+                        "type": "number"
+                    },
+                    "allocateQuantity": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AllocationSuggestResponse": {
+                "type": "object",
+                "properties": {
+                    "refId": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "issueUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueUnitCode": {
+                        "type": "string"
+                    },
+                    "issueUnitName": {
+                        "type": "string"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "allocations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Allocation"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListAllocationSuggestResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AllocationSuggestResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListOutsourceOrderComponentResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OutsourceOrderComponentResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListOutsourceOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OutsourceOrderItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListPendingOutsourceOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PendingOutsourceOrderItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PendingOutsourceOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "outsourceOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "supplierId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "supplierCode": {
+                        "type": "string"
+                    },
+                    "supplierName": {
+                        "type": "string"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "orderedQuantity": {
+                        "type": "number"
+                    },
+                    "receivedQuantity": {
+                        "type": "number"
+                    },
+                    "draftReceiptQuantity": {
+                        "type": "number"
+                    },
+                    "maxAllowedQuantity": {
+                        "type": "number"
+                    },
+                    "availableQuantity": {
+                        "type": "number"
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "ISSUED",
+                            "PARTIAL",
+                            "COMPLETED",
+                            "CLOSED"
+                        ]
+                    },
+                    "requiresPhysicalReceipt": {
+                        "type": "boolean"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListOutsourceOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OutsourceOrderResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListOptionValueDTO": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OptionValueDTO"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "OptionValueDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "activeStatus": {
+                        "type": "string",
+                        "enum": [
+                            "ACTIVE",
+                            "INACTIVE"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,268 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "OpenAPI definition",
+      "version": "v0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:9000",
+        "description": "Generated server url"
+      }
+    ],
+    "paths": {
+      "/api/v1/common/order-peggings/upstream-tree": {
+        "get": {
+          "tags": [
+            "order-pegging-controller"
+          ],
+          "operationId": "getUpstreamTree",
+          "parameters": [
+            {
+              "name": "orderType",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "SALES_ORDER",
+                  "FACTORY_ORDER",
+                  "MRP_RESULT",
+                  "PLANNED_ORDER",
+                  "PRODUCTION_ORDER",
+                  "PURCHASE_REQUISITION",
+                  "PURCHASE_ORDER",
+                  "GOODS_RECEIPT"
+                ]
+              }
+            },
+            {
+              "name": "orderId",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponsePeggingChainResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/common/order-peggings/full-chain-tree": {
+        "get": {
+          "tags": [
+            "order-pegging-controller"
+          ],
+          "operationId": "getFullChainTree",
+          "parameters": [
+            {
+              "name": "orderType",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "SALES_ORDER",
+                  "FACTORY_ORDER",
+                  "MRP_RESULT",
+                  "PLANNED_ORDER",
+                  "PRODUCTION_ORDER",
+                  "PURCHASE_REQUISITION",
+                  "PURCHASE_ORDER",
+                  "GOODS_RECEIPT"
+                ]
+              }
+            },
+            {
+              "name": "orderId",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponsePeggingChainResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/common/order-peggings/downstream-tree": {
+        "get": {
+          "tags": [
+            "order-pegging-controller"
+          ],
+          "operationId": "getDownstreamTree",
+          "parameters": [
+            {
+              "name": "orderType",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "SALES_ORDER",
+                  "FACTORY_ORDER",
+                  "MRP_RESULT",
+                  "PLANNED_ORDER",
+                  "PRODUCTION_ORDER",
+                  "PURCHASE_REQUISITION",
+                  "PURCHASE_ORDER",
+                  "GOODS_RECEIPT"
+                ]
+              }
+            },
+            {
+              "name": "orderId",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponsePeggingChainResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ApiResponsePeggingChainResponse": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "success": {
+              "type": "boolean"
+            },
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "$ref": "#/components/schemas/PeggingChainResponse"
+            },
+            "error": {
+  
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string"
+            },
+            "total": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "PeggingChainResponse": {
+          "type": "object",
+          "properties": {
+            "currentNodeId": {
+              "type": "string"
+            },
+            "upstreamTree": {
+              "$ref": "#/components/schemas/PeggingNodeDTO"
+            },
+            "downstreamTree": {
+              "$ref": "#/components/schemas/PeggingNodeDTO"
+            }
+          }
+        },
+        "PeggingNodeDTO": {
+          "type": "object",
+          "properties": {
+            "nodeId": {
+              "type": "string"
+            },
+            "orderType": {
+              "type": "string",
+              "enum": [
+                "SALES_ORDER",
+                "FACTORY_ORDER",
+                "MRP_RESULT",
+                "PLANNED_ORDER",
+                "PRODUCTION_ORDER",
+                "PURCHASE_REQUISITION",
+                "PURCHASE_ORDER",
+                "GOODS_RECEIPT"
+              ]
+            },
+            "orderId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "orderNo": {
+              "type": "string"
+            },
+            "materialId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "materialCode": {
+              "type": "string"
+            },
+            "materialName": {
+              "type": "string"
+            },
+            "peggedQuantity": {
+              "type": "number"
+            },
+            "orderTotalQuantity": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "relationType": {
+              "type": "string"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+  
+              }
+            }
+          }
+        }
+      }
+    }
+  }

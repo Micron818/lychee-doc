@@ -1,0 +1,3445 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:9000",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/api/v1/sd/sales-orders/{id}": {
+            "get": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "getSalesOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSalesOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "updateSalesOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SalesOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSalesOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "updateSalesOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SalesOrderItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSalesOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-forecasts/{id}": {
+            "put": {
+                "tags": [
+                    "sales-forecast-controller"
+                ],
+                "operationId": "updateSalesForecast",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SalesForecastRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSalesForecastResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}": {
+            "get": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "getDelivery",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseDeliveryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "updateDelivery",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DeliveryRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseDeliveryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "updateDeliveryItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DeliveryItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseDeliveryItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/customers/{id}": {
+            "get": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "getCustomer",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseCustomerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "updateCustomer",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseCustomerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "createSalesOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SalesOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSalesOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/{id}/items": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "createSalesOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SalesOrderItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSalesOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/{id}/items/{itemId}/close": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "closeSalesOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "getSalesOrderItemPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListSalesOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/page": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "getSalesOrderPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListSalesOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/items/pending-production": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "getPendingProductionItems",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListSalesOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/items/pending-delivery": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "getPendingDeliveryItems",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPendingDeliverySalesOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/bulk-unconfirm": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "unConfirmSalesOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/bulk-confirm": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "confirmSalesOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/bulk-close": {
+            "post": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "closeSalesOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-forecasts": {
+            "post": {
+                "tags": [
+                    "sales-forecast-controller"
+                ],
+                "operationId": "createSalesForecast",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SalesForecastRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSalesForecastResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-forecasts/page": {
+            "post": {
+                "tags": [
+                    "sales-forecast-controller"
+                ],
+                "operationId": "getSalesForecastPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListSalesForecastResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "createDelivery",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DeliveryRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseDeliveryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/unrelease": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "unReleaseDelivery",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/release": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "releaseDelivery",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/items": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "createDeliveryItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DeliveryItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseDeliveryItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "getDeliveryItemPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListDeliveryItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/items/batch": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "createDeliveryItemsBatch",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/DeliveryItemRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListDeliveryItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "cancelDelivery",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/page": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "getDeliveryPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListDeliveryResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/items/pending": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "getPendingDeliveryItems_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPendingDeliveryItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/items/pending/allocations": {
+            "post": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "suggestPendingIssueAllocations",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PendingDeliveryIssueSuggestRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListAllocationSuggestResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/customers": {
+            "post": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "createCustomer",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseCustomerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/customers/page": {
+            "post": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "getCustomerPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListCustomerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/for-ar-invoice": {
+            "get": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "getDeliveryForBilling",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseRemoteDeliveryForBillingDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/customers/list": {
+            "get": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "getCustomerList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListCustomerResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "deleteSalesOrderItemBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-orders/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "sales-order-controller"
+                ],
+                "operationId": "deleteSalesOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/sales-forecasts/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "sales-forecast-controller"
+                ],
+                "operationId": "deleteSalesForecastBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "deleteDeliveryItemBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/deliveries/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "delivery-controller"
+                ],
+                "operationId": "deleteDeliveryBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sd/customers/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "deleteCustomerBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SalesOrderRequest": {
+                "type": "object",
+                "properties": {
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "expectedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerPoNo": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "salesPersonId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "paymentTermOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "billingAddress": {
+                        "type": "string"
+                    },
+                    "shippingAddress": {
+                        "type": "string"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "customerId",
+                    "customerPoNo",
+                    "orderDate"
+                ]
+            },
+            "ApiResponseSalesOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/SalesOrderResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SalesOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "expectedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    },
+                    "customerPoNo": {
+                        "type": "string"
+                    },
+                    "salesPersonId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "paymentTermOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "billingAddress": {
+                        "type": "string"
+                    },
+                    "shippingAddress": {
+                        "type": "string"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "orderStatus": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "CONFIRMED",
+                            "DELIVERED",
+                            "CLOSED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "confirmedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "confirmedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "confirmedByName": {
+                        "type": "string"
+                    },
+                    "salesPersonName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SalesOrderItemRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "expectedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerInternalRefNo": {
+                        "type": "string"
+                    },
+                    "customerOrderNo": {
+                        "type": "string"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "customerOrderNo",
+                    "materialId",
+                    "quantity",
+                    "unitId",
+                    "unitPrice"
+                ]
+            },
+            "ApiResponseSalesOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/SalesOrderItemResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SalesOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "salesOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "allocatedQuantity": {
+                        "type": "number"
+                    },
+                    "deliveredQuantity": {
+                        "type": "number"
+                    },
+                    "expectedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerInternalRefNo": {
+                        "type": "string"
+                    },
+                    "customerOrderNo": {
+                        "type": "string"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "orderStatus": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "CONFIRMED",
+                            "DELIVERED",
+                            "CLOSED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "salesOrderNo": {
+                        "type": "string"
+                    },
+                    "salesOrderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SalesForecastRequest": {
+                "type": "object",
+                "properties": {
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bucketDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "forecastQuantity": {
+                        "type": "number"
+                    },
+                    "version": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "bucketDate",
+                    "forecastQuantity",
+                    "materialId",
+                    "version"
+                ]
+            },
+            "ApiResponseSalesForecastResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/SalesForecastResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SalesForecastResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bucketDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "forecastQuantity": {
+                        "type": "number"
+                    },
+                    "version": {
+                        "type": "string"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "customerCode": {
+                        "type": "string"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "DeliveryRequest": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "deliveryType": {
+                        "type": "string",
+                        "enum": [
+                            "NORMAL",
+                            "RETURN",
+                            "SAMPLE"
+                        ]
+                    },
+                    "plannedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "actualDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "shippingAddress": {
+                        "type": "string"
+                    },
+                    "carrierName": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "trackingNumber": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "customerId",
+                    "deliveryType",
+                    "exchangeRate",
+                    "factoryId",
+                    "plannedDeliveryDate"
+                ]
+            },
+            "ApiResponseDeliveryResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DeliveryResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DeliveryResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "deliveryNo": {
+                        "type": "string"
+                    },
+                    "deliveryType": {
+                        "type": "string",
+                        "enum": [
+                            "NORMAL",
+                            "RETURN",
+                            "SAMPLE"
+                        ]
+                    },
+                    "plannedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "actualDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "shippingAddress": {
+                        "type": "string"
+                    },
+                    "carrierName": {
+                        "type": "string"
+                    },
+                    "trackingNumber": {
+                        "type": "string"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "exchangeRate": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "RELEASED",
+                            "DELIVERED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "invoiceStatus": {
+                        "type": "string",
+                        "enum": [
+                            "UNINVOICED",
+                            "PARTIALLY_INVOICED",
+                            "FULLY_INVOICED"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "customerCode": {
+                        "type": "string"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "DeliveryItemRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "sourceDocType": {
+                        "type": "string",
+                        "enum": [
+                            "SALES_ORDER",
+                            "RETURN_PO",
+                            "TRANSFER_ORDER",
+                            "OTHER"
+                        ]
+                    },
+                    "sourceDocId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceDocItemId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceDocNo": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "sourceDocItemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "transactionUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "transactionQuantity": {
+                        "type": "number"
+                    },
+                    "baseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "baseQuantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "baseQuantity",
+                    "baseUnitId",
+                    "materialId",
+                    "transactionQuantity",
+                    "transactionUnitId",
+                    "unitPrice"
+                ]
+            },
+            "ApiResponseDeliveryItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DeliveryItemResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DeliveryItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "deliveryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "sourceDocType": {
+                        "type": "string",
+                        "enum": [
+                            "SALES_ORDER",
+                            "RETURN_PO",
+                            "TRANSFER_ORDER",
+                            "OTHER"
+                        ]
+                    },
+                    "sourceDocId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceDocItemId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceDocNo": {
+                        "type": "string"
+                    },
+                    "sourceDocItemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "transactionUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "transactionQuantity": {
+                        "type": "number"
+                    },
+                    "issuedQuantity": {
+                        "type": "number"
+                    },
+                    "baseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "baseQuantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "RELEASED",
+                            "DELIVERED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "invoicedQuantity": {
+                        "type": "number"
+                    },
+                    "invoiceStatus": {
+                        "type": "string",
+                        "enum": [
+                            "UNINVOICED",
+                            "PARTIALLY_INVOICED",
+                            "FULLY_INVOICED"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "transactionUnitCode": {
+                        "type": "string"
+                    },
+                    "transactionUnitName": {
+                        "type": "string"
+                    },
+                    "baseUnitCode": {
+                        "type": "string"
+                    },
+                    "baseUnitName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CustomerRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "minLength": 0
+                    },
+                    "shortName": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "taxId": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "email": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "fax": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "website": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "minLength": 0
+                    },
+                    "addressBilling": {
+                        "type": "string"
+                    },
+                    "addressShipping": {
+                        "type": "string"
+                    },
+                    "contactPerson": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "contactPhone": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "contactEmail": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerTypeOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "salesPersonId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "code",
+                    "name"
+                ]
+            },
+            "ApiResponseCustomerResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/CustomerResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "CustomerResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "shortName": {
+                        "type": "string"
+                    },
+                    "taxId": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "fax": {
+                        "type": "string"
+                    },
+                    "website": {
+                        "type": "string"
+                    },
+                    "addressBilling": {
+                        "type": "string"
+                    },
+                    "addressShipping": {
+                        "type": "string"
+                    },
+                    "contactPerson": {
+                        "type": "string"
+                    },
+                    "contactPhone": {
+                        "type": "string"
+                    },
+                    "contactEmail": {
+                        "type": "string"
+                    },
+                    "currencyOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerTypeOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "salesPersonId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "currencyOptionCode": {
+                        "type": "string"
+                    },
+                    "currencyOptionName": {
+                        "type": "string"
+                    },
+                    "customerTypeOptionCode": {
+                        "type": "string"
+                    },
+                    "customerTypeOptionName": {
+                        "type": "string"
+                    },
+                    "salesPersonName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseVoid": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {},
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProPageRequest": {
+                "type": "object",
+                "properties": {
+                    "pageNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "params": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    },
+                    "sort": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListSalesOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SalesOrderItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListSalesOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SalesOrderResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListPendingDeliverySalesOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PendingDeliverySalesOrderItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PendingDeliverySalesOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "salesOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "allocatedQuantity": {
+                        "type": "number"
+                    },
+                    "deliveredQuantity": {
+                        "type": "number"
+                    },
+                    "draftDeliveryQuantity": {
+                        "type": "number"
+                    },
+                    "pendingDeliveryQuantity": {
+                        "type": "number"
+                    },
+                    "expectedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerInternalRefNo": {
+                        "type": "string"
+                    },
+                    "customerOrderNo": {
+                        "type": "string"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "orderStatus": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "CONFIRMED",
+                            "DELIVERED",
+                            "CLOSED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "salesOrderNo": {
+                        "type": "string"
+                    },
+                    "salesOrderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListSalesForecastResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SalesForecastResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListDeliveryItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DeliveryItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListDeliveryResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DeliveryResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListPendingDeliveryItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PendingDeliveryItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PendingDeliveryItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "deliveryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "deliveryNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "plannedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "sourceDocType": {
+                        "type": "string",
+                        "enum": [
+                            "SALES_ORDER",
+                            "RETURN_PO",
+                            "TRANSFER_ORDER",
+                            "OTHER"
+                        ]
+                    },
+                    "sourceDocId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceDocItemId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceDocNo": {
+                        "type": "string"
+                    },
+                    "sourceDocItemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "transactionUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "transactionUnitCode": {
+                        "type": "string"
+                    },
+                    "transactionUnitName": {
+                        "type": "string"
+                    },
+                    "transactionQuantity": {
+                        "type": "number"
+                    },
+                    "issuedQuantity": {
+                        "type": "number"
+                    },
+                    "draftIssueQuantity": {
+                        "type": "number"
+                    },
+                    "pendingIssueQuantity": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "RELEASED",
+                            "DELIVERED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PendingDeliveryIssueSuggestRequest": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "deliveryItemIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "minItems": 1,
+                        "uniqueItems": true
+                    }
+                },
+                "required": [
+                    "deliveryItemIds",
+                    "factoryId"
+                ]
+            },
+            "Allocation": {
+                "type": "object",
+                "properties": {
+                    "warehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "warehouseCode": {
+                        "type": "string"
+                    },
+                    "warehouseName": {
+                        "type": "string"
+                    },
+                    "batchNo": {
+                        "type": "string"
+                    },
+                    "availableQuantity": {
+                        "type": "number"
+                    },
+                    "allocateQuantity": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AllocationSuggestResponse": {
+                "type": "object",
+                "properties": {
+                    "refId": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "issueUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueUnitCode": {
+                        "type": "string"
+                    },
+                    "issueUnitName": {
+                        "type": "string"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "allocations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Allocation"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListAllocationSuggestResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AllocationSuggestResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListCustomerResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CustomerResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseRemoteDeliveryForBillingDTO": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/RemoteDeliveryForBillingDTO"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "Item": {
+                "type": "object",
+                "properties": {
+                    "deliveryItemId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "lineNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "uomCode": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "unitPrice": {
+                        "type": "number"
+                    },
+                    "taxRate": {
+                        "type": "number"
+                    },
+                    "subtotalAmount": {
+                        "type": "number"
+                    },
+                    "taxAmount": {
+                        "type": "number"
+                    },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "sourceDocId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceDocNo": {
+                        "type": "string"
+                    },
+                    "sourceLineId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sourceLineNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "RemoteDeliveryForBillingDTO": {
+                "type": "object",
+                "properties": {
+                    "deliveryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "deliveryNo": {
+                        "type": "string"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "companyId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "plannedDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "actualDeliveryDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Item"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

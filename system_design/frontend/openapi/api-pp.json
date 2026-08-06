@@ -1,0 +1,4960 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:9000",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/api/v1/pp/production-reports/{id}": {
+            "get": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "getById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductionReportResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductionReportRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductionReportResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}": {
+            "get": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "getProductionOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductionOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "updateProductionOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductionOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductionOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/release": {
+            "put": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "releaseProductionOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "updateProductionOrderComponent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductionOrderComponentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductionOrderComponentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/finish": {
+            "put": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "finishProductionOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/close": {
+            "put": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "closeProductionOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "forceClose",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/cancel": {
+            "put": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "cancelProductionOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/planned-orders/{id}": {
+            "put": {
+                "tags": [
+                    "planned-order-controller"
+                ],
+                "operationId": "updatePlannedOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlannedOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponsePlannedOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-parameters/{id}": {
+            "get": {
+                "tags": [
+                    "mrp-parameter-controller"
+                ],
+                "operationId": "getMrpParameter",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMrpParameterResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "mrp-parameter-controller"
+                ],
+                "operationId": "updateMrpParameter",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MrpParameterRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMrpParameterResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/{id}": {
+            "get": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "getFactoryOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseFactoryOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "updateFactoryOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FactoryOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseFactoryOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "updateFactoryOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FactoryOrderItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseFactoryOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/{id}": {
+            "get": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "getBillOfMaterial",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBillOfMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "updateBillOfMaterial",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BillOfMaterialRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBillOfMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/{id}/items/{itemId}": {
+            "put": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "updateBomItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BomItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBomItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/bulk-unobsolete": {
+            "put": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "unobsoleteBillOfMaterialBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/bulk-unapprove": {
+            "put": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "unapproveBillOfMaterialBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/bulk-obsolete": {
+            "put": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "obsoleteBillOfMaterialBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/bulk-approve": {
+            "put": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "approveBillOfMaterialBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-reports": {
+            "post": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductionReportRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductionReportResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-reports/{id}/reverse": {
+            "post": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "reverseReport",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-reports/{id}/post": {
+            "post": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "postReport",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-reports/page": {
+            "post": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "getPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductionReportResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-reports/calculate-backflush": {
+            "post": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "calculateBackflushComponents",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductionReportCalculateBackflushRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListAllocationSuggestResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/items": {
+            "post": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "createProductionOrderComponent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductionOrderComponentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductionOrderComponentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/items/pending-issue/page": {
+            "post": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "getPendingIssueProductionOrderComponentPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductionOrderComponentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "getProductionOrderComponentPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductionOrderComponentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/page": {
+            "post": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "getProductionOrderPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductionOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/planned-orders/page": {
+            "post": {
+                "tags": [
+                    "planned-order-controller"
+                ],
+                "operationId": "getPlannedOrderPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListPlannedOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/planned-orders/bulk-unfirm": {
+            "post": {
+                "tags": [
+                    "planned-order-controller"
+                ],
+                "operationId": "unfirmPlannedOrdersBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/planned-orders/bulk-firm": {
+            "post": {
+                "tags": [
+                    "planned-order-controller"
+                ],
+                "operationId": "firmPlannedOrdersBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/planned-orders/bulk-convert-to-mo": {
+            "post": {
+                "tags": [
+                    "planned-order-controller"
+                ],
+                "operationId": "convertToProductionOrdersBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-runs": {
+            "post": {
+                "tags": [
+                    "mrp-controller"
+                ],
+                "operationId": "createMrpRun",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MrpRunRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMrpRunResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-runs/{id}/results/page": {
+            "post": {
+                "tags": [
+                    "mrp-controller"
+                ],
+                "operationId": "getMrpResultPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMrpResultResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-runs/{id}/results/convert-to-purchase-requisitions": {
+            "post": {
+                "tags": [
+                    "mrp-controller"
+                ],
+                "operationId": "convertToPurchaseRequisitions",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-runs/{id}/results/convert-to-planned-orders": {
+            "post": {
+                "tags": [
+                    "mrp-controller"
+                ],
+                "operationId": "convertToPlannedOrders",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-runs/page": {
+            "post": {
+                "tags": [
+                    "mrp-controller"
+                ],
+                "operationId": "getMrpRunPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMrpRunResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-parameters": {
+            "post": {
+                "tags": [
+                    "mrp-parameter-controller"
+                ],
+                "operationId": "createMrpParameter",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MrpParameterRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMrpParameterResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-parameters/page": {
+            "post": {
+                "tags": [
+                    "mrp-parameter-controller"
+                ],
+                "operationId": "getMrpParameterPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListMrpParameterResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders": {
+            "post": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "createFactoryOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FactoryOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseFactoryOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/{id}/items": {
+            "post": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "createFactoryOrderItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FactoryOrderItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseFactoryOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "getFactoryOrderItemPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListFactoryOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/{id}/add-items-from-so": {
+            "post": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "addSoItems",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FactoryOrderAddItemsRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListFactoryOrderItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/page": {
+            "post": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "getFactoryOrderPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListFactoryOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/bulk-unconfirm": {
+            "post": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "unConfirmFactoryOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/bulk-confirm": {
+            "post": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "confirmFactoryOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials": {
+            "post": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "createBillOfMaterial",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BillOfMaterialRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBillOfMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/{id}/items": {
+            "post": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "createBomItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BomItemRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBomItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/{id}/items/page": {
+            "post": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "getBomItemPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBomItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/page": {
+            "post": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "getBillOfMaterialPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBillOfMaterialResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/backflush-exceptions/reprocess": {
+            "post": {
+                "tags": [
+                    "production-backflush-exception-controller"
+                ],
+                "operationId": "reprocessExceptions",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/backflush-exceptions/page": {
+            "post": {
+                "tags": [
+                    "production-backflush-exception-controller"
+                ],
+                "operationId": "getExceptionPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductionBackflushExceptionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/backflush-exceptions/bulk-ignore": {
+            "post": {
+                "tags": [
+                    "production-backflush-exception-controller"
+                ],
+                "operationId": "ignoreExceptions",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-reports/{id}/items": {
+            "get": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "getItems",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductionReportComponentGroupResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-reports/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "production-report-controller"
+                ],
+                "operationId": "deleteBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "deleteProductionOrderComponentBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/production-orders/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "production-order-controller"
+                ],
+                "operationId": "deleteProductionOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/planned-orders/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "planned-order-controller"
+                ],
+                "operationId": "deletePlannedOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-runs/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "mrp-controller"
+                ],
+                "operationId": "deleteMrpRunBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/mrp-parameters/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "mrp-parameter-controller"
+                ],
+                "operationId": "deleteMrpParameterBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "deleteFactoryOrderItemBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/factory-orders/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "factory-order-controller"
+                ],
+                "operationId": "deleteFactoryOrderBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/{id}/items/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "deleteBomItemBulk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pp/bill-of-materials/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "bill-of-material-controller"
+                ],
+                "operationId": "deleteBillOfMaterialBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                },
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ProductionReportComponentRequest": {
+                "type": "object",
+                "properties": {
+                    "productionOrderComponentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "warehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "batchNo": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueQuantity": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "issueQuantity",
+                    "materialId",
+                    "productionOrderComponentId",
+                    "unitId",
+                    "warehouseId"
+                ]
+            },
+            "ProductionReportRequest": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "reportDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "goodQuantity": {
+                        "type": "number"
+                    },
+                    "reworkQuantity": {
+                        "type": "number"
+                    },
+                    "scrapQuantity": {
+                        "type": "number"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "warehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "batchNo": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "defectReasonCode": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "components": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductionReportComponentRequest"
+                        }
+                    },
+                    "autoPost": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "factoryId",
+                    "goodQuantity",
+                    "productMaterialId",
+                    "productionOrderId",
+                    "reportDate",
+                    "reworkQuantity",
+                    "scrapQuantity",
+                    "unitId"
+                ]
+            },
+            "ApiResponseProductionReportResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductionReportResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductionReportResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "reportNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionOrderNo": {
+                        "type": "string"
+                    },
+                    "productionOrderPlannedQuantity": {
+                        "type": "number"
+                    },
+                    "productionOrderCompletedQuantity": {
+                        "type": "number"
+                    },
+                    "productionOrderScrappedQuantity": {
+                        "type": "number"
+                    },
+                    "productionOrderStatus": {
+                        "type": "string",
+                        "enum": [
+                            "CREATED",
+                            "RELEASED",
+                            "CANCELLED",
+                            "IN_PROGRESS",
+                            "FINISHED",
+                            "CLOSED"
+                        ]
+                    },
+                    "reportDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "goodQuantity": {
+                        "type": "number"
+                    },
+                    "reworkQuantity": {
+                        "type": "number"
+                    },
+                    "scrapQuantity": {
+                        "type": "number"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productMaterialCode": {
+                        "type": "string"
+                    },
+                    "productMaterialName": {
+                        "type": "string"
+                    },
+                    "warehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "batchNo": {
+                        "type": "string"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "reportStatus": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "POSTED",
+                            "REVERSED"
+                        ]
+                    },
+                    "defectReasonCode": {
+                        "type": "string"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ProductionOrderRequest": {
+                "type": "object",
+                "properties": {
+                    "scheduledStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "scheduledEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "departmentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseProductionOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductionOrderResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductionOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryCode": {
+                        "type": "string"
+                    },
+                    "factoryName": {
+                        "type": "string"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productMaterialCode": {
+                        "type": "string"
+                    },
+                    "productMaterialName": {
+                        "type": "string"
+                    },
+                    "bomId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bomVersion": {
+                        "type": "string"
+                    },
+                    "plannedQuantity": {
+                        "type": "number"
+                    },
+                    "completedQuantity": {
+                        "type": "number"
+                    },
+                    "scrappedQuantity": {
+                        "type": "number"
+                    },
+                    "underDeliveryTolerance": {
+                        "type": "number"
+                    },
+                    "draftCompletedQuantity": {
+                        "type": "number"
+                    },
+                    "draftScrappedQuantity": {
+                        "type": "number"
+                    },
+                    "draftReworkQuantity": {
+                        "type": "number"
+                    },
+                    "orderUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderUnitCode": {
+                        "type": "string"
+                    },
+                    "orderUnitName": {
+                        "type": "string"
+                    },
+                    "scheduledStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "scheduledEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "actualStartDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "actualEndDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "orderStatus": {
+                        "type": "string",
+                        "enum": [
+                            "CREATED",
+                            "RELEASED",
+                            "CANCELLED",
+                            "IN_PROGRESS",
+                            "FINISHED",
+                            "CLOSED"
+                        ]
+                    },
+                    "departmentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "departmentName": {
+                        "type": "string"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseVoid": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {},
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductionOrderComponentRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "isBackflush": {
+                        "type": "boolean"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "materialId",
+                    "requiredQuantity"
+                ]
+            },
+            "ApiResponseProductionOrderComponentResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductionOrderComponentResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductionOrderComponentResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "issueUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueUnitCode": {
+                        "type": "string"
+                    },
+                    "issueUnitName": {
+                        "type": "string"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "issuedQuantity": {
+                        "type": "number"
+                    },
+                    "isBackflush": {
+                        "type": "boolean"
+                    },
+                    "underIssueTolerance": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "draftIssueQuantity": {
+                        "type": "number"
+                    },
+                    "availableToIssueQuantity": {
+                        "type": "number"
+                    }
+                }
+            },
+            "PlannedOrderRequest": {
+                "type": "object",
+                "properties": {
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "orderType": {
+                        "type": "string",
+                        "enum": [
+                            "MAKE",
+                            "OUTSOURCE"
+                        ]
+                    }
+                },
+                "required": [
+                    "endDate",
+                    "orderType",
+                    "startDate"
+                ]
+            },
+            "ApiResponsePlannedOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PlannedOrderResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PlannedOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "mrpRunId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "mrpRunCode": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryCode": {
+                        "type": "string"
+                    },
+                    "factoryName": {
+                        "type": "string"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productMaterialCode": {
+                        "type": "string"
+                    },
+                    "productMaterialName": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "orderType": {
+                        "type": "string",
+                        "enum": [
+                            "MAKE",
+                            "OUTSOURCE"
+                        ]
+                    },
+                    "orderStatus": {
+                        "type": "string",
+                        "enum": [
+                            "PROPOSED",
+                            "FIRMED",
+                            "CONVERTED"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "JsonNullableLong": {
+                "type": "object",
+                "properties": {
+                    "present": {
+                        "type": "boolean"
+                    },
+                    "undefined": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "MrpParameterRequest": {
+                "type": "object",
+                "properties": {
+                    "materialId": {
+                        "$ref": "#/components/schemas/JsonNullableLong"
+                    },
+                    "factoryId": {
+                        "$ref": "#/components/schemas/JsonNullableLong"
+                    },
+                    "lotSizingProcedure": {
+                        "type": "string",
+                        "enum": [
+                            "LFL",
+                            "FOQ",
+                            "POQ"
+                        ]
+                    },
+                    "minLotSize": {
+                        "type": "number"
+                    },
+                    "maxLotSize": {
+                        "type": "number"
+                    },
+                    "roundingValue": {
+                        "type": "number"
+                    },
+                    "fixedLotSize": {
+                        "type": "number"
+                    },
+                    "periodDays": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "leadTimeDays": {
+                        "type": "number"
+                    },
+                    "safetyStockQuantity": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "lotSizingProcedure"
+                ]
+            },
+            "ApiResponseMrpParameterResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MrpParameterResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MrpParameterResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "lotSizingProcedure": {
+                        "type": "string",
+                        "enum": [
+                            "LFL",
+                            "FOQ",
+                            "POQ"
+                        ]
+                    },
+                    "minLotSize": {
+                        "type": "number"
+                    },
+                    "maxLotSize": {
+                        "type": "number"
+                    },
+                    "roundingValue": {
+                        "type": "number"
+                    },
+                    "fixedLotSize": {
+                        "type": "number"
+                    },
+                    "periodDays": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "leadTimeDays": {
+                        "type": "number"
+                    },
+                    "safetyStockQuantity": {
+                        "type": "number"
+                    },
+                    "level": {
+                        "type": "string",
+                        "enum": [
+                            "LEVEL_1_FACTORY_MATERIAL",
+                            "LEVEL_2_GLOBAL_MATERIAL",
+                            "LEVEL_3_FACTORY_DEFAULT",
+                            "LEVEL_4_GLOBAL_DEFAULT",
+                            "LEVEL_5_SYSTEM_DEFAULT"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryCode": {
+                        "type": "string"
+                    },
+                    "factoryName": {
+                        "type": "string"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "FactoryOrderRequest": {
+                "type": "object",
+                "properties": {
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "enum": [
+                            "LOW",
+                            "NORMAL",
+                            "HIGH",
+                            "URGENT"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "sourceType": {
+                        "type": "string",
+                        "enum": [
+                            "SALES_ORDER",
+                            "MANUAL"
+                        ]
+                    }
+                },
+                "required": [
+                    "customerId",
+                    "factoryId",
+                    "orderDate"
+                ]
+            },
+            "ApiResponseFactoryOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/FactoryOrderResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "FactoryOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "orderNo": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryCode": {
+                        "type": "string"
+                    },
+                    "factoryName": {
+                        "type": "string"
+                    },
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    },
+                    "orderStatus": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "CONFIRMED",
+                            "IN_PROGRESS",
+                            "COMPLETED",
+                            "CLOSED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "priority": {
+                        "type": "string",
+                        "enum": [
+                            "LOW",
+                            "NORMAL",
+                            "HIGH",
+                            "URGENT"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "sourceType": {
+                        "type": "string",
+                        "enum": [
+                            "SALES_ORDER",
+                            "MANUAL"
+                        ]
+                    },
+                    "totalQuantity": {
+                        "type": "number"
+                    },
+                    "soCount": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "confirmedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "confirmedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "confirmedByName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "FactoryOrderItemRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "dueDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "dueDate",
+                    "productMaterialId",
+                    "quantity"
+                ]
+            },
+            "ApiResponseFactoryOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/FactoryOrderItemResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "FactoryOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "dueDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "allocatedQuantity": {
+                        "type": "number"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BillOfMaterialRequest": {
+                "type": "object",
+                "properties": {
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "validFrom": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "validTo": {
+                        "$ref": "#/components/schemas/JsonNullableLocalDate"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "productMaterialId",
+                    "validFrom",
+                    "version"
+                ]
+            },
+            "JsonNullableLocalDate": {
+                "type": "object",
+                "properties": {
+                    "present": {
+                        "type": "boolean"
+                    },
+                    "undefined": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ApiResponseBillOfMaterialResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BillOfMaterialResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "BillOfMaterialResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bomStatus": {
+                        "type": "string",
+                        "enum": [
+                            "DRAFT",
+                            "APPROVED",
+                            "OBSOLETE"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "string"
+                    },
+                    "validFrom": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "validTo": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "productMaterialCode": {
+                        "type": "string"
+                    },
+                    "productMaterialName": {
+                        "type": "string"
+                    },
+                    "baseUnitCode": {
+                        "type": "string"
+                    },
+                    "baseUnitName": {
+                        "type": "string"
+                    },
+                    "salesUnitCode": {
+                        "type": "string"
+                    },
+                    "salesUnitName": {
+                        "type": "string"
+                    },
+                    "isManufactured": {
+                        "type": "boolean"
+                    },
+                    "productModelCode": {
+                        "type": "string"
+                    },
+                    "productModelName": {
+                        "type": "string"
+                    },
+                    "colorCode": {
+                        "type": "string"
+                    },
+                    "colorName": {
+                        "type": "string"
+                    },
+                    "productSizeCode": {
+                        "type": "string"
+                    },
+                    "productSizeName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BomItemRequest": {
+                "type": "object",
+                "properties": {
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "componentMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "scrapRate": {
+                        "type": "number"
+                    },
+                    "isBackflush": {
+                        "type": "boolean"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "activeStatus": {
+                        "type": "string",
+                        "enum": [
+                            "ACTIVE",
+                            "INACTIVE"
+                        ]
+                    }
+                },
+                "required": [
+                    "activeStatus",
+                    "componentMaterialId",
+                    "quantity"
+                ]
+            },
+            "ApiResponseBomItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BomItemResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "BomItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bomId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "componentMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    },
+                    "scrapRate": {
+                        "type": "number"
+                    },
+                    "isBackflush": {
+                        "type": "boolean"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "activeStatus": {
+                        "type": "string",
+                        "enum": [
+                            "ACTIVE",
+                            "INACTIVE"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "componentMaterialCode": {
+                        "type": "string"
+                    },
+                    "componentMaterialName": {
+                        "type": "string"
+                    },
+                    "baseUnitCode": {
+                        "type": "string"
+                    },
+                    "baseUnitName": {
+                        "type": "string"
+                    },
+                    "purchaseUnitCode": {
+                        "type": "string"
+                    },
+                    "purchaseUnitName": {
+                        "type": "string"
+                    },
+                    "isManufactured": {
+                        "type": "boolean"
+                    },
+                    "colorCode": {
+                        "type": "string"
+                    },
+                    "colorName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProPageRequest": {
+                "type": "object",
+                "properties": {
+                    "pageNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "params": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    },
+                    "sort": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListProductionReportResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductionReportResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductionReportCalculateBackflushRequest": {
+                "type": "object",
+                "properties": {
+                    "productionOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "goodQuantity": {
+                        "type": "number"
+                    },
+                    "scrapQuantity": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "goodQuantity",
+                    "productionOrderId",
+                    "scrapQuantity"
+                ]
+            },
+            "Allocation": {
+                "type": "object",
+                "properties": {
+                    "warehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "warehouseCode": {
+                        "type": "string"
+                    },
+                    "warehouseName": {
+                        "type": "string"
+                    },
+                    "batchNo": {
+                        "type": "string"
+                    },
+                    "availableQuantity": {
+                        "type": "number"
+                    },
+                    "allocateQuantity": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AllocationSuggestResponse": {
+                "type": "object",
+                "properties": {
+                    "refId": {
+                        "type": "string"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "issueUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueUnitCode": {
+                        "type": "string"
+                    },
+                    "issueUnitName": {
+                        "type": "string"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "allocations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Allocation"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListAllocationSuggestResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AllocationSuggestResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListProductionOrderComponentResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductionOrderComponentResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListProductionOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductionOrderResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListPlannedOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PlannedOrderResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MrpRunRequest": {
+                "type": "object",
+                "properties": {
+                    "runDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "runDate"
+                ]
+            },
+            "ApiResponseMrpRunResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MrpRunResponse"
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MrpRunResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "runCode": {
+                        "type": "string"
+                    },
+                    "runDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "runStatus": {
+                        "type": "string",
+                        "enum": [
+                            "RUNNING",
+                            "COMPLETED",
+                            "FAILED",
+                            "CANCELLED"
+                        ]
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "executionTimeMs": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListMrpResultResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MrpResultResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "MrpResultResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "mrpRunId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryCode": {
+                        "type": "string"
+                    },
+                    "factoryName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "plannedStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "plannedEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "suggestedActionType": {
+                        "type": "string",
+                        "enum": [
+                            "PURCHASE",
+                            "PRODUCTION"
+                        ]
+                    },
+                    "isConverted": {
+                        "type": "boolean"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListMrpRunResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MrpRunResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListMrpParameterResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MrpParameterResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListFactoryOrderItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FactoryOrderItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ConvertItem": {
+                "type": "object",
+                "properties": {
+                    "salesOrderItemId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quantity": {
+                        "type": "number",
+                        "minimum": 0.000001
+                    }
+                },
+                "required": [
+                    "quantity",
+                    "salesOrderItemId"
+                ]
+            },
+            "FactoryOrderAddItemsRequest": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ConvertItem"
+                        },
+                        "minItems": 1
+                    }
+                },
+                "required": [
+                    "items"
+                ]
+            },
+            "ApiResponseListFactoryOrderResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FactoryOrderResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListBomItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BomItemResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListBillOfMaterialResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BillOfMaterialResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ApiResponseListProductionBackflushExceptionResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductionBackflushExceptionResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductionBackflushExceptionResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionOrderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionOrderNo": {
+                        "type": "string"
+                    },
+                    "productionReportId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionReportNo": {
+                        "type": "string"
+                    },
+                    "productionReportDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "productionOrderComponentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productMaterialCode": {
+                        "type": "string"
+                    },
+                    "productMaterialName": {
+                        "type": "string"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "issueUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueUnitCode": {
+                        "type": "string"
+                    },
+                    "issueUnitName": {
+                        "type": "string"
+                    },
+                    "missingQuantity": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "PENDING",
+                            "RESOLVED",
+                            "IGNORED"
+                        ]
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ApiResponseListProductionReportComponentGroupResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductionReportComponentGroupResponse"
+                        }
+                    },
+                    "error": {},
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProductionReportComponentGroupResponse": {
+                "type": "object",
+                "properties": {
+                    "factoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionOrderComponentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "issueUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "issueUnitCode": {
+                        "type": "string"
+                    },
+                    "issueUnitName": {
+                        "type": "string"
+                    },
+                    "requiredQuantity": {
+                        "type": "number"
+                    },
+                    "totalIssueQuantity": {
+                        "type": "number"
+                    },
+                    "allocations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductionReportComponentResponse"
+                        }
+                    }
+                }
+            },
+            "ProductionReportComponentResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productionReportId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "itemNo": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productionOrderComponentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "warehouseId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "warehouseCode": {
+                        "type": "string"
+                    },
+                    "warehouseName": {
+                        "type": "string"
+                    },
+                    "batchNo": {
+                        "type": "string"
+                    },
+                    "materialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialCode": {
+                        "type": "string"
+                    },
+                    "materialName": {
+                        "type": "string"
+                    },
+                    "unitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unitCode": {
+                        "type": "string"
+                    },
+                    "unitName": {
+                        "type": "string"
+                    },
+                    "issueQuantity": {
+                        "type": "number"
+                    },
+                    "remarks": {
+                        "type": "string"
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedBy": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        }
+    }
+}
