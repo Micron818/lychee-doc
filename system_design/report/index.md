@@ -123,7 +123,7 @@
 - **新单据类 PDF**：复用后端 `*PdfRenderer`/模板 + 前端 `PdfPreview*` 基座（见 04 §6）；禁止再开前端打印页双轨。
 - **请购单打印（仅 Print）**：比照订购单实现 `GET /purchase-requisitions/{id}/pdf` + `PurchaseRequisitionPdfRenderer` + 原页 Modal；无 `ExportHandler` / 无「下载 PDF」（无归档需求时省略导出层）。
 - **更多 Excel 导入**：复用 `DataImportHandler` + 模板 + `ExcelImportButton`（见 06）；单据类导入二期评估。
-- 标准成本「导出为再导入模板」：与 I1 列对齐的导出 Handler，便于期间调价。
+- ~~标准成本「导出为再导入模板」~~：✅ `FI_MATERIAL_COST` 清单导出（前 8 列对齐导入模板；见 07 §12）。
 
 ## 关键风险与对策
 
