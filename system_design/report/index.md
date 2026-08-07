@@ -1,7 +1,7 @@
-# 系统报表与资料导出功能 — 规划文档
+# 系统报表与资料导入导出功能 — 规划文档
 
-> 编写日期：2026-07-31（P3：2026-08-05）
-> 状态：**P0、P1、P2、P3 已实现**（Excel 模板填充 + 进耗存汇总导出）
+> 编写日期：2026-07-31（P3：2026-08-05；导入框架设计：2026-08-07）
+> 状态：**导出 P0–P3 已实现**；**导入 I0/I1 已实现**（框架 + 物料标准成本导入，2026-08-07）
 
 ## 文档索引
 
@@ -12,6 +12,8 @@
 | [03-示例-供应商Excel导出.md](./03-示例-供应商Excel导出.md) | 第一个落地示例：供应商清单导出 Excel 的端到端实现方案 |
 | [04-示例-订购单打印表单.md](./04-示例-订购单打印表单.md) | 第二个落地示例：订购单服务端 PDF + 原页 Modal iframe 预览 |
 | [05-Excel模板填充与进耗存汇总导出.md](./05-Excel模板填充与进耗存汇总导出.md) | **P3 执行计划**：Fesod 模板填充基础能力 + 进耗存汇总表示例 |
+| [06-导入框架总体设计.md](./06-导入框架总体设计.md) | **导入框架**：作业表、SPI、`ExcelReadSupport`、错误报告、前端 `ExcelImportButton` |
+| [07-示例-物料标准成本导入.md](./07-示例-物料标准成本导入.md) | **I1 首例**：物料标准成本（MaterialCost）Excel 导入端到端方案 |
 
 ## 核心决策摘要
 
@@ -25,6 +27,9 @@
 | 固定版式 Excel | **Fesod `withTemplate` + fill**（`ExcelTemplateWriteSupport`） | 与清单流式写入分流；版式在 `.xlsx` 模板维护；作业管线零改动（见 05） |
 | 后端代码位置 | 新增 Gradle 模块 **`lychee-erp-report`**（作业编排）+ SPI 接口与 Excel 工具置于 `lychee-erp-common`，各领域模块实现自己的导出 Handler | 与现有按领域分模块的结构一致；report 模块不依赖任何领域模块，避免循环依赖 |
 | 前端交互 | 共享 `ExportButton` 组件（`canAction(pathname, 'export')` 权限门控，权限系统已内建 `export` action）+ `useExportJob` 轮询 Hook + 「导出中心」页面 | 复用 MRP 前端的 ProTable `polling` 范式与工具栏按钮范式 |
+| Excel 导入库 | **同一 Apache Fesod**（`FesodSheet.read` + `ReadListener`） | 与导出共用依赖；流式读低内存；注解 DTO + 批处理 |
+| 导入执行模型 | **统一导入作业框架**（镜像导出：小文件同步 + 大文件异步） | 复用租户/安全上下文传递；OSS 存源文件与错误报告；部分成功 |
+| 导入前端 | 新建 `ExcelImportButton` + `useImportJob` + 「导入中心」；**不复用**现有 `ImportButton` | 现有 `ImportButton` 专用于「从他单/资料导入行」；权限用已内建 `import` action |
 
 ## 报表需求分类（决定架构分层）
 
@@ -32,6 +37,7 @@
 2. **单据类打印**（已实现）：单张业务单据的固定版式表单。示例：订购单 PDF（`PdfRenderSupport`）。
 3. **固定版式 Excel / 模板填充**（P3）：标题区 + 明细列表 + 合计等套打 xlsx。示例：进耗存汇总表（`ExcelTemplateWriteSupport`）。
 4. **统计分析类报表**（后续）：聚合查询 + 前端图表展示。框架 Handler SPI 已预留；届时前端按需引入图表库。
+5. **Excel 资料导入**（设计完成，待实现）：系统模板 + 上传作业 + 行级校验落库 + 错误报告。示例：物料标准成本（见 [06](./06-导入框架总体设计.md) / [07](./07-示例-物料标准成本导入.md)）。
 
 ## 实施阶段
 
@@ -92,15 +98,32 @@
 3. ✅ 前端：`ExportButton.beforeExport` + 进耗存列表接入 + `ExportJobType` 扩展；三语提示文案。
 4. ⬜ 上线前：运行时为 `/wm/inventory-balances` 追加 `export` 动作权限并授予角色。
 
+### I0 — Excel 导入框架（✅ 已实现 2026-08-07，见 [06](./06-导入框架总体设计.md)）
+
+1. ✅ Liquibase：`0807-001-report-import-jobs.sql` 建 `import_jobs` 表。
+2. ✅ 后端 common：`ImportJobType`/`ImportJobStatus`、`DataImportHandler` SPI、`ExcelReadSupport` / `ExcelErrorReportSupport` / `ExcelImportTemplateSupport`；`StorageService.open`。
+3. ✅ 后端 report：`ImportJobService`（同步阈值默认 500 行 + 异步 `importTaskExecutor`）、`ImportJobController`（模板下载 / multipart 创建 / 轮询 / 签名 URL / 分页 / 批量删除）、访问控制对齐导出中心。
+4. ✅ 前端：`services/report/import-job`、`useImportJob`、`ExcelImportButton`、「导入中心」`/report/import-jobs`、三语文案。
+5. ⬜ 上线前：OSS `*/imports/` 生命周期 30 天；菜单 `/report/import-jobs` 配置 `read`/`delete`。
+
+### I1 — 物料标准成本 Excel 导入（✅ 已实现 2026-08-07，见 [07](./07-示例-物料标准成本导入.md)）
+
+1. ✅ fi：`MaterialStandardCostImportHandler` + `MaterialStandardCostImportRow`；仅 `STANDARD_COST`；UPSERT/CREATE_ONLY；拒绝成本计算只读行。
+2. ✅ mm/common：`RemoteMaterialService.findByCodes` + `MaterialRepository.findByCodeIn`。
+3. ✅ 前端：物料成本列表挂 `ExcelImportButton`；模板下载 + 上传 Modal；成功后 reload。
+4. ⬜ 上线前：为 `/fi/material-costs` 追加 `import` 动作权限并授予角色。
+
 ### 后续按需演进
 
 - 批量 PDF 列表入口（订购单列表勾选多单导出）：后端 Handler 已支持 `ids` 批量，前端待解决列表复选框当前仅允许勾选 DRAFT 单（服务于批量删除/审核）的语义冲突后即可开放。
 - 邮件发送供应商：PDF 已落 OSS，追加邮件通道即可。
-- 过期作业清理定时任务（`@Scheduled`，与 OSS 生命周期规则双保险）。
+- 过期作业清理定时任务（`@Scheduled`，与 OSS 生命周期规则双保险；导出/导入作业均可覆盖）。
 - 更多清单导出：只需新增一个 Handler + 前端一个按钮，框架零改动。
 - **更多模板 Excel**：复用 `ExcelTemplateWriteSupport` + 领域模板 + Handler（见 05）；大清单仍走 `ExcelWriteSupport`。
 - **新单据类 PDF**：复用后端 `*PdfRenderer`/模板 + 前端 `PdfPreview*` 基座（见 04 §6）；禁止再开前端打印页双轨。
 - **请购单打印（仅 Print）**：比照订购单实现 `GET /purchase-requisitions/{id}/pdf` + `PurchaseRequisitionPdfRenderer` + 原页 Modal；无 `ExportHandler` / 无「下载 PDF」（无归档需求时省略导出层）。
+- **更多 Excel 导入**：复用 `DataImportHandler` + 模板 + `ExcelImportButton`（见 06）；单据类导入二期评估。
+- 标准成本「导出为再导入模板」：与 I1 列对齐的导出 Handler，便于期间调价。
 
 ## 关键风险与对策
 
@@ -111,3 +134,6 @@
 | 签名 URL 泄露 | 下载 URL 每次通过 API 实时签发，有效期 5 分钟；不落库、不返回长效 URL |
 | 租户内越权下载导出文件 | 作业默认仅发起人本人可见（管理员例外）；下载时重验 Handler 业务导出权限；下载留审计日志 |
 | 打印/归档版式漂移 | 版式收敛为 Thymeleaf 模板单一来源；原页 Modal + iframe 预览同一 PDF |
+| 导入大文件/大批量写库 | Fesod 流式读 + `max-rows`/`max-file-size` + 独立 `importTaskExecutor` + 小 batchSize |
+| 导入模板列头被改 / 跨语言错配 | 强制系统模板；按作业 locale 校验列头；按 index 绑定字段 |
+| 与单据「导入」按钮语义混淆 | 新建 `ExcelImportButton`；保留现有 `ImportButton` 给从他单导入 |
