@@ -2,7 +2,7 @@
 
 > Trạng thái：**Chưa dịch** — chờ bản tiếng Trung ổn định sau buổi thử giảng.  
 > Chính sách ngôn ngữ：chỉ duy trì **zh** và **vi** (không duy trì bản tiếng Anh cho user training).  
-> Baseline menu（zh）：`menus_20260808`；tên menu theo giao diện hệ thống.
+> Phạm vi chức năng（zh）：`menus_20260808`（cùng một bộ tài liệu với bản Trung）；tên menu theo giao diện hệ thống.
 
 ## Quy tắc đồng bộ
 

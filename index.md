@@ -24,7 +24,7 @@ features:
     link: /user_training/zh/00-overview/
     linkText: 查看业务全景
   - title: 流程剧本 PB-01～10
-    details: 主价值链 PB-01～06，增量包含导入、委外、盘点、销货收款。
+    details: 主数据、销货、采购、生产、关账、导入导出、委外、盘点、收款等完整训练场景。
     link: /user_training/zh/03-process-playbooks/PB-01-master-data-ready
     linkText: 从 PB-01 开始
   - title: 仅维护中越两语

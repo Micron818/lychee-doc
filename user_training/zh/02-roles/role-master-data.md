@@ -22,7 +22,7 @@
 6. **批量导入**：若财务/实施开放导入类型，配合 [导入中心](../01-getting-started/03-import-center.md) 在训练环境先验证。  
 7. **变更**：停用前确认无未结单据依赖；编码一经启用勿随意复用。  
 
-跟练剧本：[PB-01 主数据就绪](../03-process-playbooks/PB-01-master-data-ready.md)；可选 [PB-07](../03-process-playbooks/PB-07-import-center.md)。
+跟练剧本：[PB-01 主数据就绪](../03-process-playbooks/PB-01-master-data-ready.md)、[PB-07 导入中心](../03-process-playbooks/PB-07-import-center.md)。
 
 ## 4. 状态与权限说明
 
