@@ -1,6 +1,6 @@
 # 角色手册：销售
 
-> 受众：销售 | 模块：SD | 版本：2026-08-01  
+> 受众：销售 | 模块：SD | 版本：2026-08-08  
 > 预计时长：35 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 业务目标
@@ -20,7 +20,8 @@
 4. 在可交货状态下创建或跟进 `交货单(DN)`，与仓储确认出货。
 5. 关注订单未交数量与异常关闭。
 
-跟练剧本：[PB-02 销售出货](../03-process-playbooks/PB-02-sales-to-delivery.md)。
+跟练剧本：[PB-02 销售出货](../03-process-playbooks/PB-02-sales-to-delivery.md)。  
+后续开票收款由财务执行，概念见 [OV-02](../00-overview/02-order-to-cash.md)，动手见 [PB-10](../03-process-playbooks/PB-10-order-to-cash.md)。
 
 ## 4. 状态与权限说明
 

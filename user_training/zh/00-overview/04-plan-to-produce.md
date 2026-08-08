@@ -1,6 +1,6 @@
 # OV-04 计划生产（概念）
 
-> 受众：生产计划、仓储 | 模块：PP / WM / SCM | 版本：2026-08-01  
+> 受众：生产计划、仓储 | 模块：PP / WM / SCM | 版本：2026-08-08  
 > 预计时长：10 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 目标
@@ -41,6 +41,7 @@ MRP 还可能驱动采购侧需求（转 PR/PO），与 [OV-03](./03-procure-to-
 ## 3. 跟练入口
 
 - 操作步骤：[PB-04](../03-process-playbooks/PB-04-mrp-to-production.md)  
+- 委外支线（采购主责）：[PB-08](../03-process-playbooks/PB-08-outsource-loop.md)  
 - 角色：[生产计划](../02-roles/role-production.md)  
 - 总图：[OV-01](./01-system-process-map.md)
 

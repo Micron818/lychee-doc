@@ -1,6 +1,6 @@
 # OV-02 销货闭环（概念）
 
-> 受众：销售、仓储、财务 | 模块：SD / WM / FI | 版本：2026-08-01  
+> 受众：销售、仓储、财务 | 模块：SD / WM / FI | 版本：2026-08-08  
 > 预计时长：10 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 目标
@@ -16,9 +16,10 @@ flowchart LR
   DN[交货单 DN]
   STK[库存出货]
   AR[应收发票 AR]
+  PAY[收付款]
 
   C --> SO --> DN --> STK
-  DN -.-> AR
+  DN -.-> AR --> PAY
 ```
 
 | 环节 | 主责 | 交出什么 |
@@ -27,12 +28,14 @@ flowchart LR
 | SO | 销售 | 已审核（或等效）订单 |
 | DN | 销售或仓储（按公司分工） | 实发数量、出货过账 |
 | 库存 | 仓储 | 现存量 / 流水变化 |
-| AR | 财务 | 开票与过账（训练深度由教员定） |
+| AR | 财务 | 开票与过账 |
+| 收付款 | 财务 | 收款核销 |
 
 ## 3. 跟练入口
 
-- 操作步骤：[PB-02 销售出货](../03-process-playbooks/PB-02-sales-to-delivery.md)  
-- 角色：[销售](../02-roles/role-sales.md)、[仓储](../02-roles/role-warehouse.md)  
+- 出货：[PB-02 销售出货](../03-process-playbooks/PB-02-sales-to-delivery.md)  
+- 开票收款：[PB-10 销货到收款](../03-process-playbooks/PB-10-order-to-cash.md)  
+- 角色：[销售](../02-roles/role-sales.md)、[仓储](../02-roles/role-warehouse.md)、[财务](../02-roles/role-finance.md)  
 - 回到总图：[OV-01](./01-system-process-map.md)
 
 ## 4. 概念要点（非操作）

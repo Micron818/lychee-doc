@@ -23,8 +23,8 @@ features:
     details: 跨模块价值链与关账协作概念图；动手前先建立地图。
     link: /user_training/zh/00-overview/
     linkText: 查看业务全景
-  - title: 流程剧本 PB-01～06
-    details: 主数据、销售、采购、生产、关账、导出打印等优先场景。
+  - title: 流程剧本 PB-01～10
+    details: 主价值链 PB-01～06，增量包含导入、委外、盘点、销货收款。
     link: /user_training/zh/03-process-playbooks/PB-01-master-data-ready
     linkText: 从 PB-01 开始
   - title: 仅维护中越两语

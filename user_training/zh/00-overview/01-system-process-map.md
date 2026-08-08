@@ -1,6 +1,6 @@
 # OV-01 系统整体流程地图
 
-> 受众：全体用户 | 模块：跨模块 | 版本：2026-08-01  
+> 受众：全体用户 | 模块：跨模块 | 版本：2026-08-08  
 > 预计时长：25 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 这篇解决什么问题
@@ -27,8 +27,9 @@ flowchart LR
   WM --> FI[FI 财务]
   SD --> FI
   SCM --> FI
-  SD --> R[REPORT 报表]
+  SD --> R[RPT 报表中心]
   SCM --> R
+  FI --> R
 ```
 
 > **ADM 系统管理**不画进主链：它为上述模块配置菜单与权限，贯穿全程。
@@ -43,7 +44,7 @@ flowchart LR
 | WM | 收发存、盘点、库存结账 | GR、SI、ST、PI |
 | PP | BOM、MRP、工单、产量回馈 | BOM、FO、MRP、PLO、MO、MOR |
 | FI | 发票、收付款、凭证、成本、资产 | AR、AP、日记账、成本结算 |
-| REPORT | 导出作业跟踪与下载 | 导出中心 |
+| RPT | 导出/导入作业跟踪与下载 | 导出中心、导入中心 |
 
 缩写释义见 [术语表](../../glossary.md)。
 
@@ -63,8 +64,9 @@ flowchart TB
   OTC --> FIN[财务：发票/收付款/成本/期间]
   PTP --> FIN
   STK --> FIN
-  MD -.-> EXP[导出与打印]
+  MD -.-> EXP[导出导入与打印]
   PTP -.-> EXP
+  FIN -.-> EXP
 ```
 
 ## 4. 角色与剧本对照
@@ -74,10 +76,10 @@ flowchart TB
 | 全体 | 本文 | [系统入门](../01-getting-started/01-system-overview.md) |
 | 主数据 | 本文 §2 | [PB-01](../03-process-playbooks/PB-01-master-data-ready.md) |
 | 销售 | [OV-02](./02-order-to-cash.md) | [PB-02](../03-process-playbooks/PB-02-sales-to-delivery.md) |
-| 采购 | [OV-03](./03-procure-to-pay.md) | [PB-03](../03-process-playbooks/PB-03-procure-to-pay.md)、[PB-06](../03-process-playbooks/PB-06-export-and-print.md) |
-| 仓储 | OV-03 + [OV-05](./05-period-close-collaboration.md) | PB-03、[PB-05](../03-process-playbooks/PB-05-period-close.md) |
+| 采购 | [OV-03](./03-procure-to-pay.md) | [PB-03](../03-process-playbooks/PB-03-procure-to-pay.md)、[PB-06](../03-process-playbooks/PB-06-export-and-print.md)、[PB-08](../03-process-playbooks/PB-08-outsource-loop.md) |
+| 仓储 | OV-03 + [OV-05](./05-period-close-collaboration.md) | PB-03、[PB-05](../03-process-playbooks/PB-05-period-close.md)、[PB-09](../03-process-playbooks/PB-09-physical-inventory.md) |
 | 生产计划 | [OV-04](./04-plan-to-produce.md) | [PB-04](../03-process-playbooks/PB-04-mrp-to-production.md) |
-| 财务 | OV-03 + OV-05 | PB-03（AP 段）、PB-05 |
+| 财务 | OV-02 + OV-03 + OV-05 | PB-03（AP）、PB-05、[PB-07](../03-process-playbooks/PB-07-import-center.md)、[PB-10](../03-process-playbooks/PB-10-order-to-cash.md) |
 | 管理员 | 本文 + 运维开通 | [菜单与权限](../05-admin-ops/01-menu-and-permission.md) |
 
 ## 5. 课堂使用建议
@@ -89,10 +91,10 @@ flowchart TB
 ## 6. FAQ
 
 **Q：为什么总图里没有把所有菜单画全？**  
-A：训练先抓主价值链。固定资产、科目确定等可在财务角色手册与模块速查中展开。
+A：训练先抓主价值链。固定资产、科目确定等可在财务角色手册与 [FI 速查](../04-module-quickref/fi.md) 中展开。
 
 **Q：委外（OSO）画在哪里？**  
-A：归属采购协同生产/仓储的支线；细节见采购角色手册与委外相关操作（实施阶段可再补 OV 专篇）。
+A：归属采购协同生产/仓储的支线；动手见 [PB-08](../03-process-playbooks/PB-08-outsource-loop.md)。
 
-**Q：导出中心是不是业务流程的一环？**  
-A：它是交付通道（清单 Excel、单据 PDF），不改变库存或凭证；见 [导出中心](../01-getting-started/02-export-center.md) 与 [PB-06](../03-process-playbooks/PB-06-export-and-print.md)。
+**Q：导出/导入中心是不是业务流程的一环？**  
+A：它们是交付与批量维护通道，不替代业务单据本身；见 [导出中心](../01-getting-started/02-export-center.md)、[导入中心](../01-getting-started/03-import-center.md) 与 PB-06 / PB-07。

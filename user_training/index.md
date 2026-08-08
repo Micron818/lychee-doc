@@ -1,8 +1,10 @@
 # Lychee ERP 用户教育训练文档
 
 > 编写日期：2026-08-01  
+> 修订：2026-08-08（对齐菜单基线 `menus_20260808`）  
 > 状态：**骨架已建立，中文内容逐步填充中**  
-> 语言策略：**仅维护中文（zh）与越南文（vi）两套**；先完成中文，再同步越南文
+> 语言策略：**仅维护中文（zh）与越南文（vi）两套**；先完成中文，再同步越南文  
+> 菜单文案：以系统界面当前中文菜单名为准；功能清单参考 [`menus_20260808-simple.md`](../system_design/backend/database/sql/initial_data/adm_init_data/menus_20260808-simple.md)
 
 ## 目标
 
@@ -29,6 +31,7 @@ pnpm docs:dev
 | 不维护 | 英文用户手册（系统界面三语文案仍可保留 en） |
 | 同步规则 | 以中文为源；改中文后必须在 PR / 变更记录中标注「待同步 vi」；vi 文件路径与 zh 一一对应 |
 | 术语 | 统一见 [`glossary.md`](./glossary.md)；缩写（SO/PO/GR 等）两语共用 |
+| 菜单名 | 一律用系统界面中文名；勿直接使用 SQL 菜单表英文 `name` |
 
 写作规范与截图约定见 [`00-conventions.md`](./00-conventions.md)。
 
@@ -38,11 +41,11 @@ pnpm docs:dev
 |------|------|------|
 | L0 总纲 | 本文件 + 约定 + 术语表 | 训练计划、索引、语言策略 |
 | L0.5 整体流程 | `zh/00-overview/` | 跨模块业务全景、价值链概念图（不写逐步点击） |
-| 入门 | `zh/01-getting-started/` | 登录、界面、导出中心 |
+| 入门 | `zh/01-getting-started/` | 登录、界面、导出/导入中心 |
 | L1 角色手册 | `zh/02-roles/` | 按岗位一天怎么干活 |
 | L2 流程剧本 | `zh/03-process-playbooks/` | 端到端场景（主战场） |
 | 速查 | `zh/04-module-quickref/` | 模块入口、状态、禁忌（薄文档） |
-| 运维开通 | `zh/05-admin-ops/` | 菜单/权限/导出等上线配置 |
+| 运维开通 | `zh/05-admin-ops/` | 菜单/权限/导入导出等上线配置 |
 
 建议阅读顺序：**总纲 → 入门（登录）→ 整体流程 → 角色手册 → 流程剧本**。
 
@@ -52,12 +55,12 @@ pnpm docs:dev
 |------|----------|------------|----------|
 | 全体 | — | OV-01 | 系统入门 |
 | 系统管理员 | ADM | OV-01 | 权限与菜单开通 |
-| 主数据维护 | BASIS / MM / SD 客户 / SCM 供应商 | OV-01 | PB-01 |
+| 主数据维护 | BASIS / MM / SD 客户 / SCM 供应商 | OV-01 | PB-01、PB-07（可选） |
 | 销售 | SD | OV-02 | PB-02 |
-| 采购 | SCM | OV-03 | PB-03、PB-06 |
-| 仓储 | WM | OV-03、OV-05 | PB-03、PB-05 |
-| 生产计划 | PP | OV-04 | PB-04 |
-| 财务 | FI | OV-03、OV-05 | PB-03、PB-05 |
+| 采购 | SCM | OV-03 | PB-03、PB-06、PB-08 |
+| 仓储 | WM | OV-03、OV-05 | PB-03、PB-05、PB-09 |
+| 生产计划 | PP | OV-04 | PB-04、PB-08（协同） |
+| 财务 | FI | OV-02、OV-03、OV-05 | PB-03、PB-05、PB-07、PB-10 |
 
 ## 优先流程剧本（中文优先完成顺序）
 
@@ -69,6 +72,15 @@ pnpm docs:dev
 | PB-04 | [计划到生产回馈](./zh/03-process-playbooks/PB-04-mrp-to-production.md) | BOM → FO → MRP → PLO → MO → MOR |
 | PB-05 | [库存与财务关账](./zh/03-process-playbooks/PB-05-period-close.md) | 库存期末 ↔ 成本结算 / 会计期间 |
 | PB-06 | [导出与打印](./zh/03-process-playbooks/PB-06-export-and-print.md) | 供应商 Excel、订购单打印 / PDF、导出中心 |
+
+### 增量剧本（对齐 menus_20260808）
+
+| 编号 | 文档 | 场景 |
+|------|------|------|
+| PB-07 | [导入中心](./zh/03-process-playbooks/PB-07-import-center.md) | 模板下载 → 上传 → 导入中心跟踪 / 错误报告 |
+| PB-08 | [委外闭环](./zh/03-process-playbooks/PB-08-outsource-loop.md) | OSO → 发料 → GR →（AP） |
+| PB-09 | [库存盘点](./zh/03-process-playbooks/PB-09-physical-inventory.md) | PI 录入 → 差异处理 → 再关账 |
+| PB-10 | [销货到收款](./zh/03-process-playbooks/PB-10-order-to-cash.md) | DN → AR → 收付款 |
 
 ## 中文文档索引
 
@@ -85,6 +97,7 @@ pnpm docs:dev
 
 - [系统入门](./zh/01-getting-started/01-system-overview.md)
 - [导出中心使用说明](./zh/01-getting-started/02-export-center.md)
+- [导入中心使用说明](./zh/01-getting-started/03-import-center.md)
 
 ### 角色手册
 
@@ -103,7 +116,7 @@ pnpm docs:dev
 ### 运维开通
 
 - [菜单与权限开通](./zh/05-admin-ops/01-menu-and-permission.md)
-- [导出功能上线检查清单](./zh/05-admin-ops/02-export-go-live-checklist.md)
+- [导入导出功能上线检查清单](./zh/05-admin-ops/02-export-go-live-checklist.md)
 
 ## 越南文
 
@@ -117,6 +130,6 @@ pnpm docs:dev
 
 1. 课堂第 0 节使用 **OV-01** 建立全景；专篇 OV-02～05 作预习/串讲。  
 2. 先填满 **PB-01～PB-06** 中文剧本并可在训练环境走通。  
-3. 再补齐角色手册与模块速查。  
+3. 再完成增量包 **PB-07～PB-10**（导入、委外、盘点、销货收款），并补齐角色手册与模块速查入口表。  
 4. 中文试讲一轮后冻结术语表，启动 `vi/` 同步（含 `vi/00-overview/` 镜像）。  
-5. 新功能以「增量训练包」形式追加剧本，同步更新本索引与 OV 总图（若影响主价值链）。
+5. 新功能以「增量训练包」形式追加剧本，同步更新本索引与 OV 总图（若影响主价值链）；菜单名变更以系统界面为准回改正文。

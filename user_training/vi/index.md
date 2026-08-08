@@ -1,7 +1,8 @@
 # Tài liệu đào tạo người dùng (Tiếng Việt)
 
 > Trạng thái：**Chưa dịch** — chờ bản tiếng Trung ổn định sau buổi thử giảng.  
-> Chính sách ngôn ngữ：chỉ duy trì **zh** và **vi** (không duy trì bản tiếng Anh cho user training).
+> Chính sách ngôn ngữ：chỉ duy trì **zh** và **vi** (không duy trì bản tiếng Anh cho user training).  
+> Baseline menu（zh）：`menus_20260808`；tên menu theo giao diện hệ thống.
 
 ## Quy tắc đồng bộ
 
@@ -16,9 +17,9 @@
 | Nhóm | Trạng thái |
 |------|------------|
 | 00-overview (OV-01～OV-05) | Chưa bắt đầu |
-| 01-getting-started | Chưa bắt đầu |
+| 01-getting-started（含导入中心） | Chưa bắt đầu |
 | 02-roles | Chưa bắt đầu |
-| 03-process-playbooks (PB-01～PB-06) | Chưa bắt đầu |
+| 03-process-playbooks (PB-01～PB-10) | Chưa bắt đầu |
 | 04-module-quickref | Chưa bắt đầu |
 | 05-admin-ops | Chưa bắt đầu |
 

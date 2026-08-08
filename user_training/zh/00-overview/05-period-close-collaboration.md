@@ -1,6 +1,6 @@
 # OV-05 关账协作（概念）
 
-> 受众：仓储、财务 | 模块：WM / FI | 版本：2026-08-01  
+> 受众：仓储、财务 | 模块：WM / FI | 版本：2026-08-08  
 > 预计时长：10 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 目标
@@ -36,6 +36,7 @@ flowchart TB
 ## 3. 跟练入口
 
 - 操作 / 演练：[PB-05](../03-process-playbooks/PB-05-period-close.md)  
+- 关账前盘点：[PB-09](../03-process-playbooks/PB-09-physical-inventory.md)  
 - 角色：[仓储](../02-roles/role-warehouse.md)、[财务](../02-roles/role-finance.md)  
 - 总图：[OV-01](./01-system-process-map.md)
 

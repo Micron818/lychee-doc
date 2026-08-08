@@ -1,6 +1,6 @@
 # OV-03 采购闭环（概念）
 
-> 受众：采购、仓储、财务 | 模块：SCM / WM / FI | 版本：2026-08-01  
+> 受众：采购、仓储、财务 | 模块：SCM / WM / FI | 版本：2026-08-08  
 > 预计时长：10 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 目标
@@ -32,11 +32,12 @@ flowchart LR
 | GR | 仓储 | 实收过账、库存 |
 | AP | 财务 | 发票审核与过账 |
 
-委外（OSO）是采购协同生产/仓储的支线：发料与收货规则不同于标准 PO，细节见采购角色手册。
+委外（OSO）是采购协同生产/仓储的支线：先发料再收货，规则不同于标准 PO。
 
 ## 3. 跟练入口
 
-- 操作步骤：[PB-03](../03-process-playbooks/PB-03-procure-to-pay.md)  
+- 标准采购：[PB-03](../03-process-playbooks/PB-03-procure-to-pay.md)  
+- 委外支线：[PB-08](../03-process-playbooks/PB-08-outsource-loop.md)  
 - 打印 / 导出：[PB-06](../03-process-playbooks/PB-06-export-and-print.md)  
 - 角色：采购、仓储、财务手册  
 - 总图：[OV-01](./01-system-process-map.md)

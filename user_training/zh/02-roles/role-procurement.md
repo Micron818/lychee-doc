@@ -1,6 +1,6 @@
 # 角色手册：采购
 
-> 受众：采购 | 模块：SCM | 版本：2026-08-01  
+> 受众：采购 | 模块：SCM | 版本：2026-08-08  
 > 预计时长：40 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 业务目标
@@ -14,14 +14,14 @@
 
 ## 3. 日常工作清单
 
-1. 维护 `供应商管理`；需要时导出供应商清单。  
+1. 维护 `采购管理 → 供应商管理`；需要时导出供应商清单。  
 2. 处理 `采购申请(PR)`：创建、审核、转单。  
 3. 维护 `采购订单(PO)`：价格、交期、数量；提交与审核。  
 4. 打印 PO 或下载 PDF 发给供应商。  
 5. 跟进收货进度（协同仓储 GR）；异常交期与数量变更。  
-6. 委外场景维护 `委外加工订单(OSO)`（发料/收货协同仓储与生产）。  
+6. 委外场景维护 `委外加工订单(OSO)`（发料/收货协同仓储与生产）→ [PB-08](../03-process-playbooks/PB-08-outsource-loop.md)。  
 
-跟练：[PB-03](../03-process-playbooks/PB-03-procure-to-pay.md)、[PB-06](../03-process-playbooks/PB-06-export-and-print.md)。
+跟练：[PB-03](../03-process-playbooks/PB-03-procure-to-pay.md)、[PB-06](../03-process-playbooks/PB-06-export-and-print.md)、[PB-08](../03-process-playbooks/PB-08-outsource-loop.md)。
 
 ## 4. 状态与权限说明
 
@@ -36,6 +36,7 @@
 - [ ] 能完成 PR→PO 训练闭环至可收货  
 - [ ] 能打印或下载一张已审核 PO  
 - [ ] 知道异步导出时去「导出中心」取文件  
+- [ ] （增量）能说明 OSO 与 PO 的发料差异，或完成 PB-08  
 
 ## 6. FAQ / 禁忌
 

@@ -1,7 +1,8 @@
 # 术语表（中文 ↔ 越南文）
 
 > 中文为源。越南文列在启动 `vi/` 翻译时填齐；缩写两语共用。  
-> 界面菜单名以系统当前语言包为准；本表用于训练文档用词统一。
+> 界面菜单名以系统当前界面显示为准；本表用于训练文档用词统一。  
+> 菜单功能基线：`menus_20260808`。SQL 表英文 `name`（如 OO、MR、Cost Roll-up）**不**作为训练用语；以界面中文与下表缩写为准。
 
 ## 单据与流程缩写
 
@@ -12,7 +13,7 @@
 | FO | 工厂订单 | | Factory Order |
 | PR | 采购申请 | | Purchase Requisition |
 | PO | 采购订单 | | Purchase Order |
-| OSO | 委外加工订单 | | Outsource Order |
+| OSO | 委外加工订单 | | Outsource Order（界面用 OSO，非 OO） |
 | GR | 收货单 | | Goods Receipt |
 | SI | 库存领料 | | Stock Issue |
 | ST | 库存调拨 | | Stock Transfer |
@@ -21,24 +22,24 @@
 | MRP | 物料需求计划 | | Material Requirements Planning |
 | PLO | 计划工单 | | Planned Order |
 | MO | 生产工单 | | Production / Manufacturing Order |
-| MOR | 工单产量回馈 | | Production Report |
+| MOR | 工单产量回馈 | | Manufacturing / Production Report（界面用 MOR，非 MR） |
 | AP | 应付发票 | | Accounts Payable Invoice |
 | AR | 应收发票 | | Accounts Receivable Invoice |
 | GR/IR | 收货/发票暂估 | | Goods Receipt / Invoice Receipt |
 
 ## 模块
 
-| 代码 | 中文 | Việt Nam（待填） |
-|------|------|------------------|
-| ADM | 系统管理 | |
-| BASIS | 基础资料 | |
-| MM | 物料管理 | |
-| SD | 销售管理 | |
-| SCM | 采购管理 | |
-| WM | 仓储管理 | |
-| PP | 生产计划 | |
-| FI | 财务会计 | |
-| REPORT | 报表中心 | |
+| 代码 | 中文 | Việt Nam（待填） | 备注 |
+|------|------|------------------|------|
+| ADM | 系统管理 | | |
+| BASIS | 基础资料 | | |
+| MM | 物料管理 | | |
+| SD | 销售管理 | | |
+| SCM | 采购管理 | | |
+| WM | 仓储管理 | | |
+| PP | 生产计划 | | |
+| FI | 财务会计 | | |
+| RPT | 报表中心 | | 文档中亦可称 REPORT；菜单 access_key 为 RPT |
 
 ## 通用界面用语
 
@@ -51,9 +52,11 @@
 | 作废 | | |
 | 冲销 | | |
 | 导出 | | |
+| 导入 | | |
 | 打印 | | |
 | 下载 PDF | | |
 | 导出中心 | | 菜单：报表中心 → 导出中心 |
+| 导入中心 | | 菜单：报表中心 → 导入中心 |
 | 筛选 | | |
 | 保存 | | |
 | 删除 | | |
@@ -62,12 +65,14 @@
 
 | 中文 | Việt Nam（待填） | 备注 |
 |------|------------------|------|
-| 库存期末结账 | | WM |
+| 库存期末结账 | | WM；菜单 `menu.wm.inventoryPeriods` |
+| 进耗存汇总表 | | WM；菜单 `menu.wm.inventoryBalances` |
 | 会计期间结账 | | FI |
-| 成本结算 | | Cost Run / 成本计算 |
+| 成本结算 | | FI；界面名「成本结算」（勿称 Cost Roll-up） |
 | 活跃成本结算 | | 未作废且未结束的成本作业，会阻止库存期重开 |
 | 倒扣料 | | Backflush |
 | 倒扣料异常 | | 需在「倒扣料异常处理」处理 |
+| 物料采购成本分析 | | FI 进阶查询入口 |
 
 ## 维护说明
 

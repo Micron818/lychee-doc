@@ -25,6 +25,7 @@ function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
       items: [
         { text: '系统入门', link: '/user_training/zh/01-getting-started/01-system-overview' },
         { text: '导出中心', link: '/user_training/zh/01-getting-started/02-export-center' },
+        { text: '导入中心', link: '/user_training/zh/01-getting-started/03-import-center' },
       ],
     },
     {
@@ -62,6 +63,10 @@ function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
         { text: 'PB-04 计划到生产回馈', link: '/user_training/zh/03-process-playbooks/PB-04-mrp-to-production' },
         { text: 'PB-05 库存与财务关账', link: '/user_training/zh/03-process-playbooks/PB-05-period-close' },
         { text: 'PB-06 导出与打印', link: '/user_training/zh/03-process-playbooks/PB-06-export-and-print' },
+        { text: 'PB-07 导入中心', link: '/user_training/zh/03-process-playbooks/PB-07-import-center' },
+        { text: 'PB-08 委外闭环', link: '/user_training/zh/03-process-playbooks/PB-08-outsource-loop' },
+        { text: 'PB-09 库存盘点', link: '/user_training/zh/03-process-playbooks/PB-09-physical-inventory' },
+        { text: 'PB-10 销货到收款', link: '/user_training/zh/03-process-playbooks/PB-10-order-to-cash' },
       ],
     },
     {
@@ -77,7 +82,7 @@ function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
         { text: 'WM 仓储', link: '/user_training/zh/04-module-quickref/wm' },
         { text: 'PP 生产计划', link: '/user_training/zh/04-module-quickref/pp' },
         { text: 'FI 财务', link: '/user_training/zh/04-module-quickref/fi' },
-        { text: 'REPORT 报表', link: '/user_training/zh/04-module-quickref/report' },
+        { text: 'RPT 报表中心', link: '/user_training/zh/04-module-quickref/report' },
       ],
     },
     {
@@ -85,7 +90,7 @@ function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
       collapsed: true,
       items: [
         { text: '菜单与权限', link: '/user_training/zh/05-admin-ops/01-menu-and-permission' },
-        { text: '导出上线检查清单', link: '/user_training/zh/05-admin-ops/02-export-go-live-checklist' },
+        { text: '导入导出上线检查清单', link: '/user_training/zh/05-admin-ops/02-export-go-live-checklist' },
       ],
     },
     {
@@ -116,7 +121,7 @@ function systemDesignSidebar(): DefaultTheme.SidebarItem[] {
 
 export default withMermaid({
   ...defineConfig({
-  title: 'Lychee ERP 文档',
+  title: 'ERP 文档',
   description: 'Lychee ERP 用户训练与系统设计文档',
   lang: 'zh-CN',
   cleanUrls: true,
@@ -136,7 +141,7 @@ export default withMermaid({
 
   themeConfig: {
     logo: undefined,
-    siteTitle: 'Lychee Doc',
+    siteTitle: 'ERP Doc',
 
     nav: [
       { text: '首页', link: '/' },
