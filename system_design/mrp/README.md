@@ -9,5 +9,5 @@
 
 相关代码主路径：
 
-- Backend：`lychee-erp-pp`（`MrpServiceImpl` / `MrpCalculationEngine` / `MrpConversionServiceImpl`）
-- Frontend：`lychee-frontend/src/pages/pp/mrp-runs`、`mrp-parameters`
+- Backend：`lychee-erp-pp`（`MrpServiceImpl` / `MrpCalculationEngine` / `MrpScheduleServiceImpl` / `MrpScheduleJob`）
+- Frontend：`lychee-frontend/src/pages/pp/mrp-runs`、`mrp-parameters`、`mrp-schedules`

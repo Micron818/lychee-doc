@@ -205,8 +205,9 @@ CANCELLED：枚举存在，无业务写入
 | MRP Runs | 列表；存在 RUNNING 时每 3s 轮询；创建（runDate/description）；批量删除；详情抽屉 |
 | Results | 按 PRODUCTION/PURCHASE 过滤；勾选转 PLO/PR；Pegging 抽屉 |
 | MRP Parameters | 完整 CRUD |
+| MRP Schedules | 完整 CRUD；立即执行（按排程参数创建 SCHEDULED Run） |
 
-**没有：** 取消运算、模拟模式、例外清单、供需投影视图、排程配置。
+**没有：** 取消运算、模拟模式逻辑、例外清单、供需投影视图、Net Change。
 
 ---
 

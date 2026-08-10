@@ -29,6 +29,7 @@ INSERT INTO menus (id,tenant_id,"name",parent_id,"path",icon,sort_order,is_visib
 	 (39,1,'Bill of materials(BOM)',38,'/pp/bill-of-materials',NULL,5010,true,1,'2026-01-13 15:53:43.291354','2026-03-14 08:15:35.467923',1,1,'menu.pp.billOfMaterials','PP01'),
 	 (40,1,'Factory orders(FO)',38,'/pp/factory-orders',NULL,5020,true,1,'2026-01-22 20:55:34.437893','2026-03-14 08:15:25.116913',1,1,'menu.pp.factoryOrders','PP02'),
 	 (44,1,'MRP Parameters',38,'/pp/mrp-parameters',NULL,5030,true,1,'2026-03-27 21:40:42.199441','2026-03-27 21:40:42.199441',1,1,'menu.pp.mrpParameters','PP03'),
+	 (96,1,'MRP Schedules',38,'/pp/mrp-schedules',NULL,5035,true,1,'2026-08-10 14:00:00.000000','2026-08-10 14:00:00.000000',1,1,'menu.pp.mrpSchedules','PP03S'),
 	 (41,1,'MRP Runs',38,'/pp/mrp-runs',NULL,5040,true,1,'2026-03-07 13:22:20.395738','2026-03-27 21:43:08.609494',1,1,'menu.pp.mrpRuns','PP04'),
 	 (42,1,'Planned Orders(PLO)',38,'/pp/planned-orders',NULL,5050,true,1,'2026-03-14 07:50:03.86305','2026-03-27 21:41:47.410061',1,1,'menu.pp.plannedOrders','PP05'),
 	 (43,1,'Manufacturing Orders(MO)',38,'/pp/production-orders',NULL,5060,true,1,'2026-03-14 14:19:38.173597','2026-03-27 21:41:08.257439',1,1,'menu.pp.productionOrders','PP06'),

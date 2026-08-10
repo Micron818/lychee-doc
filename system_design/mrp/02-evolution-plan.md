@@ -101,36 +101,35 @@
 
 ---
 
-### Phase 2 — 定时 Regenerative（P0）
+### Phase 2 — 定时 Regenerative（P0）✅ 已落地
 
 **目的：** 规范 ERP 日终全量重算，不再只靠人工点按钮。
 
-#### 2.1 排程配置
-
-新增配置实体（示例名 `mrp_schedules`）或先用应用配置 + 租户表二选一。  
-推荐落库，便于多租户：
+#### 2.1 排程配置（`mrp_schedules`）
 
 | 字段 | 说明 |
 |------|------|
 | `tenantId` / `factoryId` | 作用范围（工厂可选） |
-| `cronExpression` + `timeZone` | 执行时刻 |
+| `cronExpression` + `timeZone` | Spring 6 段 Cron + IANA 时区 |
 | `enabled` | 开关 |
 | `planningHorizonDays` | 传给 Run |
-| `autoConvert` | **固定 false（本期不做自动转单）** |
+| `lastTriggeredAt` / `lastErrorMessage` | 运维观测 |
+| 自动转单 | **不做**（仍人工转 PLO/PR） |
 
 #### 2.2 执行器
 
-- Spring `@Scheduled` 扫描启用中的 schedule，或独立 Job 服务调用内部 API
-- 以系统用户身份调用 `createMrpRun`，`triggerSource=SCHEDULED`
-- 复用 Phase 1 互斥；不新建第二套计算入口
+- `MrpScheduleJob` 固定间隔轮询（默认 60s，`lychee.mrp.schedule.*`）
+- `SystemTenantAuthentication`（userId=0）+ `RemoteTenantService` 跨租户扫描
+- 到期则调用现有 `createMrpRun`，`triggerSource=SCHEDULED`
+- 互斥冲突：跳过并写 `lastErrorMessage`，推进 `lastTriggeredAt` 防每分钟重试
 
 #### 2.3 运维
 
+- FE：`/pp/mrp-schedules` CRUD +「立即执行」
 - Run 列表可筛 `triggerSource=SCHEDULED`
-- 失败：写 `FAILED` + `error_message`；可选通知（邮件/站内，可后置）
-- 前端提供「立即按排程参数跑一次」调试入口（仍走同一 API）
+- Liquibase 同步写入菜单与权限（对已有 MRP Runs 读权限的角色授权）
 
-**完成标准：** 指定工厂可在无人值守下每日产生 COMPLETED Run；与手动 Run 互斥正确。
+**完成标准：** 指定工厂可在无人值守下按 Cron 产生 COMPLETED Run；与手动 Run 互斥正确。
 
 ---
 
