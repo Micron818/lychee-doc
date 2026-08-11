@@ -14,6 +14,7 @@
 | [05-Excel模板填充与进耗存汇总导出.md](./05-Excel模板填充与进耗存汇总导出.md) | **P3 执行计划**：Fesod 模板填充基础能力 + 进耗存汇总表示例 |
 | [06-导入框架总体设计.md](./06-导入框架总体设计.md) | **导入框架**：作业表、SPI、`ExcelReadSupport`、错误报告、前端 `ExcelImportButton` |
 | [07-示例-物料标准成本导入.md](./07-示例-物料标准成本导入.md) | **I1 首例**：物料标准成本（MaterialCost）Excel 导入端到端方案 |
+| [08-示例-工厂订单报表.md](./08-示例-工厂订单报表.md) | **已实现**：工厂订单报表（尺码矩阵、型号/PO/颜色合并、仅数量合计、样图、A4 横向 PDF） |
 
 ## 核心决策摘要
 
@@ -122,6 +123,7 @@
 - **更多模板 Excel**：复用 `ExcelTemplateWriteSupport` + 领域模板 + Handler（见 05）；大清单仍走 `ExcelWriteSupport`。
 - **新单据类 PDF**：复用后端 `*PdfRenderer`/模板 + 前端 `PdfPreview*` 基座（见 04 §6）；禁止再开前端打印页双轨。
 - **请购单打印（仅 Print）**：比照订购单实现 `GET /purchase-requisitions/{id}/pdf` + `PurchaseRequisitionPdfRenderer` + 原页 Modal；无 `ExportHandler` / 无「下载 PDF」（无归档需求时省略导出层）。
+- **工厂订单报表（✅）**：`FactoryOrder` 接单确认 PDF（尺码矩阵 + 型号/PO/颜色 rowspan 合并 + 仅数量合计 + 样图 + A4 landscape）；设计见 [08](./08-示例-工厂订单报表.md)。
 - **更多 Excel 导入**：复用 `DataImportHandler` + 模板 + `ExcelImportButton`（见 06）；单据类导入二期评估。
 - ~~标准成本「导出为再导入模板」~~：✅ `FI_MATERIAL_COST` 清单导出（前 8 列对齐导入模板；见 07 §12）。
 
