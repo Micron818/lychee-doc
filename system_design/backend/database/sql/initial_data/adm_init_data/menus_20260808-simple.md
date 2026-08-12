@@ -36,6 +36,7 @@ ORDER BY menus.sort_order::varchar ;
 |5010|PP01|Bill of materials(BOM)|menu.pp.billOfMaterials|
 |5020|PP02|Factory orders(FO)|menu.pp.factoryOrders|
 |5030|PP03|MRP Parameters|menu.pp.mrpParameters|
+|5035|PP03S|MRP Schedules|menu.pp.mrpSchedules|
 |5040|PP04|MRP Runs|menu.pp.mrpRuns|
 |5050|PP05|Planned Orders(PLO)|menu.pp.plannedOrders|
 |5060|PP06|Manufacturing Orders(MO)|menu.pp.productionOrders|
