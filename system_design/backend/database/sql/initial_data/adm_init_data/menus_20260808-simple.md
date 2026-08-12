@@ -1,3 +1,9 @@
+# Get menus list:
+```sql
+SELECT sort_order ,access_key ,name,locale  FROM menus
+ORDER BY menus.sort_order::varchar ;
+```
+
 |sort_order|access_key|name|locale|
 |----------|----------|----|------|
 |10|ADM|Admin|menu.adm|
