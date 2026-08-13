@@ -221,7 +221,8 @@ public class InventoryBalanceExportHandler implements DataExportHandler {
         // 2) 同源 spec + fetch（inventoryPeriod, material, baseUnit）
         // 3) slice 收集 List<ItemRow>（maxRows 兜底）；解析仓库名；累加合计
         // 4) header：title、periodLabel、factoryName、exportedAt、col*、total*
-        // 5) ExcelTemplateWriteSupport.fill(..., Map.of("items", rows))
+        // 5) ExcelTemplateWriteSupport.fill(..., SheetFill(0, locale sheetName, Map.of("items", rows)))
+        //    填充按 sheetNo；fill 后 POI 按 export.inventory_balance.sheetName 改页签
         // 6) ExportResult(rows.size(), suggestedFileName)
     }
 }
@@ -265,7 +266,7 @@ public class InventoryBalanceExportItem {
 
 - 运行时菜单：为 `/wm/inventory-balances` 追加 `export` action，授予相应角色（与供应商相同惯例，无 Liquibase 种子）。
 - 后端 messages 补充：
-  - `export.inventory_balance.fileName` / `title` / 各 `col*`
+  - `export.inventory_balance.fileName` / `sheetName` / `title` / 各 `col*`
   - `validation.export.inventory_balance.period_and_factory.required`
   - `validation.export.inventory_balance.period.ambiguous`
   - `validation.export.template.not_found`
