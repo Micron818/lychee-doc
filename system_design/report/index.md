@@ -16,6 +16,7 @@
 | [07-示例-物料标准成本导入.md](./07-示例-物料标准成本导入.md) | **I1 首例**：物料标准成本（MaterialCost）Excel 导入端到端方案 |
 | [08-示例-工厂订单报表.md](./08-示例-工厂订单报表.md) | **已实现**：工厂订单报表（尺码矩阵、型号/PO/颜色合并、仅数量合计、样图、A4 横向 PDF） |
 | [09-示例-销售订单报表.md](./09-示例-销售订单报表.md) | **已实现**：销售订单报表（筛选条件驱动跨单矩阵、币别/单价/金额、仅预览打印、A4 横向 PDF） |
+| [10-示例-工单进度报表.md](./10-示例-工单进度报表.md) | **已实现**：工单进度（列表多单 Excel；清单 + 模板并存；状态跟列表筛选；含组件领料） |
 
 ## 核心决策摘要
 
@@ -126,6 +127,7 @@
 - **请购单打印（仅 Print）**：比照订购单实现 `GET /purchase-requisitions/{id}/pdf` + `PurchaseRequisitionPdfRenderer` + 原页 Modal；无 `ExportHandler` / 无「下载 PDF」（无归档需求时省略导出层）。
 - **工厂订单报表（✅）**：`FactoryOrder` 接单确认 PDF（尺码矩阵 + 型号/PO/颜色 rowspan 合并 + 仅数量合计 + 样图 + A4 landscape）；设计见 [08](./08-示例-工厂订单报表.md)。
 - **销售订单报表（✅）**：列表工具栏预览/打印；强制单一客户 + 订单日期区间；跨多 SO 一张尺码矩阵（含币别/单价/金额）；无归档 Export；设计见 [09](./09-示例-销售订单报表.md)。
+- **工单进度报表（✅）**：`ProductionOrder` 列表多单 Excel；清单（`PP_PRODUCTION_PROGRESS`，流式 `max-rows`）与模板（`PP_PRODUCTION_PROGRESS_TEMPLATE`，`template-max-rows`）**并存**；状态跟列表筛选；无组件仍 1 行。设计见 [10](./10-示例-工单进度报表.md)。
 - **更多 Excel 导入**：复用 `DataImportHandler` + 模板 + `ExcelImportButton`（见 06）；单据类导入二期评估。
 - ~~标准成本「导出为再导入模板」~~：✅ `FI_MATERIAL_COST` 清单导出（前 8 列对齐导入模板；见 07 §12）。
 
