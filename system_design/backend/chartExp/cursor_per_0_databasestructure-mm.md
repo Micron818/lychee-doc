@@ -457,7 +457,7 @@ ALTER TABLE lychee_erp.product_models ADD CONSTRAINT fk_product_models_updated_b
 
 ### 步驟 1：建立顏色檔 (Colors)
 
-```sql:docs/database/sql/schema_tables/MM/colors.sql
+```sql
 DROP TABLE IF EXISTS lychee_erp.colors CASCADE;
 
 CREATE TABLE lychee_erp.colors
@@ -480,7 +480,7 @@ CREATE TABLE lychee_erp.colors
 
 ### 步驟 2：建立尺碼/規格檔 (Product Sizes)
 
-```sql:docs/database/sql/schema_tables/MM/product_sizes.sql
+```sql
 DROP TABLE IF EXISTS lychee_erp.product_sizes CASCADE;
 
 CREATE TABLE lychee_erp.product_sizes

@@ -9,6 +9,7 @@ CREATE TABLE lychee_erp.fi_costing_policies
 	variance_settlement varchar(30) NOT NULL DEFAULT 'FULL_TO_PL',
 	oh_absorption_basis varchar(30) NOT NULL DEFAULT 'LABOR_HOURS',
 	require_posted_cost_run_on_close boolean NOT NULL DEFAULT false,
+	require_standard_cost_on_stock_post boolean NOT NULL DEFAULT true,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
 	created_by bigint NULL,
@@ -45,3 +46,6 @@ COMMENT ON COLUMN lychee_erp.fi_costing_policies.oh_absorption_basis
 
 COMMENT ON COLUMN lychee_erp.fi_costing_policies.require_posted_cost_run_on_close
 	IS 'When true, fiscal period close requires a posted cost calculation for the period';
+
+COMMENT ON COLUMN lychee_erp.fi_costing_policies.require_standard_cost_on_stock_post
+	IS 'When true, stock post requires active standard unit cost > 0 and posts inventory valuation journals. When false, quantity-only: unit_cost=0 allowed, skip inventory valuation journals, Cost Run disallowed.';

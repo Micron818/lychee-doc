@@ -12,7 +12,7 @@ CREATE TABLE lychee_erp.customers
 	short_name varchar(50) NULL,
 	tax_id varchar(50) NULL,
 	email varchar(100) NULL,
-	phone varchar(50) NULL,
+	phone varchar(100) NULL,
 	fax varchar(50) NULL,
 	website varchar(200) NULL,
 	address_billing text NULL,

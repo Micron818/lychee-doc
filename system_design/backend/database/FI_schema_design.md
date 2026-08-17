@@ -339,6 +339,7 @@ cost_calculations ── cost_calculation_items
     *   `variance_settlement`: 首版 `FULL_TO_PL`。
     *   `oh_absorption_basis`: 首版 `LABOR_HOURS`。
     *   `require_posted_cost_run_on_close`: 關帳前是否強制已過帳 Cost Run。
+    *   `require_standard_cost_on_stock_post`: 日常庫存過帳是否強制有效標準成本並拋評價分錄；`false` 為數量記帳（見 [08.1-未上线成本时库存过账.md](../chartExp/财务/08.1-未上线成本时库存过账.md)）。預設 `true`。
 
 ### 3.20 費用分攤 (cost_allocations)
 

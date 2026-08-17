@@ -2,12 +2,12 @@
 
 透過分析您專案中的檔案（如 `build.gradle`、`lychee-erp-basis/build.gradle`、`gradle.properties`），我們可以看到目前這些配置在各個子模組中被重複編寫了：
 
-```6:8:lychee-erp-basis/build.gradle
+```properties
 group = 'com.lychee'
 version = '0.0.1-SNAPSHOT'
 ```
 
-```9:17:lychee-erp-basis/build.gradle
+```groovy
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(javaVersion.toInteger())

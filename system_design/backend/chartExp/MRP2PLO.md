@@ -31,7 +31,7 @@
 ### 4. 目前代碼中的體現
 您可以在 `MrpResult` 模型中看到這些關鍵欄位：
 
-```24:68:lychee-erp-pp/src/main/java/com/lychee/erp/pp/model/MrpResult.java
+```java
 public class MrpResult extends AuditableEntity {
     // ...
     private Long materialId;
