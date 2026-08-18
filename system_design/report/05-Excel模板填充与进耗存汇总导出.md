@@ -393,5 +393,5 @@ lychee-frontend
 
 - ~~`lychee.export.template-max-rows` 独立配置。~~ ✅ 已实现（默认 50,000；Handler 声明 `usesExcelTemplate()`）。
 - 租户级模板：OSS 存储 + 配置表选择 template key，`ExcelTemplateWriteSupport` 增加 `InputStream` 重载即可。
-- 其他套打表（对账单、盘点表）只加模板 + Handler。
+- 其他套打表（对账单等）只加模板 + Handler。**盘点表已改走单据 PDF**（见 [14](./14-示例-库存盘点报表.md)），不再用 Excel 模板。
 - 若业务要求进耗存同时提供「纯数据清单」与「正式汇总表」：可登记两个 `ExportJobType`，或前端下拉选格式（仍共用作业管线）。
