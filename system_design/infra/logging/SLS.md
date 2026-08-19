@@ -74,6 +74,8 @@ SLS Project lychee-prod / Logstore lychee-backend
 docker run -d \
     --name loongcollector \
     --restart always \
+    --memory=256m \
+    --memory-swap=256m \
     -v /:/logtail_host:ro \
     -v /var/run/docker.sock:/var/run/docker.sock \
     --env ALIYUN_LOGTAIL_CONFIG=/etc/ilogtail/conf/ap-southeast-1/ilogtail_config.json \
@@ -82,12 +84,20 @@ docker run -d \
     aliyun-observability-release-registry.ap-southeast-1.cr.aliyuncs.com/loongcollector/loongcollector:v3.3.3.0-f44ebb3-aliyun
 ```
 
+已在跑的容器补上限（不必重建）：
+
+```bash
+docker update --memory=256m loongcollector
+```
+
 说明：
 
 - 镜像地域与 SLS Project 一致（新加坡）。
 - `ALIYUN_LOGTAIL_USER_DEFINED_ID` 必须与 SLS 机器组标识 `lychee-prod-app` 相同。
 - `/:/logtail_host:ro` 与 `docker.sock` 为官方 Docker 安装所需挂载，用于读容器 stdout。
+- `--memory=256m`：现网约 60MiB，256MiB 足够；与业务 Compose 一样卡住 Java/采集器，把约 4GiB 主机余量留给 Postgres 缓存。
 - `--restart always`：采集器应按基础设施常驻。崩溃、Docker 守护进程重启、主机 reboot 后都会拉起；这与阿里云 LoongCollector Docker 安装说明一致。`unless-stopped` 在有人 `docker stop` 后，reboot 也不会再起来，排障时容易漏采。需要临时停采集用 `docker stop loongcollector` 即可，当前会话内不会立刻被拉起；reboot 后会再启动（这是 `always` 与 `unless-stopped` 的差别）。
+- LoongCollector **不要**写入业务 `docker-compose.yml`。业务容器内存上限见该文件：`backend` 1g、`keycloak` 768m、`nginx`/`frontend` 64m；`postgres` 不设 limit。
 
 SLS：机器组类型选 **用户自定义标识**，标识填 `lychee-prod-app`。
 
