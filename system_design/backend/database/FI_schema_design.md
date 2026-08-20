@@ -127,7 +127,7 @@ cost_calculations ── cost_calculation_items
     *   `journal_no`: 傳票編號；`(tenant_id, company_id, journal_no)` 唯一。
     *   `journal_date` / `document_date` / `post_date`: 傳票日期、單據日期、過帳日期。
     *   `fiscal_period_id`: 所屬會計期間。
-    *   `currency_id` / `local_currency_id` / `exchange_rate`: 原幣、本幣與匯率。
+    *   `currency_id` / `local_currency_id` / `exchange_rate`: 原幣、本幣與匯率快照。開單預設來自 BASIS `exchange_rates`；過帳後凍結，不隨主檔變更。
     *   `total_debit` / `total_credit` / `local_total_debit` / `local_total_credit`: 表頭彙總金額，供快速校驗借貸必相等。
     *   `journal_type`: `AUTO` (系統產生), `MANUAL` (手工錄入)。
     *   `source_module`: 來源模組 (`GL`, `AR`, `AP`, `FA`, `IN`, `CASH`, `COSTING`)。

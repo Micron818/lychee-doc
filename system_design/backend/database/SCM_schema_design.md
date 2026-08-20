@@ -36,6 +36,7 @@ SCM 模組負責管理企業的供應鏈活動，目前設計核心為 **採購 
 *   **用途**: 對供應商發出的正式訂購合約。
 *   **關鍵欄位**:
     *   `supplier_id`: 正式下單對象。
+    *   `currency_option_id` & `exchange_rate`: 採購幣別與匯率快照。預設來自 BASIS `exchange_rates`；收貨複製本快照，不重查主檔。
     *   `unit_price` & `subtotal`: 雙方議定後的價格，為 AP (應付帳款) 的依據。
     *   `source_pr_item_id`: 連結回請購單明細。
     *   `expected_delivery_date`: 預計到貨日。

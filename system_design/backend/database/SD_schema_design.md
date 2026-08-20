@@ -30,7 +30,7 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
 *   **用途**: 記錄訂單的總體資訊與明細。
 *   **關鍵欄位**:
     *   `customer_po_no`: 客戶採購單號，B2B 對帳關鍵。
-    *   `currency_option_id` & `exchange_rate`: 記錄接單匯率，鎖定營收金額。
+    *   `currency_option_id` & `exchange_rate`: 記錄接單匯率快照，鎖定營收金額。預設來自 BASIS `exchange_rates`（`rate_date <= order_date`），允許覆寫；主檔變更不回溯已存訂單。
     *   `shipping_address`: 獨立儲存送貨地址 (Snapshot)，不隨客戶主檔變動而改變歷史訂單。
     *   `expected_delivery_date`: 明細層級的預計交貨日，支援分批交貨。
 
