@@ -11,8 +11,8 @@ CREATE TABLE lychee_erp.stock_returns
 	factory_id bigint NOT NULL,
 	return_date date NOT NULL,
 	department_id bigint NULL,
-	return_type varchar(20) NOT NULL,    -- PRODUCTION/COST_CENTER/SCRAP/SAMPLE
-	status varchar(20) NOT NULL,    -- DRAFT/POSTED/POSTED/CANCELLED
+	return_type varchar(20) NOT NULL,    -- PRODUCTION,PRODUCTION_REPORT,COST_CENTER,SCRAP,SAMPLE,SALES_DELIVERY
+	status varchar(20) NOT NULL,    -- DRAFT, POSTED, REVERSED
 	approved_by bigint NULL,
 	approved_at timestamp without time zone NULL,
 	remarks text NULL,
@@ -31,11 +31,11 @@ ALTER TABLE lychee_erp.stock_returns ADD CONSTRAINT uk_stock_returns UNIQUE (ten
 ;
 
 COMMENT ON COLUMN lychee_erp.stock_returns.return_type
-	IS 'PRODUCTION/COST_CENTER/SCRAP/SAMPLE'
+	IS 'PRODUCTION,PRODUCTION_REPORT,COST_CENTER,SCRAP,SAMPLE,SALES_DELIVERY'
 ;
 
 COMMENT ON COLUMN lychee_erp.stock_returns.status
-	IS 'DRAFT/POSTED/POSTED/CANCELLED'
+	IS 'DRAFT, POSTED, REVERSED'
 ;
 
  

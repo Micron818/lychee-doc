@@ -10,12 +10,12 @@ CREATE TABLE lychee_erp.goods_receipts
 	receipt_no varchar(50) NOT NULL,
 	factory_id bigint NOT NULL,
 	receipt_date date NOT NULL,
-	receipt_type varchar(20) NOT NULL,    -- PURCHASE, PRODUCTION_REPORT, MISC
 	supplier_id bigint NULL,
 	delivery_note_no varchar(50) NULL,
 	remarks text NULL,
 	status varchar(20) NOT NULL,    -- DRAFT, POSTED, REVERSED
-	invoice_status varchar(20) NOT NULL DEFAULT 'UNINVOICED',
+	receipt_type varchar(20) NOT NULL,    -- PURCHASE, PRODUCTION_REPORT, MISC, OUTSOURCE
+	invoice_status varchar(20) NOT NULL DEFAULT 'UNINVOICED',    -- UNINVOICED, PARTIALLY_INVOICED, FULLY_INVOICED
 	journal_entry_id bigint NULL,
 	currency_option_id bigint NULL,
 	exchange_rate numeric(18,6) NOT NULL DEFAULT 1,
@@ -52,7 +52,7 @@ ALTER TABLE lychee_erp.goods_receipts ADD CONSTRAINT fk_goods_receipts_currency
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipts.receipt_type
-	IS 'PURCHASE, PRODUCTION_REPORT, MISC'
+	IS 'PURCHASE, PRODUCTION_REPORT, MISC, OUTSOURCE'
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipts.status
@@ -60,7 +60,7 @@ COMMENT ON COLUMN lychee_erp.goods_receipts.status
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipts.invoice_status
-	IS 'UNINVOICED, PARTIAL, FULLY_INVOICED'
+	IS 'UNINVOICED, PARTIALLY_INVOICED, FULLY_INVOICED'
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipts.journal_entry_id

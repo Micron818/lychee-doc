@@ -17,7 +17,7 @@ CREATE TABLE lychee_erp.stock_transfer_items
 	transaction_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	base_unit_id bigint NOT NULL,
 	base_quantity numeric(18,6) NOT NULL   DEFAULT 0,
-	source_doc_type varchar(50) NOT NULL,    -- OUTSOURCE_ORDER, OTHER
+	source_doc_type varchar(50) NOT NULL,    -- OUTSOURCE_ORDER_COMPONENT, OTHER
 	source_doc_id bigint NULL,
 	source_doc_no varchar(50) NULL,
 	source_doc_item_id bigint NULL,
@@ -70,7 +70,7 @@ ALTER TABLE lychee_erp.stock_transfer_items ADD CONSTRAINT fk_stock_transfer_ite
 ;
 
 COMMENT ON COLUMN lychee_erp.stock_transfer_items.source_doc_type
-	IS 'OUTSOURCE_ORDER, OTHER'
+	IS 'OUTSOURCE_ORDER_COMPONENT, OTHER'
 ;
 
  

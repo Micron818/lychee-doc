@@ -16,7 +16,7 @@ CREATE TABLE lychee_erp.stock_issue_items
 	transaction_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	base_unit_id bigint NOT NULL,
 	base_quantity numeric(18,6) NOT NULL   DEFAULT 0,
-	source_doc_type varchar(50) NOT NULL,    -- PRODUCTION_ORDER,PRODUCTION_ORDER_COMPONENT,PRODUCTION_REPORT_COMPONENT,SALES_ORDER,DEPARTMENT,OTHER
+	source_doc_type varchar(50) NOT NULL,    -- PRODUCTION_ORDER,PRODUCTION_ORDER_COMPONENT,PRODUCTION_REPORT_COMPONENT,SALES_ORDER,DELIVERY,DEPARTMENT,OTHER
 	source_doc_id bigint NULL,
 	source_doc_no varchar(50) NULL,
 	source_doc_item_id bigint NULL,

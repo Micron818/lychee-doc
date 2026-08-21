@@ -13,8 +13,8 @@ CREATE TABLE lychee_erp.stock_transfers
 	transfer_type varchar(20) NOT NULL,    -- OUTSOURCE, INTERNAL
 	status varchar(20) NOT NULL,    -- DRAFT, POSTED, REVERSED
 	approved_by bigint NULL,
-	remarks text NULL,
 	approved_at timestamp without time zone NULL,
+	remarks text NULL,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
 	created_by bigint NULL,

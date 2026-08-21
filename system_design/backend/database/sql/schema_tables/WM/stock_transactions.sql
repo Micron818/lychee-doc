@@ -27,8 +27,8 @@ CREATE TABLE lychee_erp.stock_transactions
 	source_doc_item_no integer NULL,
 	remarks text NULL,
 	created_at timestamp without time zone NULL,
-	created_by bigint NULL,
 	updated_at timestamp without time zone NULL,
+	created_by bigint NULL,
 	updated_by bigint NULL
 )
 ;

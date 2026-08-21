@@ -14,7 +14,7 @@ CREATE TABLE lychee_erp.physical_inventories
 	factory_id bigint NOT NULL,
 	plan_date date NOT NULL,
 	warehouse_id bigint NOT NULL,
-	inventory_type varchar(20) NOT NULL,    -- FULL/CYCLE
+	inventory_type varchar(20) NOT NULL,    -- FULL, CYCLE
 	status varchar(20) NOT NULL,    -- PLANNED,COUNTED,POSTED,REVERSED
 	block_transactions boolean NOT NULL   DEFAULT false,
 	remarks text NULL,
@@ -65,7 +65,7 @@ ALTER TABLE lychee_erp.physical_inventories ADD CONSTRAINT fk_physical_inventori
 ;
 
 COMMENT ON COLUMN lychee_erp.physical_inventories.inventory_type
-	IS 'FULL/CYCLE'
+	IS 'FULL, CYCLE'
 ;
 
 COMMENT ON COLUMN lychee_erp.physical_inventories.status

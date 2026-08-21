@@ -11,12 +11,12 @@ CREATE TABLE lychee_erp.stock_issues
 	factory_id bigint NOT NULL,
 	issue_date date NOT NULL,
 	department_id bigint NULL,
-	issue_type varchar(20) NOT NULL,    -- PRODUCTION,PRODUCTION_REPORT,COST_CENTER,SCRAP,SAMPLE
+	issue_type varchar(20) NOT NULL,    -- PRODUCTION,PRODUCTION_REPORT,COST_CENTER,SCRAP,SAMPLE,SALES_DELIVERY
 	status varchar(20) NOT NULL,    -- DRAFT, POSTED, REVERSED
-	journal_entry_id bigint NULL,   -- 发料成本结转凭证
 	approved_by bigint NULL,
-	remarks text NULL,
 	approved_at timestamp without time zone NULL,
+	remarks text NULL,
+	journal_entry_id bigint NULL,   -- 发料成本结转凭证
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
 	created_by bigint NULL,

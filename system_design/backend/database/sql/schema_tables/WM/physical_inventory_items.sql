@@ -11,7 +11,6 @@ CREATE TABLE lychee_erp.physical_inventory_items
 	item_no integer NOT NULL,
 	material_id bigint NOT NULL,
 	batch_no varchar(50) NOT NULL   DEFAULT '',
-	stock_type varchar(20) NOT NULL,    --  UNRESTRICTED, INSPECTION, BLOCKED
 	base_unit_id bigint NOT NULL,
 	book_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	counted_quantity numeric(18,6) NULL,
@@ -20,6 +19,7 @@ CREATE TABLE lychee_erp.physical_inventory_items
 	posted_difference_quantity numeric(18,6) NULL,
 	reason_code varchar(50) NULL,
 	remarks text NULL,
+	stock_type varchar(20) NOT NULL,    -- UNRESTRICTED, INSPECTION, BLOCKED
 	location_code varchar(50) NULL,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
@@ -53,7 +53,7 @@ ALTER TABLE lychee_erp.physical_inventory_items ADD CONSTRAINT fk_physical_inven
 ;
 
 COMMENT ON COLUMN lychee_erp.physical_inventory_items.stock_type
-	IS ' UNRESTRICTED, INSPECTION, BLOCKED'
+	IS 'UNRESTRICTED, INSPECTION, BLOCKED'
 ;
 
  

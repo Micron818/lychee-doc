@@ -48,6 +48,7 @@ companies.local_currency_id ──► option_values (CURRENCY)
     *   下游轉單（GR←PO、AP←GR）複製來源快照，不重查主檔。
     *   開單允許覆寫帶出的匯率。外幣找不到匯率時不得靜默為 1。
     *   只存單向（原幣→本幣），不存反向匯率。
+    *   `STANDARD` 可由排程寫入 Vietcombank USD 轉帳價（insert-only）；該日該公司已有列則不覆蓋；人工維護頁面仍可新增／修改。
 
 ## 4. 檔案路徑對照
 

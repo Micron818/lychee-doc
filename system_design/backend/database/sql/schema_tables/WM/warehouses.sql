@@ -16,7 +16,7 @@ CREATE TABLE lychee_erp.warehouses
 	contact_person varchar(100) NULL,
 	contact_phone varchar(50) NULL,
 	is_mrp_relevant boolean NOT NULL   DEFAULT true,
-	active_status varchar(20) NOT NULL,
+	active_status varchar(20) NOT NULL,    -- ACTIVE, INACTIVE
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
 	created_by bigint NULL,
@@ -48,6 +48,10 @@ ALTER TABLE lychee_erp.warehouses ADD CONSTRAINT fk_warehouses_tenant
 
 COMMENT ON COLUMN lychee_erp.warehouses.warehouse_type
 	IS 'RAW_MATERIAL,WIP,FINISHED_GOODS,TRANSIT,SCRAP,OUTSOURCE'
+;
+
+COMMENT ON COLUMN lychee_erp.warehouses.active_status
+	IS 'ACTIVE, INACTIVE'
 ;
 
  
