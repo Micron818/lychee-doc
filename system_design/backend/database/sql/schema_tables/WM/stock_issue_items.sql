@@ -16,6 +16,7 @@ CREATE TABLE lychee_erp.stock_issue_items
 	transaction_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	base_unit_id bigint NOT NULL,
 	base_quantity numeric(18,6) NOT NULL   DEFAULT 0,
+	returned_quantity numeric(18,6) NOT NULL   DEFAULT 0,    -- 已过账退料基本单位合计
 	source_doc_type varchar(50) NOT NULL,    -- PRODUCTION_ORDER,PRODUCTION_ORDER_COMPONENT,PRODUCTION_REPORT_COMPONENT,SALES_ORDER,DELIVERY,DEPARTMENT,OTHER
 	source_doc_id bigint NULL,
 	source_doc_no varchar(50) NULL,
@@ -66,6 +67,10 @@ ALTER TABLE lychee_erp.stock_issue_items ADD CONSTRAINT fk_si_items_warehouse
 
 COMMENT ON COLUMN lychee_erp.stock_issue_items.source_doc_type
 	IS 'PRODUCTION_ORDER,PRODUCTION_ORDER_COMPONENT,PRODUCTION_REPORT_COMPONENT,SALES_ORDER,DELIVERY,DEPARTMENT,OTHER'
+;
+
+COMMENT ON COLUMN lychee_erp.stock_issue_items.returned_quantity
+	IS '已过账退料的基本单位合计；可退数量 = base_quantity - returned_quantity；草稿退料另按查询加总'
 ;
 
  

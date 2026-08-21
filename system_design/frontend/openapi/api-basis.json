@@ -449,6 +449,7 @@
                                 "GOODS_RECEIPT",
                                 "GOODS_RECEIPT_BATCH",
                                 "STOCK_ISSUE",
+                                "STOCK_ISSUE_RETURN",
                                 "PHYSICAL_INVENTORY",
                                 "PRODUCTION_REPORT",
                                 "STOCK_TRANSFER",

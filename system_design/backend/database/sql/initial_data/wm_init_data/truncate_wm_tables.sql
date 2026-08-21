@@ -19,7 +19,7 @@
 -- CASCADE：处理 inventory_periods 被 FI cost_calculations 引用的跨模块 FK
 TRUNCATE TABLE
     -- 退料明细（引用 stock_issue_items）
-    lychee_erp.stock_return_items,
+    lychee_erp.stock_issue_return_items,
     -- 出入库 / 调拨 / 盘点明细
     lychee_erp.stock_issue_items,
     lychee_erp.goods_receipt_items,
@@ -32,7 +32,7 @@ TRUNCATE TABLE
     -- 盘点单
     lychee_erp.physical_inventories,
     -- 单据表头
-    lychee_erp.stock_returns,
+    lychee_erp.stock_issue_returns,
     lychee_erp.stock_issues,
     lychee_erp.goods_receipts,
     lychee_erp.stock_transfers,
@@ -45,7 +45,7 @@ RESTART IDENTITY CASCADE;
 -- 验证：各表记录数应为 0
 -- =====================================================
 
-SELECT 'stock_return_items' AS table_name, COUNT(*) AS count FROM lychee_erp.stock_return_items
+SELECT 'stock_issue_return_items' AS table_name, COUNT(*) AS count FROM lychee_erp.stock_issue_return_items
 UNION ALL SELECT 'stock_issue_items', COUNT(*) FROM lychee_erp.stock_issue_items
 UNION ALL SELECT 'goods_receipt_items', COUNT(*) FROM lychee_erp.goods_receipt_items
 UNION ALL SELECT 'stock_transfer_items', COUNT(*) FROM lychee_erp.stock_transfer_items
@@ -54,7 +54,7 @@ UNION ALL SELECT 'stock_transactions', COUNT(*) FROM lychee_erp.stock_transactio
 UNION ALL SELECT 'inventory_balances', COUNT(*) FROM lychee_erp.inventory_balances
 UNION ALL SELECT 'stock_on_hand', COUNT(*) FROM lychee_erp.stock_on_hand
 UNION ALL SELECT 'physical_inventories', COUNT(*) FROM lychee_erp.physical_inventories
-UNION ALL SELECT 'stock_returns', COUNT(*) FROM lychee_erp.stock_returns
+UNION ALL SELECT 'stock_issue_returns', COUNT(*) FROM lychee_erp.stock_issue_returns
 UNION ALL SELECT 'stock_issues', COUNT(*) FROM lychee_erp.stock_issues
 UNION ALL SELECT 'goods_receipts', COUNT(*) FROM lychee_erp.goods_receipts
 UNION ALL SELECT 'stock_transfers', COUNT(*) FROM lychee_erp.stock_transfers

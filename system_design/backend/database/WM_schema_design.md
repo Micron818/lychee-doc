@@ -74,7 +74,7 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
     *   `GOODS_RECEIPT`: 採購收貨 (+)。
     *   `SHIPMENT`: 銷售出貨 (-)。
     *   `STOCK_ISSUE`: 內部領用 (-)。
-    *   `STOCK_RETURN`: 退料/退貨 (+/-)。
+    *   `STOCK_ISSUE_RETURN`: 領料退料 (+)。客戶退貨用 `CUSTOMER_RETURN`，採購退貨用 `VENDOR_RETURN`。
     *   `ADJUSTMENT`: 盤點調整 (+/-)。
 
 ## 5. 檔案路徑對照表
@@ -84,6 +84,8 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
 | **warehouses** | `docs/database/sql/schema_tables/WM/warehouses.sql` | 倉庫主檔 |
 | **stock_issues** | `docs/database/sql/schema_tables/WM/stock_issues.sql` | 領料單表頭 |
 | **stock_issue_items** | `docs/database/sql/schema_tables/WM/stock_issue_items.sql` | 領料單明細 |
+| **stock_issue_returns** | `docs/database/sql/schema_tables/WM/stock_issue_returns.sql` | 退料單表頭 |
+| **stock_issue_return_items** | `docs/database/sql/schema_tables/WM/stock_issue_return_items.sql` | 退料單明細 |
 | **stock_on_hand** | `docs/database/sql/schema_tables/WM/stock_on_hand.sql` | 即時庫存量 |
 | **stock_transactions** | `docs/database/sql/schema_tables/WM/stock_transactions.sql` | 庫存異動流水帳 |
 | **inventory_periods** | `docs/database/sql/schema_tables/WM/inventory_periods.sql` | 庫存期間 |

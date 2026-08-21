@@ -26,6 +26,15 @@
 
 ### 2.2 領料單明細表 (stock_issue_items)
 - **source_doc_id / type**: 關聯來源，如 `PRODUCTION_ORDER_COMPONENT` 用於核銷工單預留量。
+- **returned_quantity**: 已過賬退料基本單位合計。可退數量 = `base_quantity - returned_quantity`。
+
+### 2.3 退料單 (stock_issue_returns / items)
+內部領料的反向單，不是客戶退貨或採購退貨。
+- **original_stock_issue_id**: 一張退料單只對應一張已過賬領料單。
+- **return_type**: `PRODUCTION`, `COST_CENTER`, `SAMPLE`。
+- **original_issue_item_id**: 必須參照原領料明細。
+- **stock_type**: 退回庫存狀態。`UNRESTRICTED`, `INSPECTION`, `BLOCKED`。
+- 流水類型為 `STOCK_ISSUE_RETURN`；領料沖銷仍寫 `STOCK_ISSUE`。
 
 ---
 
@@ -40,7 +49,7 @@
 
 ### 3.2 庫存異動流水帳 (stock_transactions)
 所有庫存變動的 Source of Truth。
-- **transaction_type**: 異動類型。`GOODS_RECEIPT`, `SHIPMENT`, `STOCK_ISSUE`, `ADJUSTMENT`。
+- **transaction_type**: 異動類型。`GOODS_RECEIPT`, `PRODUCTION_RECEIPT`, `VENDOR_RETURN`, `DELIVERY`, `CUSTOMER_RETURN`, `STOCK_ISSUE`, `STOCK_ISSUE_RETURN`, `ADJUSTMENT`, `STOCK_TRANSFER`, `BACKFLUSH`。冲销沿用原过账类型。
 - **before / in / out / after_quantity**: 數量變動軌跡，確保帳務連續性。
 - **unit_cost / total_amount**: 異動當下的成本與金額，用於庫存估值。
 - **source_doc_id / type**: 追溯至觸發異動的原始單據。

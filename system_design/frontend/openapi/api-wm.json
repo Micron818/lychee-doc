@@ -4522,7 +4522,7 @@
                             "DELIVERY",
                             "CUSTOMER_RETURN",
                             "STOCK_ISSUE",
-                            "STOCK_RETURN",
+                            "STOCK_ISSUE_RETURN",
                             "ADJUSTMENT",
                             "STOCK_TRANSFER",
                             "BACKFLUSH"
