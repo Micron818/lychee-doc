@@ -50,8 +50,9 @@ ORDER BY menus.sort_order::varchar ;
 |70|WM|Warehouse Management|menu.wm|
 |7010|WM01|Warehouse|menu.wm.warehouses|
 |7020|WM02|Goods receipts(GR)|menu.wm.goodsReceipts|
-|7040|WM04|Stock transfer(ST)|menu.wm.stockTransfers|
-|7040|WM03|Stock issues(SI)|menu.wm.stockIssues|
+|7030|WM03|Stock transfer(ST)|menu.wm.stockTransfers|
+|7040|WM04|Stock issues(SI)|menu.wm.stockIssues|
+|7045|WM04R|Stock issue returns(SIR)|menu.wm.stockIssueReturns|
 |7050|WM05|Stock onhand|menu.wm.stockOnHand|
 |7060|WM06|Stock transaction|menu.wm.stockTransactions|
 |7070|WM07|Physical inventories|menu.wm.physicalInventories|

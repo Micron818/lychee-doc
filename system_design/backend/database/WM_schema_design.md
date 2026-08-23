@@ -44,7 +44,6 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
 *   **主表關鍵欄位**:
     *   `issue_type`: 領料目的（生產 / 部門 / 報廢 / 樣品等）。
     *   `department_id`: **成本中心**，費用歸屬的責任單位。
-    *   `warehouse_id`: 扣帳倉庫（明細層亦可指定）。
     *   `status`: `DRAFT`, `POSTED`, `REVERSED`。
 *   **明細關鍵欄位**:
     *   `source_doc_id` / `source_doc_type`: 關聯來源，如 `PRODUCTION_ORDER_COMPONENT` 用於核銷工單預留量。
@@ -53,14 +52,16 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
 
 ### 3.4 退料單 (stock_issue_returns / items)
 *   **用途**: 內部領料的反向單。**不是**客戶退貨（`CUSTOMER_RETURN`）或採購退貨（`VENDOR_RETURN`）。
+*   **可退領料類型**: 僅已過帳 `PRODUCTION` / `COST_CENTER` / `SAMPLE`。不含 `PRODUCTION_REPORT`（沖銷生產日報）、`SCRAP`、`SALES_DELIVERY`。
 *   **主表關鍵欄位**:
     *   `original_stock_issue_id`: 一張退料單只對應一張已過帳領料單。
-    *   `return_type`: `PRODUCTION`, `COST_CENTER`, `SAMPLE`。
+    *   `return_type`: `PRODUCTION`, `COST_CENTER`, `SAMPLE`（從原領料 `issue_type` 複製，不可改）。
     *   `status`: `DRAFT`, `POSTED`, `REVERSED`。
 *   **明細關鍵欄位**:
     *   `original_issue_item_id`: 必須參照原領料明細；同一退料單內一行對應一條領料明細。
-    *   `stock_type`: 退回庫存狀態。`UNRESTRICTED`, `INSPECTION`, `BLOCKED`。
-*   **流水帳規則**: 過帳寫入 `STOCK_ISSUE_RETURN`；領料單本身的沖銷仍寫 `STOCK_ISSUE`（進出方向對調）。
+    *   倉庫與批號鎖定原領料明細，不可改。
+    *   `stock_type`: 退回庫存狀態，可選 `UNRESTRICTED`, `INSPECTION`, `BLOCKED`。
+*   **流水帳規則**: 過帳寫入 `STOCK_ISSUE_RETURN`；領料單本身的沖銷仍寫 `STOCK_ISSUE`（進出方向對調）。原領料存在草稿或已過帳退料時禁止沖銷。
 
 ### 3.5 庫存帳務體系 (Stock Ledger)
 為了滿足即時查詢與歷史報表需求，採用三層式架構：

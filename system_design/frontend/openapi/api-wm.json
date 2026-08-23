@@ -986,6 +986,422 @@
                 }
             }
         },
+        "/api/v1/wm/stock-issue-returns": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "createStockIssueReturn",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/StockIssueReturnRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseStockIssueReturnResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/page": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "getStockIssueReturnPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/ProPageRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseListStockIssueReturnResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/returnable-issues/page": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "getReturnableStockIssuePage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/ProPageRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseListReturnableStockIssueResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/returnable-issues/{originalStockIssueId}": {
+            "get": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "getReturnableStockIssue",
+                "parameters": [
+                    {
+                        "name": "originalStockIssueId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseReturnableStockIssueResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{id}": {
+            "get": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "getStockIssueReturn",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseStockIssueReturnResponse" }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "updateStockIssueReturn",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/StockIssueReturnRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseStockIssueReturnResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/bulk-delete": {
+            "delete": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "deleteStockIssueReturnBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": { "type": "integer", "format": "int64" }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{id}/post": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "postStockIssueReturn",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{id}/reverse": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "reverseStockIssueReturn",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{stockIssueReturnId}/items": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "createStockIssueReturnItem",
+                "parameters": [
+                    {
+                        "name": "stockIssueReturnId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/StockIssueReturnItemRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseStockIssueReturnItemResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{stockIssueReturnId}/items/page": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "getStockIssueReturnItemPage",
+                "parameters": [
+                    {
+                        "name": "stockIssueReturnId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/ProPageRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseListStockIssueReturnItemResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{stockIssueReturnId}/returnable-items/page": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "getReturnableIssueItemPage",
+                "parameters": [
+                    {
+                        "name": "stockIssueReturnId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/ProPageRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseListReturnableIssueItemResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{stockIssueReturnId}/items/batch-from-issue": {
+            "post": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "batchCreateItemsFromIssue",
+                "parameters": [
+                    {
+                        "name": "stockIssueReturnId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/BatchStockIssueReturnItemRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{stockIssueReturnId}/items/{itemId}": {
+            "put": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "updateStockIssueReturnItem",
+                "parameters": [
+                    {
+                        "name": "stockIssueReturnId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/StockIssueReturnItemRequest" }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "$ref": "#/components/schemas/ApiResponseStockIssueReturnItemResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wm/stock-issue-returns/{stockIssueReturnId}/items/bulk-delete": {
+            "delete": {
+                "tags": ["stock-issue-return-controller"],
+                "operationId": "deleteStockIssueReturnItemBulk",
+                "parameters": [
+                    {
+                        "name": "stockIssueReturnId",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": { "type": "integer", "format": "int64" }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/wm/stock-issues/{stockIssueId}/items": {
             "post": {
                 "tags": [
@@ -3320,6 +3736,9 @@
                         "type": "string"
                     },
                     "baseQuantity": {
+                        "type": "number"
+                    },
+                    "returnedQuantity": {
                         "type": "number"
                     },
                     "baseUnitId": {
@@ -6050,6 +6469,161 @@
                             "$ref": "#/components/schemas/Item"
                         }
                     }
+                }
+            },
+            "StockIssueReturnRequest": {
+                "type": "object",
+                "properties": {
+                    "originalStockIssueId": { "type": "integer", "format": "int64" },
+                    "returnDate": { "type": "string", "format": "date" },
+                    "departmentId": { "type": "integer", "format": "int64" },
+                    "remarks": { "type": "string" }
+                },
+                "required": ["originalStockIssueId", "returnDate"]
+            },
+            "StockIssueReturnResponse": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer", "format": "int64" },
+                    "code": { "type": "string" },
+                    "factoryId": { "type": "integer", "format": "int64" },
+                    "returnDate": { "type": "string", "format": "date" },
+                    "departmentId": { "type": "integer", "format": "int64" },
+                    "originalStockIssueId": { "type": "integer", "format": "int64" },
+                    "originalStockIssueCode": { "type": "string" },
+                    "returnType": { "type": "string", "enum": ["PRODUCTION", "COST_CENTER", "SAMPLE"] },
+                    "status": { "type": "string", "enum": ["DRAFT", "POSTED", "REVERSED"] },
+                    "remarks": { "type": "string" }
+                }
+            },
+            "StockIssueReturnItemRequest": {
+                "type": "object",
+                "properties": {
+                    "originalIssueItemId": { "type": "integer", "format": "int64" },
+                    "transactionQuantity": { "type": "number" },
+                    "stockType": { "type": "string", "enum": ["UNRESTRICTED", "INSPECTION", "BLOCKED"] },
+                    "reasonCode": { "type": "string" },
+                    "remarks": { "type": "string" }
+                },
+                "required": ["originalIssueItemId", "transactionQuantity"]
+            },
+            "StockIssueReturnItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer", "format": "int64" },
+                    "stockIssueReturnId": { "type": "integer", "format": "int64" },
+                    "itemNo": { "type": "integer", "format": "int32" },
+                    "originalIssueItemId": { "type": "integer", "format": "int64" },
+                    "materialId": { "type": "integer", "format": "int64" },
+                    "warehouseId": { "type": "integer", "format": "int64" },
+                    "transactionQuantity": { "type": "number" },
+                    "baseQuantity": { "type": "number" },
+                    "stockType": { "type": "string", "enum": ["UNRESTRICTED", "INSPECTION", "BLOCKED"] },
+                    "reasonCode": { "type": "string" }
+                }
+            },
+            "ReturnableIssueItemResponse": {
+                "type": "object",
+                "properties": {
+                    "originalIssueItemId": { "type": "integer", "format": "int64" },
+                    "itemNo": { "type": "integer", "format": "int32" },
+                    "materialId": { "type": "integer", "format": "int64" },
+                    "returnableBaseQuantity": { "type": "number" },
+                    "returnableTransactionQuantity": { "type": "number" },
+                    "returnedQuantity": { "type": "number" },
+                    "draftReturnQuantity": { "type": "number" }
+                }
+            },
+            "BatchStockIssueReturnItemRequest": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/StockIssueReturnItemRequest" }
+                    }
+                }
+            },
+            "ApiResponseStockIssueReturnResponse": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "integer", "format": "int32" },
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/StockIssueReturnResponse" }
+                }
+            },
+            "ApiResponseListStockIssueReturnResponse": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "integer", "format": "int32" },
+                    "success": { "type": "boolean" },
+                    "data": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/StockIssueReturnResponse" }
+                    },
+                    "total": { "type": "integer", "format": "int64" }
+                }
+            },
+            "ApiResponseStockIssueReturnItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "integer", "format": "int32" },
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/StockIssueReturnItemResponse" }
+                }
+            },
+            "ApiResponseListStockIssueReturnItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "integer", "format": "int32" },
+                    "success": { "type": "boolean" },
+                    "data": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/StockIssueReturnItemResponse" }
+                    },
+                    "total": { "type": "integer", "format": "int64" }
+                }
+            },
+            "ApiResponseListReturnableIssueItemResponse": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "integer", "format": "int32" },
+                    "success": { "type": "boolean" },
+                    "data": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/ReturnableIssueItemResponse" }
+                    },
+                    "total": { "type": "integer", "format": "int64" }
+                }
+            },
+            "ReturnableStockIssueResponse": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer", "format": "int64" },
+                    "code": { "type": "string" },
+                    "factoryId": { "type": "integer", "format": "int64" },
+                    "departmentId": { "type": "integer", "format": "int64" },
+                    "issueType": { "type": "string", "enum": ["PRODUCTION", "COST_CENTER", "SAMPLE"] },
+                    "issueDate": { "type": "string", "format": "date" }
+                }
+            },
+            "ApiResponseReturnableStockIssueResponse": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "integer", "format": "int32" },
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/ReturnableStockIssueResponse" }
+                }
+            },
+            "ApiResponseListReturnableStockIssueResponse": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "integer", "format": "int32" },
+                    "success": { "type": "boolean" },
+                    "data": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/ReturnableStockIssueResponse" }
+                    },
+                    "total": { "type": "integer", "format": "int64" }
                 }
             }
         }

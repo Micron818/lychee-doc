@@ -45,6 +45,7 @@ INSERT INTO menus (id,tenant_id,"name",parent_id,"path",icon,sort_order,is_visib
 	 (49,1,'Goods receipts(GR)',50,'/wm/goods-receipts',NULL,7020,true,1,'2026-04-14 15:12:11.831012','2026-05-08 10:48:57.350546',1,1,'menu.wm.goodsReceipts','WM02'),
 	 (60,1,'Stock transfer(ST)',50,'/wm/stock-transfers',NULL,7040,true,1,'2026-06-13 09:12:29.612095','2026-06-13 09:13:46.270447',1,1,'menu.wm.stockTransfers','WM04'),
 	 (54,1,'Stock issues(SI)',50,'/wm/stock-issues',NULL,7040,true,1,'2026-05-08 10:48:46.022402','2026-05-08 10:49:08.391207',1,1,'menu.wm.stockIssues','WM03'),
+	 (97,1,'Stock issue returns(SIR)',50,'/wm/stock-issue-returns',NULL,7045,true,1,'2026-08-21 00:00:00','2026-08-21 00:00:00',1,1,'menu.wm.stockIssueReturns','WM10'),
 	 (55,1,'Stock onhand',50,'/wm/stock-on-hand',NULL,7050,true,1,'2026-05-12 00:14:15.656542','2026-06-13 09:11:30.187772',1,1,'menu.wm.stockOnHand','WM05'),
 	 (56,1,'Stock transaction',50,'/wm/stock-transactions',NULL,7060,true,1,'2026-05-19 13:45:30.758112','2026-06-13 09:11:18.763952',1,1,'menu.wm.stockTransactions','WM06'),
 	 (58,1,'Physical inventories',50,'/wm/physical-inventories',NULL,7070,true,1,'2026-06-02 23:31:36.528903','2026-06-13 09:10:49.128448',1,1,'menu.wm.physicalInventories','WM07'),
