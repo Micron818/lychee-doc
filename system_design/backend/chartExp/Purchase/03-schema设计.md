@@ -227,9 +227,11 @@ To-Be 允许一行建议拆多次、拆多供应商转 PO。`false` 会叠两种
 |----|--------------------------------------|----------|--------|
 | `OPEN` | `converted_quantity = 0` | **删除** | 仅当属于该厂最新 Run：可转 |
 | `PARTIAL` | `0 < converted < required` | **保留** | 仅当属于该厂最新 Run：可转剩余；历史 Run 的 PARTIAL 不进工作台 |
-| `CONVERTED` | `converted ≥ required`（与 `remaining ≈ 0` 同一公差） | **保留** | 不可转 |
+| `CONVERTED` | `remaining.compareTo(0) <= 0` | **保留** | 不可转 |
 
 重算之后旧 `PARTIAL`/`CONVERTED` 行留下作审计，缺口由新 Run 的 `OPEN` 行覆盖。
+
+生产建议（`PRODUCTION`）共用这两列：转 PLO 仍整行，`converted_quantity = required_quantity`，`CONVERTED`；回退 PROPOSED PLO 时减回。生产路径不做 PARTIAL。详见 `04-实施清单.md` §3.1。
 
 ```sql
 ALTER TABLE lychee_erp.mrp_results
@@ -239,18 +241,21 @@ ALTER TABLE lychee_erp.mrp_results
 ALTER TABLE lychee_erp.mrp_results
     DROP COLUMN IF EXISTS is_converted;
 
+CREATE INDEX ix_mrp_results_factory_convert
+    ON lychee_erp.mrp_results (factory_id, convert_status);
+
 COMMENT ON COLUMN lychee_erp.mrp_results.converted_quantity
-    IS '已转入未关闭 PO 的数量；与 MRP_RESULT→PURCHASE_ORDER pegging 合计对齐';
+    IS '已转入下游执行单的数量（采购=PO，生产=PLO）；仅 DRAFT/PROPOSED 回退时减少';
 COMMENT ON COLUMN lychee_erp.mrp_results.convert_status
     IS 'OPEN / PARTIAL / CONVERTED；由 converted_quantity 与 required_quantity 派生';
 ```
 
 新 Run 写入：`converted_quantity = 0`，`convert_status = OPEN`。`suggested_supplier_id` 仍不加。
 
-派生函数（转单、回退共用，禁止只改其一）：
+派生函数（转单、回退共用，禁止只改其一；用 `BigDecimal.compareTo`）：
 
 ```text
-if converted_quantity ≈ 0        → OPEN
+if converted_quantity <= 0       → OPEN
 else if remainingQty > 0         → PARTIAL
 else                             → CONVERTED
 ```
@@ -290,6 +295,8 @@ R1 建议 100，先转 40 到 PO
 
 不要靠把部分转标成 `CONVERTED` 来躲清理。
 
+`CLOSED`/`COMPLETED` PO **不**回减 `converted_quantity`。删除 MrpRun 时若该 Run 存在 `convert_status <> OPEN` 则拒绝（避免 CASCADE 拆掉仍挂着的 PO pegging）。
+
 ---
 
 ## 6. 请购表：去掉 MRP 来源列
@@ -308,13 +315,14 @@ ALTER TABLE lychee_erp.purchase_requisitions DROP COLUMN IF EXISTS source_type;
 
 ## 7. 文档与过期描述对齐
 
-实施时同步改：
+实施时同步改（本轮审查已改文档与 `schema_tables`；**Liquibase 随代码提交**）：
 
-- `database/SCM_schema_design.md`：去掉「请购明细必须有 `source_mrp_result_id`」；改为 Pegging；补充 `material_suppliers` 与 `purchase_orders.source_type`。  
-- `system_design/mrp/01-current-capability.md` §5.2：转单目标改为 PO，清理对象不再含 DRAFT MRP PR。  
-- `system_design/mrp/02-evolution-plan.md`：图中 `MrpResult → 人工转 PLO/PR` 改为 `PLO / PO`。  
-- `schema_tables/SCM/`：新增 `material_suppliers.sql`；`purchase_orders.sql` 加 `source_type`/`mrp_run_id`；`purchase_requisitions.sql` 删除 `source_type`/`mrp_run_id`。  
-- `schema_tables/PP/mrp_results.sql`：加 `converted_quantity`、`convert_status`；删除 `is_converted`。
+- `database/SCM_schema_design.md`：PO 三值 `source_type` + `mrp_run_id`；PR 去掉来源列；DRAFT PO 计入供给。  
+- `system_design/mrp/01-current-capability.md`：文首指向本目录；As-Is 正文保留，避免和 To-Be 混写。  
+- `system_design/mrp/02-evolution-plan.md`：图中转单目标改为 PLO / PO。  
+- `schema_tables`：`material_suppliers.sql`；`purchase_orders` / `purchase_requisitions` / `mrp_results`。  
+- Liquibase：`lychee-erp/src/main/resources/db/changelog/v1/2026/`（格式见现网 `0810-001-mrp-run-scope.sql`）。  
+- 代码面：`04-实施清单.md`。
 
 ---
 
@@ -327,10 +335,12 @@ ALTER TABLE lychee_erp.purchase_requisitions DROP COLUMN IF EXISTS source_type;
 | `POST .../purchase-orders/from-pr-items` | `lychee-erp-scm`（请购一键建单） |
 | `POST .../purchase-orders/{id}/items/from-pr` | `lychee-erp-scm`；仅请购类型 DRAFT |
 | 待转建议查询 | SCM 调 `RemoteMrpResultService`（`lychee-erp-common` 契约） |
+| 转 PO 回写数量账 | 同上 `applyConvertedQuantity` |
 | MRP 清理不再删 PR | `lychee-erp-pp` `MrpCalculationEngine` |
-| 前端工作台 | `lychee-frontend/src/pages/scm/purchase-proposals`（或 PO 下抽屉） |
+| 前端工作台 | `lychee-frontend/src/pages/scm/purchase-proposals` |
+| 计划员转单 | 跳转工作台；**不**做 PP 一键转 PO |
 
-跨模块禁止 PP 直接依赖 SCM 实体：继续走 `Remote*`，与现有转 PR 相同。
+跨模块禁止 PP 直接依赖 SCM 实体：继续走 `Remote*`。
 
 ---
 

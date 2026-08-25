@@ -2,6 +2,8 @@
 
 > 依据：`lychee-erp-pp` / `lychee-erp-scm` / `lychee-frontend` 当前代码。  
 > 不引用历史草稿文档。
+>
+> **原物料转单改造（To-Be）** 以 [`chartExp/Purchase`](../backend/chartExp/Purchase/README.md) 为准（开发入口 `04-实施清单.md`）。**本节正文仍是改造前行为**，避免和目标流程混写。
 
 ---
 
@@ -186,6 +188,8 @@ CANCELLED：枚举存在，无业务写入
 - Pegging：`MRP_RESULT → PLANNED_ORDER`；`isConverted=true`
 
 ### 5.2 → Purchase Requisition
+
+> To-Be：删除本路径，改为 SCM 采购建议工作台转 PO。见 Purchase/02、04。
 
 - 仅 `PURCHASE` 且未转单
 - 已有 PR pegging 则跳过

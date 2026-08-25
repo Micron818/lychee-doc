@@ -1,7 +1,7 @@
 # MRP 演进计划（基于现有实现）
 
 > 目标：在**不推翻**现有「创建 Run → 异步计算 → 人工转单」骨架的前提下，补齐触发、作用域与运维能力。  
-> 约束：转单默认仍人工确认；不自动产出 MO / PO。
+> 约束：转单默认仍人工确认；不自动产出 MO / PO。原物料人工转单目标为 **PLO / PO**（不再转 PR），见 [`chartExp/Purchase`](../backend/chartExp/Purchase/README.md)。
 
 ---
 
@@ -41,7 +41,7 @@
                         ▼
               MrpCalculationEngine     ← 现有（后续可扩 scope）
                         ▼
-              MrpResult → 人工转 PLO/PR ← 现有
+              MrpResult → 人工转 PLO/PO ← 采购工作台（原转 PR 淘汰）
 ```
 
 ---
@@ -85,7 +85,8 @@
 
 #### 1.3 清理范围收窄（配合 factory 过滤）
 
-- 有 `factoryId`：只清该工厂未固化结果 / PROPOSED PLO / DRAFT MRP-PR
+- 有 `factoryId`：只清该工厂未固化结果 / PROPOSED PLO / DRAFT MRP-PR  
+  （Purchase 改造后不再有 DRAFT MRP-PR：改为删除 `convert_status=OPEN` 的结果，保留已转 PO 的行。见 `chartExp/Purchase`。）
 - 无 `factoryId`：保持现行为
 
 引擎种子需求与供给收集同步按工厂过滤；`planningHorizonDays` 仅截断初始需求种子。
@@ -114,7 +115,7 @@
 | `enabled` | 开关 |
 | `planningHorizonDays` | 传给 Run |
 | `lastTriggeredAt` / `lastErrorMessage` | 运维观测 |
-| 自动转单 | **不做**（仍人工转 PLO/PR） |
+| 自动转单 | **不做**（仍人工转 PLO/PO） |
 
 #### 2.2 执行器
 

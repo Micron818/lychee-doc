@@ -20,6 +20,8 @@ CREATE TABLE lychee_erp.purchase_orders
 	tax_amount numeric(18,2) NOT NULL   DEFAULT 0,
 	total_amount numeric(18,2) NOT NULL   DEFAULT 0,
 	status varchar(20) NOT NULL,    -- DRAFT, APPROVED, PARTIAL,COMPLETED, CLOSED
+	source_type varchar(20) NOT NULL DEFAULT 'MANUAL',    -- MRP, PURCHASE_REQUISITION, MANUAL
+	mrp_run_id bigint NULL,
 	remarks text NULL,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
@@ -69,8 +71,19 @@ ALTER TABLE lychee_erp.purchase_orders ADD CONSTRAINT fk_purchase_orders_updated
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
 ;
 
+CREATE INDEX ix_purchase_orders_mrp_run ON lychee_erp.purchase_orders (mrp_run_id ASC)
+;
+
+ALTER TABLE lychee_erp.purchase_orders ADD CONSTRAINT fk_purchase_orders_mrp_run
+	FOREIGN KEY (mrp_run_id) REFERENCES lychee_erp.mrp_runs (id) ON DELETE Set Null ON UPDATE No Action
+;
+
 COMMENT ON COLUMN lychee_erp.purchase_orders.status
 	IS 'DRAFT, APPROVED, PARTIAL,COMPLETED, CLOSED'
+;
+
+COMMENT ON COLUMN lychee_erp.purchase_orders.source_type
+	IS 'MRP, PURCHASE_REQUISITION, MANUAL'
 ;
 
  
