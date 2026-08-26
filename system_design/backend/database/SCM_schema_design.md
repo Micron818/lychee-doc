@@ -59,7 +59,7 @@ Source List + 簡版採購信息記錄。**不要**把預設供應商塞進 `mat
 
 *   業務鍵: `(tenant_id, factory_id, material_id, supplier_id)` 唯一。
 *   同一 `(tenant, factory, material)` 最多一個 `is_default = true`（部分唯一索引）。
-*   **關鍵欄位**: `is_default`、`purchase_unit_id`、`min_order_quantity`、`lead_time_days`（展示參考；MRP 提前期仍讀 `mrp_parameters`）、`last_price`、`currency_option_id`、`valid_from` / `valid_to`。
+*   **關鍵欄位**: `is_default`、`purchase_unit_id`（必填報價單位快照）、`currency_option_id`（末次價報價幣快照，保存後不隨供應商主檔變更）、`min_order_quantity`、`lead_time_days`（展示參考；MRP 提前期仍讀 `mrp_parameters`）、`last_price`（按本行採購單位、本行幣別；僅當快照幣 = 供應商當前交易幣時才作為轉單默認價，否則 0，不做匯率換算）、`valid_from` / `valid_to`。PO 主檔開單幣仍取 `suppliers.currency_option_id`。
 *   DDL 與解析規則見 [Purchase/03-schema設計.md](../chartExp/Purchase/03-schema设计.md)。
 
 ### 3.3 請購單 (`purchase_requisitions` / `purchase_requisition_items`)
@@ -89,7 +89,7 @@ Source List + 簡版採購信息記錄。**不要**把預設供應商塞進 `mat
     *   `mrp_run_id`: **僅** `source_type = MRP`；轉單當時的 Run 快照；`ON DELETE SET NULL`。
     *   `status`: `DRAFT` / `APPROVED` / `PARTIAL` / `COMPLETED` / `CLOSED`。
 *   **明細關鍵欄位**:
-    *   `unit_price` 及金額欄: 議定單價，AP 依據。工作台可帶來源清單 `last_price`，否則 0。
+    *   `unit_price` 及金額欄: 議定單價，AP 依據。工作台可帶來源清單 `last_price`（快照幣與供應商當前交易幣一致時），否則 0。
     *   `required_date` / `expected_delivery_date`（生成時必填，否則不算 MRP 供給）。
     *   `ordered_quantity` / `received_quantity` / `invoiced_quantity`。
     *   `is_unlimited_over_receipt` / `over_receipt_tolerance`。

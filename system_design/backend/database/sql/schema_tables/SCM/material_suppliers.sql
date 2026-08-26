@@ -11,7 +11,7 @@ CREATE TABLE lychee_erp.material_suppliers
 	material_id bigint NOT NULL,
 	supplier_id bigint NOT NULL,
 	is_default boolean NOT NULL DEFAULT false,
-	purchase_unit_id bigint NULL,
+	purchase_unit_id bigint NOT NULL,
 	min_order_quantity numeric(18,6) NOT NULL DEFAULT 0,
 	lead_time_days numeric(10,2) NOT NULL DEFAULT 0,
 	last_price numeric(18,4) NULL,
@@ -79,3 +79,10 @@ ALTER TABLE lychee_erp.material_suppliers ADD CONSTRAINT fk_material_suppliers_c
 ALTER TABLE lychee_erp.material_suppliers ADD CONSTRAINT fk_material_suppliers_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
 ;
+
+COMMENT ON COLUMN lychee_erp.material_suppliers.currency_option_id
+	IS 'Frozen quote currency for last_price; not a live projection of suppliers.currency_option_id';
+
+COMMENT ON COLUMN lychee_erp.material_suppliers.last_price
+	IS 'Last price per purchase_unit_id, in currency_option_id. Unusable as PO default when that currency differs from the supplier trading currency';
+

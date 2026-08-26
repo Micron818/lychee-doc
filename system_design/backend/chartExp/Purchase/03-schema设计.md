@@ -38,7 +38,7 @@ CREATE TABLE lychee_erp.material_suppliers
     material_id             bigint          NOT NULL,
     supplier_id             bigint          NOT NULL,
     is_default              boolean         NOT NULL DEFAULT false,
-    purchase_unit_id        bigint          NULL,
+    purchase_unit_id        bigint          NOT NULL,
     min_order_quantity      numeric(18,6)   NOT NULL DEFAULT 0,
     lead_time_days          numeric(10,2)   NOT NULL DEFAULT 0,
     last_price              numeric(18,4)   NULL,
@@ -94,16 +94,18 @@ CREATE UNIQUE INDEX uk_material_suppliers_one_default
 |------|------|
 | `factory_id` + `material_id` + `supplier_id` | 来源清单业务键 |
 | `is_default` | 工作台预填；转单未传供应商时补齐 |
-| `purchase_unit_id` | 空则回退 `materials.purchase_unit_id` / `base_unit_id` |
+| `purchase_unit_id` | **必填**。本行末次价的报价单位快照；录入时默认带出物料采购单位 / 基本单位，保存后不随物料主档变更 |
+| `currency_option_id` | 本行 `last_price` 的报价币别快照；录入时默认带出供应商交易币，保存后不随 `suppliers.currency_option_id` 变更 |
 | `min_order_quantity` | 转单数量校验（0 = 不限制） |
 | `lead_time_days` | 仅供展示/参考；MRP 提前期仍读 `mrp_parameters` |
-| `last_price` + `currency_option_id` | 生成 PO 明细默认单价；收货后可由服务回写（非本阶段必做） |
+| `last_price` | 转单默认单价的候选。计价单位为本行 `purchase_unit_id`，币别为本行 `currency_option_id`。**仅当快照币 = 供应商当前交易币** 时才带出，否则默认 `0`（不做汇率换算）。收货后可由服务回写（非本阶段必做） |
 | `valid_from` / `valid_to` | 空 = 长期有效；工作台与转单只取当前有效行 |
 
 ### 2.3 不放进本表的内容
 
 - 配额比例、多个价格阶梯：以后加子表，不堵上线。  
 - 供应商付款条件：仍在 `suppliers` / PO 主档。  
+- PO 开单币：仍在 `suppliers.currency_option_id` / PO 主档。本表 `currency_option_id` 只冻结末次价报价币，不是 live 投影；不一致时转单不带出 `last_price`。  
 - Lot-sizing：仍在 `mrp_parameters`。
 
 ### 2.4 CRUD 与引用保护
@@ -364,4 +366,4 @@ ALTER TABLE lychee_erp.purchase_requisitions DROP COLUMN IF EXISTS source_type;
 ## 10. 与收货 / 财务
 
 本改造不改 `goods_receipts`、AP。GR 仍挂 `purchase_order_item_id`。  
-末次价回写 `material_suppliers.last_price` 作为后续增强（可在 GR 过账后更新），不阻塞 V1。
+末次价回写 `material_suppliers.last_price` 作为后续增强（可在 GR 过账后更新，并同时写入当时单据币别到 `currency_option_id`），不阻塞 V1。
