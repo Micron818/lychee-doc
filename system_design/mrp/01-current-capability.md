@@ -189,7 +189,7 @@ CANCELLED：枚举存在，无业务写入
 
 ### 5.2 → Purchase Requisition
 
-> To-Be：删除本路径，改为 SCM 采购建议工作台转 PO。见 Purchase/02、04。
+> To-Be：删除本路径，改为采购订单页 MRP 待转 Tab 转 PO。见 Purchase/02、04。
 
 - 仅 `PURCHASE` 且未转单
 - 已有 PR pegging 则跳过

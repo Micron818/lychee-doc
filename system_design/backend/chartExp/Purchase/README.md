@@ -1,12 +1,13 @@
 # 原物料采购流程设计
 
 本目录描述 **FO 驱动的原物料采购** 如何从现有 `MrpResult → PR → PO` 简化为 `MrpResult → PO`。  
-请购保留给内部申请；PO 主档用 `source_type` 区分 `MRP` / `PURCHASE_REQUISITION` / `MANUAL`。系统尚未上线，允许改表。
+请购保留给内部申请；PO 主档用 `source_type` 区分 `MRP` / `PURCHASE_REQUISITION` / `MANUAL`。系统尚未上线，允许改表。  
+前端开单入口：`/scm/purchase-orders` 三 Tab（采购单 / MRP 待转 / 请购待转），不另挂工作台菜单。
 
 | 文档 | 说明 |
 |------|------|
 | [01-现状与问题.md](./01-现状与问题.md) | As-Is：现有单据链、作业步骤、代码路径与摩擦点 |
-| [02-目标流程.md](./02-目标流程.md) | To-Be：采购工作台、转单规则、API、MRP 供给/清理 |
+| [02-目标流程.md](./02-目标流程.md) | To-Be：采购订单页工作台、转单规则、API、MRP 供给/清理 |
 | [03-schema设计.md](./03-schema设计.md) | 物料供应商主档、PO 来源、Pegging、`convert_status`、PR 保留范围 |
 | [04-实施清单.md](./04-实施清单.md) | **开发入口**：已锁定决策、实现约定、改动面、提交顺序 |
 

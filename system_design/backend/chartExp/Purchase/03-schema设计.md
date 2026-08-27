@@ -339,8 +339,8 @@ ALTER TABLE lychee_erp.purchase_requisitions DROP COLUMN IF EXISTS source_type;
 | 待转建议查询 | SCM 调 `RemoteMrpResultService`（`lychee-erp-common` 契约） |
 | 转 PO 回写数量账 | 同上 `applyConvertedQuantity` |
 | MRP 清理不再删 PR | `lychee-erp-pp` `MrpCalculationEngine` |
-| 前端工作台 | `lychee-frontend/src/pages/scm/purchase-proposals` |
-| 计划员转单 | 跳转工作台；**不**做 PP 一键转 PO |
+| 前端工作台 | `lychee-frontend/src/pages/scm/purchase-orders`（Tab：`orders` / `mrp` / `pr`；组件 `MrpProposalWorkbench`、`PrProposalWorkbench`） |
+| 计划员转单 | 跳转 `/scm/purchase-orders?tab=mrp`；**不**做 PP 一键转 PO；无独立 `/scm/purchase-proposals` 页 |
 
 跨模块禁止 PP 直接依赖 SCM 实体：继续走 `Remote*`。
 
