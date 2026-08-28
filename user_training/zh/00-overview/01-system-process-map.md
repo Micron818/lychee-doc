@@ -1,6 +1,6 @@
 # OV-01 系统整体流程地图
 
-> 受众：全体用户 | 模块：跨模块 | 版本：2026-08-08  
+> 受众：全体用户 | 模块：跨模块 | 版本：2026-08-28  
 > 预计时长：25 分钟 | 语言：zh | 状态：草稿 | vi 同步：待同步
 
 ## 1. 这篇解决什么问题
@@ -40,7 +40,7 @@ flowchart LR
 | BASIS | 公司、工厂、部门 | — |
 | MM | 物料、工厂物料、单位 | 物料主数据 |
 | SD | 接单、交货 | SO、DN、客户 |
-| SCM | 申请、下单、委外 | PR、PO、OSO、供应商 |
+| SCM | 工作台转单、下单、委外 | PO、PR、OSO、物料供应商 |
 | WM | 收发存、盘点、库存结账 | GR、SI、ST、PI |
 | PP | BOM、MRP、工单、产量回馈 | BOM、FO、MRP、PLO、MO、MOR |
 | FI | 发票、收付款、凭证、成本、资产 | AR、AP、日记账、成本结算 |
@@ -56,7 +56,7 @@ flowchart LR
 flowchart TB
   MD[主数据：公司/工厂/物料/客商]
   MD --> OTC[销货：SO - DN]
-  MD --> PTP[采购：PR - PO - GR]
+  MD --> PTP[采购：工作台 - PO - GR]
   MD --> MFG[计划生产：BOM - MRP - MO - MOR]
   OTC --> STK[库存与期间]
   PTP --> STK
@@ -95,6 +95,9 @@ A：训练先抓主价值链。固定资产、科目确定等可在财务角色�
 
 **Q：委外（OSO）画在哪里？**  
 A：归属采购协同生产/仓储的支线；动手见 [PB-08](../03-process-playbooks/PB-08-outsource-loop.md)。
+
+**Q：采购为什么写成「工作台」而不是 PR → PO？**  
+A：原物料从 MRP 建议在采购订单页「MRP 待转」直接生成 PO；PR 只保留给内部手工请购。动手见 [PB-03](../03-process-playbooks/PB-03-procure-to-pay.md)。
 
 **Q：导出/导入中心是不是业务流程的一环？**  
 A：它们是交付与批量维护通道，不替代业务单据本身；见 [导出中心](../01-getting-started/02-export-center.md)、[导入中心](../01-getting-started/03-import-center.md) 与 PB-06 / PB-07。

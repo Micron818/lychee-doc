@@ -1,8 +1,8 @@
 # Lychee ERP 用户教育训练文档
 
 > 编写日期：2026-08-01  
-> 修订：2026-08-08  
-> 状态：**骨架与剧本按现行菜单整体整理**
+> 修订：2026-08-28  
+> 状态：**骨架与剧本按现行菜单整体整理**；采购主路径已改为订单页工作台（vi 待同步）
 > 语言策略：**仅维护中文（zh）与越南文（vi）两套**；先完成中文，再同步越南文  
 > 功能范围：以现行菜单清单 [`menus_20260808-simple.md`](../system_design/backend/database/sql/initial_data/adm_init_data/menus_20260808-simple.md) 为整体对照；菜单文案以系统界面当前中文名为准
 
@@ -59,7 +59,7 @@ pnpm docs:dev
 | 销售 | SD | OV-02 | PB-02 |
 | 采购 | SCM | OV-03 | PB-03、PB-06、PB-08 |
 | 仓储 | WM | OV-03、OV-05 | PB-03、PB-05、PB-09 |
-| 生产计划 | PP | OV-04 | PB-04、PB-08（协同） |
+| 生产计划 | PP | OV-04 | PB-04、PB-03（采购交接）、PB-08（协同） |
 | 财务 | FI | OV-02、OV-03、OV-05 | PB-03、PB-05、PB-07、PB-10 |
 
 ## 流程剧本（准备期优先填满顺序）
@@ -70,7 +70,7 @@ pnpm docs:dev
 |------|------|------|
 | PB-01 | [主数据就绪](./zh/03-process-playbooks/PB-01-master-data-ready.md) | 公司/工厂/物料/客户/供应商就绪 |
 | PB-02 | [销售出货](./zh/03-process-playbooks/PB-02-sales-to-delivery.md) | SO → DN |
-| PB-03 | [采购入库与应付](./zh/03-process-playbooks/PB-03-procure-to-pay.md) | PR → PO → GR → AP |
+| PB-03 | [采购入库与应付](./zh/03-process-playbooks/PB-03-procure-to-pay.md) | 工作台 / 手工 → PO → GR → AP |
 | PB-04 | [计划到生产回馈](./zh/03-process-playbooks/PB-04-mrp-to-production.md) | BOM → FO → MRP → PLO → MO → MOR |
 | PB-05 | [库存与财务关账](./zh/03-process-playbooks/PB-05-period-close.md) | 库存期末 ↔ 成本结算 / 会计期间 |
 | PB-06 | [导出与打印](./zh/03-process-playbooks/PB-06-export-and-print.md) | 供应商 Excel、订购单打印 / PDF、导出中心 |
@@ -129,4 +129,5 @@ pnpm docs:dev
 2. 准备期优先按上表顺序填满剧本正文，并在训练环境自行走通；角色手册与模块速查与剧本同步完善。  
 3. 开课后：第 0 节用 **OV-01** 建全景；专篇 OV-02～05 作预习/串讲；分班跟练对应 PB。  
 4. 中文试讲一轮后冻结术语表，启动 `vi/` 同步（含 `vi/00-overview/` 镜像）。  
-5. 此后若系统新增功能，再以新剧本追加，并更新本索引与 OV 总图（若影响主价值链）；菜单名变更以系统界面为准回改正文。
+5. 此后若系统新增功能，再以新剧本追加，并更新本索引与 OV 总图（若影响主价值链）；菜单名变更以系统界面为准回改正文。  
+6. **2026-08-28**：采购主路径改为采购订单页工作台（MRP 待转 / 请购待转 / 手工新增），已回改 OV-03、PB-03、采购与生产角色手册及 SCM/PP 速查；**vi 待同步**。

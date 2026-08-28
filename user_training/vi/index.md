@@ -20,6 +20,8 @@
 | 01-getting-started（含导入中心） | Chưa bắt đầu |
 | 02-roles | Chưa bắt đầu |
 | 03-process-playbooks (PB-01～PB-10) | Chưa bắt đầu |
+
+> 2026-08-28：中文采购主路径已改为订单页工作台（OV-03 / PB-03 等），本目录仍待翻译。
 | 04-module-quickref | Chưa bắt đầu |
 | 05-admin-ops | Chưa bắt đầu |
 
