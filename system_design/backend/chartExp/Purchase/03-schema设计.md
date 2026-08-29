@@ -118,7 +118,7 @@ CREATE UNIQUE INDEX uk_material_suppliers_one_default
 
 ```text
 1. material_suppliers WHERE factory + material + is_default + 在有效期内
-2. 若无 → 工作台 suggestedSupplierId 为空，提交必须带 supplierId
+2. 若无 → 工作台供应商为空，提交必须带 supplierId
 3. 禁止静默用「任意一条」来源行
 ```
 
@@ -311,7 +311,8 @@ ALTER TABLE lychee_erp.purchase_requisitions DROP COLUMN IF EXISTS source_type;
 ```
 
 同步删除枚举 `PurchaseRequisitionSourceType`、建 MRP PR 的 remote API、引擎清理 DRAFT MRP PR。  
-`suggested_supplier_id`、审核、`ordered_quantity` 保留，供请购类型 PO 汇入使用。
+审核、`ordered_quantity` 保留，供请购类型 PO 汇入使用。  
+`suggested_supplier_id` **删除**：默认供应商 / 末次价 / 起订量只读 `material_suppliers`；工作台与补行按提交的 `supplierId` 解析，不再用请购行绑定供应商。
 
 ---
 

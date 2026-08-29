@@ -72,7 +72,7 @@ Source List + 簡版採購信息記錄。**不要**把預設供應商塞進 `mat
     *   `status`: `DRAFT` / `APPROVED` / `PARTIAL` / `COMPLETED` / `CLOSED`。
 *   **明細關鍵欄位**:
     *   `required_quantity` / `ordered_quantity`（已轉 PO 量）。
-    *   `suggested_supplier_id`: 建議供應商（手工可填）。
+    *   **沒有** `suggested_supplier_id`（預設供應商 / 末次價改讀 `material_suppliers`）。
     *   `required_date` / `latest_order_date`。
 *   審核後的開量（`required − ordered`）可作為 MRP 預計入庫；**DRAFT 不計入**。
 

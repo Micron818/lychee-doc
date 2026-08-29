@@ -15,7 +15,6 @@ CREATE TABLE lychee_erp.purchase_requisition_items
 	required_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	ordered_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	unit_id bigint NULL,
-	suggested_supplier_id bigint NULL,
 	status varchar(20) NOT NULL,    -- DRAFT,APPROVED, PARTIAL, COMPLETED, CLOSED
 	remarks text NULL,
 	created_at timestamp without time zone NULL,
@@ -48,10 +47,6 @@ ALTER TABLE lychee_erp.purchase_requisition_items ADD CONSTRAINT fk_pr_items_req
 
 ALTER TABLE lychee_erp.purchase_requisition_items ADD CONSTRAINT fk_pr_items_material
 	FOREIGN KEY (material_id) REFERENCES lychee_erp.materials (id) ON DELETE No Action ON UPDATE No Action
-;
-
-ALTER TABLE lychee_erp.purchase_requisition_items ADD CONSTRAINT fk_pr_items_supplier
-	FOREIGN KEY (suggested_supplier_id) REFERENCES lychee_erp.suppliers (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 COMMENT ON COLUMN lychee_erp.purchase_requisition_items.required_date
