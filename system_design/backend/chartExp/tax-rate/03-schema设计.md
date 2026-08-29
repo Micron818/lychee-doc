@@ -194,14 +194,15 @@ ALTER TABLE lychee_erp.tax_code_rates
 
 ## 5. 判定矩阵 `tax_determinations`
 
-对标 `fi_account_determination` 的通配：`company_id` / 两个分类均可空。
+对标 `fi_account_determination` 的通配：`company_id` / 两个分类均可空。另加 `country_code`（NOT NULL）：无国家则 VN/CN 无法各写一套租户默认（旧唯一键不含国家，两国会撞车）。
 
 ```sql
 CREATE TABLE lychee_erp.tax_determinations
 (
     id                      bigserial       NOT NULL,
     tenant_id               bigint          NOT NULL,
-    company_id              bigint          NULL,     -- NULL = 租户默认
+    country_code            varchar(2)      NOT NULL, -- ISO 3166-1 alpha-2；租户默认按国家各写一套
+    company_id              bigint          NULL,     -- NULL = 该国租户默认
     tax_direction           varchar(20)     NOT NULL, -- INPUT, OUTPUT
     partner_tax_class_id    bigint          NULL,     -- NULL = 通配
     material_tax_class_id   bigint          NULL,     -- NULL = 通配
@@ -218,6 +219,7 @@ CREATE TABLE lychee_erp.tax_determinations
 CREATE UNIQUE INDEX uk_tax_determinations
     ON lychee_erp.tax_determinations (
         tenant_id,
+        country_code,
         COALESCE(company_id, 0),
         tax_direction,
         COALESCE(partner_tax_class_id, 0),
@@ -244,24 +246,25 @@ ALTER TABLE lychee_erp.tax_determinations
 应用层：
 
 - `partner_tax_class.class_scope = PARTNER`；物料侧 = `MATERIAL`。
-- 税码 `country_code` = 公司国家（`company_id` 空时：税码国家须与「将来使用该租户默认的公司」一致；更严：租户默认行也要求税码国家，实施按国家各写一套默认）。
+- 税码 `country_code` = 判定行 `country_code`。
+- `company_id` 非空时：判定行 `country_code` = 该公司 `country_code`（改公司国家会与矩阵不一致，见 §6）。
 - 税码 `direction` 为 `BOTH` 或等于 `tax_direction`。
 - 停用行不参与匹配，但占用唯一键——改矩阵用更新，不要插第二条同键停用行。
 
-示例（某 VN 公司，可作种子）：
+示例（`country_code = VN`，`company_id` 可空作该国租户默认；CN 另写一套指向 `CN-*` 税码）：
 
-| 方向 | 往来 | 物料 | 税码 |
-|------|------|------|------|
-| INPUT | BP-DOMESTIC | MAT-GOODS | VN-IN-10 |
-| INPUT | BP-DOMESTIC | MAT-GOODS-RED | VN-IN-8 |
-| INPUT | BP-DOMESTIC | MAT-SERVICE | VN-IN-10 |
-| INPUT | BP-SMALL | NULL | VN-IN-ND |
-| INPUT | BP-OVERSEAS | NULL | VN-IN-0 |
-| OUTPUT | BP-DOMESTIC | MAT-GOODS | VN-OUT-10 |
-| OUTPUT | BP-DOMESTIC | MAT-GOODS-RED | VN-OUT-8 |
-| OUTPUT | BP-OVERSEAS | NULL | VN-OUT-0 |
-| OUTPUT | BP-EXEMPT | NULL | VN-OUT-EX |
-| OUTPUT | BP-DOMESTIC | MAT-EXEMPT | VN-OUT-EX |
+| 国家 | 方向 | 往来 | 物料 | 税码 |
+|------|------|------|------|------|
+| VN | INPUT | BP-DOMESTIC | MAT-GOODS | VN-IN-10 |
+| VN | INPUT | BP-DOMESTIC | MAT-GOODS-RED | VN-IN-8 |
+| VN | INPUT | BP-DOMESTIC | MAT-SERVICE | VN-IN-10 |
+| VN | INPUT | BP-SMALL | NULL | VN-IN-ND |
+| VN | INPUT | BP-OVERSEAS | NULL | VN-IN-0 |
+| VN | OUTPUT | BP-DOMESTIC | MAT-GOODS | VN-OUT-10 |
+| VN | OUTPUT | BP-DOMESTIC | MAT-GOODS-RED | VN-OUT-8 |
+| VN | OUTPUT | BP-OVERSEAS | NULL | VN-OUT-0 |
+| VN | OUTPUT | BP-EXEMPT | NULL | VN-OUT-EX |
+| VN | OUTPUT | BP-DOMESTIC | MAT-EXEMPT | VN-OUT-EX |
 
 NULL 表示通配。匹配算法见 `02` §3.2。
 
@@ -278,7 +281,7 @@ COMMENT ON COLUMN lychee_erp.companies.country_code
 ```
 
 未上线可用默认 `VN` 回填后，**保留 NOT NULL**。实施中国公司改为 `CN`。  
-开账后改国家会使在途单与矩阵不一致：应用层对已有未清 SO/PO/发票的公司拒绝改国家，或仅允许改到无单据的新公司。V1：有未关闭业务单则拒绝修改。
+开账后改国家会使在途单与矩阵不一致：应用层对已有未清 SO/PO/发票的公司拒绝改国家，或仅允许改到无单据的新公司。V1：有未关闭业务单则拒绝修改。允许改时须同步该公司判定行的 `country_code`（或先删公司级判定行），否则公司保存失败。
 
 ---
 
@@ -368,10 +371,12 @@ GR 注释同步：`Source tax code + rate snapshot`。
 | `tax_classes` / `tax_codes` / `tax_code_rates` / `tax_determinations` CRUD | `lychee-erp-fi` |
 | `POST .../tax-determinations/resolve` | `lychee-erp-fi` |
 | `RemoteTaxDeterminationService` | 契约 `lychee-erp-common`；实现 FI |
+| `RemoteSupplierDTO` / `RemoteCustomerDTO` / `RemoteMaterialDTO` 加 `taxClassId` | common 契约；SCM / SD / MD 实现回填 |
 | `companies.country_code` | `lychee-erp-basis` |
 | `materials.tax_class_id` | `lychee-erp-md`（物料模块） |
 | `suppliers.tax_class_id` | `lychee-erp-scm` |
 | `customers.tax_class_id` | `lychee-erp-sd` |
+| AP/AR 杂项行取往来分类 | FI：`business_partners.source_id` → Remote 供应商/客户 |
 | PO/委外开行、转单调用判定 | SCM |
 | SO 开行调用判定 | SD |
 | GR/发货复制税码 | WM / SD |
@@ -390,6 +395,15 @@ GR 注释同步：`Source tax code + rate snapshot`。
 3. resolve(company, INPUT, partnerClass, materialClass, orderDate [, taxCodeId])
 4. INSERT 行：tax_code_id, tax_rate=档, 按公式写金额
 5. 表头 SUM
+```
+
+AP/AR 杂项行（无上游快照）：
+
+```text
+1. company = 发票表头 company_id；documentDate = invoice_date
+2. partnerClass = Remote 反查 BP.source_id 的 taxClassId（缺则失败）
+3. materialClass = 有物料则 RemoteMaterialDTO.taxClassId，否则 null
+4. resolve(...) 后写行
 ```
 
 AP 过账税行：

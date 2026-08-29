@@ -7,7 +7,7 @@
 |------|------|
 | [01-现状与问题.md](./01-现状与问题.md) | As-Is：裸百分比、默认 0、过账只认金额、主数据无税分类 |
 | [02-目标流程.md](./02-目标流程.md) | To-Be：税码/税分类/判定矩阵、开单带出、下游复制快照、发票可改票面税额 |
-| [03-schema设计.md](./03-schema设计.md) | `tax_codes` / `tax_code_rates` / `tax_classes` / `tax_determinations` 与单据行加列 |
+| [03-schema设计.md](./03-schema设计.md) | `tax_codes` / `tax_code_rates` / `tax_classes` / `tax_determinations`（含国家键）与单据行加列 |
 | [04-实施清单.md](./04-实施清单.md) | **开发入口**：已锁定决策、改动面、提交顺序、验收 |
 
 相关实现（改造前）：
