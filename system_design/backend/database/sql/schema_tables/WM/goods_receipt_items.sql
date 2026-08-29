@@ -19,6 +19,7 @@ CREATE TABLE lychee_erp.goods_receipt_items
 	batch_no varchar(50) NOT NULL   DEFAULT '',
 	is_foc boolean NOT NULL   DEFAULT false,
 	unit_price numeric(18,4) NOT NULL DEFAULT 0,
+	tax_code_id bigint NULL,
 	tax_rate numeric(5,2) NULL DEFAULT 0,
 	transaction_unit_id bigint NOT NULL,
 	transaction_quantity numeric(18,6) NOT NULL   DEFAULT 0,
@@ -84,7 +85,11 @@ COMMENT ON COLUMN lychee_erp.goods_receipt_items.unit_price
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipt_items.tax_rate
-	IS 'Source tax rate snapshot'
+	IS 'Source tax code + rate snapshot'
+;
+
+ALTER TABLE lychee_erp.goods_receipt_items ADD CONSTRAINT fk_goods_receipt_items_tax_code
+	FOREIGN KEY (tax_code_id) REFERENCES lychee_erp.tax_codes (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipt_items.invoiced_quantity

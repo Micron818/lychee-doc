@@ -10,6 +10,7 @@ MM 模組負責管理系統中所有的物料主檔資料，包含分類、屬�
 *   **分類架構**: `material_categories` (樹狀結構)
 *   **屬性定義**: `material_types` (類型控制), `material_units` (計量單位)
 *   **財務評估類**: `materials.valuation_class_id` → FI `valuation_classes`；類型允許範圍見 `material_type_valuation_classes`
+*   **稅分類**: `materials.tax_class_id` → FI `tax_classes`（`class_scope = MATERIAL`），開單判定用，不是稅碼 FK
 *   **產品變體**: `product_models` (型體), `colors` (顏色), `product_sizes` (尺碼)
 *   **單位換算**: `material_unit_conversions` (多單位支援)
 

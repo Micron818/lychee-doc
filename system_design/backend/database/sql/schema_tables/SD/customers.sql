@@ -21,6 +21,7 @@ CREATE TABLE lychee_erp.customers
 	contact_phone varchar(50) NULL,
 	contact_email varchar(100) NULL,
 	currency_option_id bigint NULL,
+	tax_class_id bigint NULL,
 	customer_type_option_id bigint NULL,
 	sales_person_id bigint NULL,
 	status_option_id bigint NULL,
@@ -74,6 +75,10 @@ ALTER TABLE lychee_erp.customers ADD CONSTRAINT fk_customers_created_by
 
 ALTER TABLE lychee_erp.customers ADD CONSTRAINT fk_customers_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.customers ADD CONSTRAINT fk_customers_tax_class
+	FOREIGN KEY (tax_class_id) REFERENCES lychee_erp.tax_classes (id) ON DELETE No Action ON UPDATE No Action
 ;
 
  

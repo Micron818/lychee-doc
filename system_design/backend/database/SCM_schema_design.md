@@ -48,6 +48,7 @@ Pegging 約定：
 *   **關鍵欄位**（與現行 SQL 一致）:
     *   `code`: 供應商代號，`(tenant_id, code)` 唯一。
     *   `tax_id`: 統一編號 / 稅號。
+    *   `tax_class_id`: 往來稅分類（FK FI `tax_classes`，`class_scope = PARTNER`），開單判定用。
     *   `supplier_type`: 枚舉 `MATERIAL` / `CONSUMABLE` / `OUTSOURCE`（**不是** `supplier_type_option_id`）。
     *   `active_status`: 啟用狀態。
     *   `currency_option_id`: 預設交易幣別。

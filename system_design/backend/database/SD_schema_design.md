@@ -18,6 +18,7 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
 *   **關鍵欄位**:
     *   `code`: 客戶代號，全 Tenant 唯一，作為訂單與發票的識別碼。
     *   `tax_id`: 統一編號/稅號，稅務申報關鍵欄位。
+    *   `tax_class_id`: 往來稅分類（FK FI `tax_classes`，`class_scope = PARTNER`），開單判定用。
     *   `currency_option_id`: 預設交易幣別，減少開立訂單時的輸入錯誤。
     *   客戶主檔**不加**付款條件欄；條件在 FI `business_partners.payment_term_id`，客戶頁只讀展示。
     *   `credit_limit`: 信用額度，用於銷售流程中的信用控管 (Credit Check)。

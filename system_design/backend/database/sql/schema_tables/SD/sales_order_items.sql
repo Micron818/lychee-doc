@@ -15,6 +15,7 @@ CREATE TABLE lychee_erp.sales_order_items
 	unit_id bigint NOT NULL,
 	quantity numeric(18,6) NOT NULL,
 	unit_price numeric(18,4) NOT NULL   DEFAULT 0,
+	tax_code_id bigint NULL,
 	tax_rate numeric(5,2) NULL   DEFAULT 0,
 	subtotal_amount numeric(18,2) NOT NULL   DEFAULT 0,
 	tax_amount numeric(18,2) NOT NULL   DEFAULT 0,
@@ -69,6 +70,10 @@ ALTER TABLE lychee_erp.sales_order_items ADD CONSTRAINT fk_sales_order_items_uni
 
 ALTER TABLE lychee_erp.sales_order_items ADD CONSTRAINT fk_sales_order_items_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.sales_order_items ADD CONSTRAINT fk_sales_order_items_tax_code
+	FOREIGN KEY (tax_code_id) REFERENCES lychee_erp.tax_codes (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 COMMENT ON COLUMN lychee_erp.sales_order_items.allocated_quantity

@@ -20,6 +20,7 @@ CREATE TABLE lychee_erp.companies
 	status_option_id bigint NULL,
 	local_currency_id bigint NOT NULL,
 	default_payment_term_id bigint NULL,
+	country_code varchar(2) NOT NULL DEFAULT 'VN',
 	created_at timestamp without time zone NULL   DEFAULT CURRENT_TIMESTAMP,
 	updated_at timestamp without time zone NULL   DEFAULT CURRENT_TIMESTAMP,
 	created_by bigint NULL,
@@ -69,6 +70,10 @@ ALTER TABLE lychee_erp.companies ADD CONSTRAINT fk_companies_created_by
 
 ALTER TABLE lychee_erp.companies ADD CONSTRAINT fk_companies_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
+;
+
+COMMENT ON COLUMN lychee_erp.companies.country_code
+	IS 'ISO 3166-1 alpha-2; tax code catalog filter'
 ;
 
  

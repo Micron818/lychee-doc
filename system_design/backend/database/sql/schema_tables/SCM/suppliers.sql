@@ -20,6 +20,7 @@ CREATE TABLE lychee_erp.suppliers
 	contact_phone varchar(20) NULL,
 	contact_email varchar(100) NULL,
 	currency_option_id bigint NULL,
+	tax_class_id bigint NULL,
 	description text NULL,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
@@ -45,6 +46,10 @@ ALTER TABLE lychee_erp.suppliers ADD CONSTRAINT fk_suppliers_created_by
 
 ALTER TABLE lychee_erp.suppliers ADD CONSTRAINT fk_suppliers_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.suppliers ADD CONSTRAINT fk_suppliers_tax_class
+	FOREIGN KEY (tax_class_id) REFERENCES lychee_erp.tax_classes (id) ON DELETE No Action ON UPDATE No Action
 ;
 
  

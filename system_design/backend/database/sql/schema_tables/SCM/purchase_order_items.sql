@@ -15,6 +15,7 @@ CREATE TABLE lychee_erp.purchase_order_items
 	received_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	invoiced_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	unit_price numeric(18,4) NOT NULL   DEFAULT 0,
+	tax_code_id bigint NULL,
 	tax_rate numeric(5,2) NULL   DEFAULT 0,
 	subtotal_amount numeric(18,2) NOT NULL   DEFAULT 0,
 	tax_amount numeric(18,2) NOT NULL   DEFAULT 0,
@@ -55,6 +56,17 @@ ALTER TABLE lychee_erp.purchase_order_items ADD CONSTRAINT fk_po_items_order
 
 ALTER TABLE lychee_erp.purchase_order_items ADD CONSTRAINT fk_po_items_material
 	FOREIGN KEY (material_id) REFERENCES lychee_erp.materials (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.purchase_order_items ADD CONSTRAINT fk_purchase_order_items_tax_code
+	FOREIGN KEY (tax_code_id) REFERENCES lychee_erp.tax_codes (id) ON DELETE No Action ON UPDATE No Action
+;
+
+CREATE INDEX ix_purchase_order_items_tax_code ON lychee_erp.purchase_order_items (tax_code_id ASC)
+;
+
+COMMENT ON COLUMN lychee_erp.purchase_order_items.tax_rate
+	IS 'Snapshot of tax_code_rates.rate at document date; not a live projection'
 ;
 
 COMMENT ON COLUMN lychee_erp.purchase_order_items.status

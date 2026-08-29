@@ -45,6 +45,7 @@ cost_calculations ── cost_calculation_items
 **子域摘要**
 
 *   **科目管理**: `gl_accounts` 支援 `parent_id` 階層結構 (tenant 級)。
+*   **稅碼子域**: `tax_classes`（物料/往來稅分類）+ `tax_codes` / `tax_code_rates` + `tax_determinations`（含 `country_code`）。開單判定寫入行上 `tax_code_id` + `tax_rate` 快照；稅行 GL 優先用稅碼覆蓋，否則回退 `INPUT_TAX` / `OUTPUT_TAX`。不可抵扣進項必須有 `input_gl_account_id`，禁止回退 `INPUT_TAX`。
 *   **科目判定**: `valuation_classes` + `fi_account_determination`（company + posting_key + valuation_class → GL）；採購側 GR/IR 與 AP 發票、銷售側 AR 收入/銷項稅與發料 COGS/WIP 共用同一判定引擎。
     *   採購鍵：`INV_STOCK`, `GRIR`, `INPUT_TAX`, `EXPENSE`, `PRICE_VAR`, `CIP`（資本性採購借在建工程）
     *   **存貨判定 SSOT**: 執行期（GR 庫存／倉庫、GR/IR、發料）只認 `valuation_classes.is_inventoried`；`material_types.is_inventoried` 僅約束類型↔評估類映射必須同值。
@@ -195,7 +196,7 @@ cost_calculations ── cost_calculation_items
 *   **關鍵欄位**:
     *   `description`: 發票票面貨物/服務名稱（支援無物料號的雜項費用）。
     *   `quantity` / `unit_price` / `line_amount`: 數量與單價。
-    *   `tax_rate` / `tax_amount` / `total_amount`: 稅率（百分比，如 13.00 = 13%）與含稅金額。
+    *   `tax_code_id` / `tax_rate` / `tax_amount` / `tax_amount_overridden` / `total_amount`: 稅碼與開單日稅率快照；票面可覆蓋稅額。
     *   `gl_account_id` / `department_id`: 費用/庫存科目與成本中心。
     *   `source_doc_type`: `RECEIPT`, `PURCHASE_ORDER`。
     *   `source_doc_id` / `source_doc_no` / `source_line_id` / `source_line_no`: 來源單據追溯。
@@ -225,7 +226,7 @@ cost_calculations ── cost_calculation_items
 *   **用途**: 記錄 AR 發票行項目。
 *   **關鍵欄位**: 結構與 `ap_invoice_lines` 類似。
     *   `source_doc_type`: `SALES_ORDER`, `SHIPMENT`。
-    *   其餘：`description`, 數量/單價/稅額, `gl_account_id`, `department_id`, 物料快照等。
+    *   其餘：`description`, 數量/單價, `tax_code_id` / `tax_rate` / `tax_amount` / `tax_amount_overridden`, `gl_account_id`, `department_id`, 物料快照等。
 *   **唯一约束**: `(tenant_id, invoice_id, line_no)`。
 
 ### 3.12 收付款單 (payments)
@@ -497,6 +498,10 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 | payment_lines | `docs/database/sql/schema_tables/FI/payment_lines.sql` |
 | asset_categories | `docs/database/sql/schema_tables/FI/asset_categories.sql` |
 | valuation_classes | `docs/database/sql/schema_tables/FI/valuation_classes.sql` |
+| tax_classes | `docs/database/sql/schema_tables/FI/tax_classes.sql` |
+| tax_codes | `docs/database/sql/schema_tables/FI/tax_codes.sql` |
+| tax_code_rates | `docs/database/sql/schema_tables/FI/tax_code_rates.sql` |
+| tax_determinations | `docs/database/sql/schema_tables/FI/tax_determinations.sql` |
 | fi_account_determination | `docs/database/sql/schema_tables/FI/fi_account_determination.sql` |
 | fixed_assets | `docs/database/sql/schema_tables/FI/fixed_assets.sql` |
 | asset_depreciations | `docs/database/sql/schema_tables/FI/asset_depreciations.sql` |
@@ -519,6 +524,10 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 3b. `business_partners.sql`
 4. `partner_bank_accounts.sql`
 5. `company_bank_accounts.sql`
+5a. `tax_classes.sql`
+5b. `tax_codes.sql`
+5c. `tax_code_rates.sql`
+5d. `tax_determinations.sql`
 
 **總帳**
 

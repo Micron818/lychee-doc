@@ -14,8 +14,10 @@ CREATE TABLE lychee_erp.ap_invoice_lines
 	unit_price numeric(18,4) NOT NULL DEFAULT 0,
 	line_amount numeric(18,2) NOT NULL DEFAULT 0,
 	source_amount numeric(18,2) NULL,
+	tax_code_id bigint NULL,
 	tax_rate numeric(5,2) NOT NULL DEFAULT 0,    -- 百分比，如 13.00 表示 13%
 	tax_amount numeric(18,2) NOT NULL DEFAULT 0,
+	tax_amount_overridden boolean NOT NULL DEFAULT false,
 	total_amount numeric(18,2) NOT NULL DEFAULT 0,
 	gl_account_id bigint NULL,
 	department_id bigint NULL,
@@ -64,6 +66,9 @@ ALTER TABLE lychee_erp.ap_invoice_lines ADD CONSTRAINT fk_ap_invoice_lines_creat
 
 ALTER TABLE lychee_erp.ap_invoice_lines ADD CONSTRAINT fk_ap_invoice_lines_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action;
+
+ALTER TABLE lychee_erp.ap_invoice_lines ADD CONSTRAINT fk_ap_invoice_lines_tax_code
+	FOREIGN KEY (tax_code_id) REFERENCES lychee_erp.tax_codes (id) ON DELETE No Action ON UPDATE No Action;
 
 COMMENT ON COLUMN lychee_erp.ap_invoice_lines.source_doc_type
 	IS 'RECEIPT, PURCHASE_ORDER';

@@ -14,7 +14,11 @@ CREATE TABLE lychee_erp.outsource_order_items
 	ordered_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	received_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	unit_price numeric(18,4) NOT NULL   DEFAULT 0,
+	tax_code_id bigint NULL,
+	tax_rate numeric(5,2) NULL DEFAULT 0,
 	subtotal_amount numeric(18,2) NOT NULL   DEFAULT 0,
+	tax_amount numeric(18,2) NOT NULL DEFAULT 0,
+	total_amount numeric(18,2) NOT NULL DEFAULT 0,
 	required_date date NULL,
 	planned_start_date date NULL,
 	requires_physical_receipt boolean NOT NULL   DEFAULT true,
@@ -64,6 +68,17 @@ ALTER TABLE lychee_erp.outsource_order_items ADD CONSTRAINT fk_outsource_items_u
 
 ALTER TABLE lychee_erp.outsource_order_items ADD CONSTRAINT fk_outsource_items_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.outsource_order_items ADD CONSTRAINT fk_outsource_order_items_tax_code
+	FOREIGN KEY (tax_code_id) REFERENCES lychee_erp.tax_codes (id) ON DELETE No Action ON UPDATE No Action
+;
+
+CREATE INDEX ix_outsource_order_items_tax_code ON lychee_erp.outsource_order_items (tax_code_id ASC)
+;
+
+COMMENT ON COLUMN lychee_erp.outsource_order_items.tax_rate
+	IS 'Snapshot of tax_code_rates.rate at document date; not a live projection'
 ;
 
 COMMENT ON COLUMN lychee_erp.outsource_order_items.status

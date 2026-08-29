@@ -11,6 +11,7 @@ CREATE TABLE lychee_erp.materials
 	material_category_id bigint NOT NULL,
 	material_type_id bigint NULL,
 	valuation_class_id bigint NULL,
+	tax_class_id bigint NULL,
 	product_model_id bigint NULL,
 	color_id bigint NULL,
 	product_size_id bigint NULL,
@@ -61,6 +62,9 @@ CREATE INDEX idx_materials_type ON lychee_erp.materials (material_type_id ASC)
 CREATE INDEX idx_materials_valuation_class ON lychee_erp.materials (valuation_class_id ASC)
 ;
 
+CREATE INDEX ix_materials_tax_class ON lychee_erp.materials (tax_class_id ASC)
+;
+
 CREATE INDEX idx_materials_llc ON lychee_erp.materials (tenant_id ASC, low_level_code ASC)
 ;
 
@@ -78,6 +82,10 @@ ALTER TABLE lychee_erp.materials ADD CONSTRAINT fk_materials_type
 
 ALTER TABLE lychee_erp.materials ADD CONSTRAINT fk_materials_valuation_class
 	FOREIGN KEY (valuation_class_id) REFERENCES lychee_erp.valuation_classes (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.materials ADD CONSTRAINT fk_materials_tax_class
+	FOREIGN KEY (tax_class_id) REFERENCES lychee_erp.tax_classes (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 ALTER TABLE lychee_erp.materials ADD CONSTRAINT fk_materials_product_model
