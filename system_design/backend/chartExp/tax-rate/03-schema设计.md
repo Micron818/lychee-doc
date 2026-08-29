@@ -194,15 +194,15 @@ ALTER TABLE lychee_erp.tax_code_rates
 
 ## 5. 判定矩阵 `tax_determinations`
 
-对标 `fi_account_determination` 的通配：`company_id` / 两个分类均可空。另加 `country_code`（NOT NULL）：无国家则 VN/CN 无法各写一套租户默认（旧唯一键不含国家，两国会撞车）。
+对标 `fi_account_determination` 的通配：`company_id` / 两个分类均可空。另加 `country_code`（NOT NULL）：无国家则 VN/CN 无法各写一套国家默认（旧唯一键不含国家，两国会撞车）。
 
 ```sql
 CREATE TABLE lychee_erp.tax_determinations
 (
     id                      bigserial       NOT NULL,
     tenant_id               bigint          NOT NULL,
-    country_code            varchar(2)      NOT NULL, -- ISO 3166-1 alpha-2；租户默认按国家各写一套
-    company_id              bigint          NULL,     -- NULL = 该国租户默认
+    country_code            varchar(2)      NOT NULL, -- ISO 3166-1 alpha-2；国家默认按国家各写一套
+    company_id              bigint          NULL,     -- NULL = 该国默认
     tax_direction           varchar(20)     NOT NULL, -- INPUT, OUTPUT
     partner_tax_class_id    bigint          NULL,     -- NULL = 通配
     material_tax_class_id   bigint          NULL,     -- NULL = 通配
@@ -251,7 +251,7 @@ ALTER TABLE lychee_erp.tax_determinations
 - 税码 `direction` 为 `BOTH` 或等于 `tax_direction`。
 - 停用行不参与匹配，但占用唯一键——改矩阵用更新，不要插第二条同键停用行。
 
-示例（`country_code = VN`，`company_id` 可空作该国租户默认；CN 另写一套指向 `CN-*` 税码）：
+示例（`country_code = VN`，`company_id` 可空作该国默认；CN 另写一套指向 `CN-*` 税码）：
 
 | 国家 | 方向 | 往来 | 物料 | 税码 |
 |------|------|------|------|------|

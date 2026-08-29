@@ -51,5 +51,6 @@ ALTER TABLE lychee_erp.tax_determinations ADD CONSTRAINT fk_tax_det_created_by
 ALTER TABLE lychee_erp.tax_determinations ADD CONSTRAINT fk_tax_det_updated_by
 	FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action;
 
-COMMENT ON TABLE lychee_erp.tax_determinations IS '税码判定矩阵；company_id 空为该国租户默认';
+COMMENT ON TABLE lychee_erp.tax_determinations IS '税码判定矩阵；company_id 空为该国默认';
+COMMENT ON COLUMN lychee_erp.tax_determinations.company_id IS 'NULL = 该国默认；有值 = 公司覆盖';
 COMMENT ON COLUMN lychee_erp.tax_determinations.tax_direction IS 'INPUT | OUTPUT；不可 BOTH';
