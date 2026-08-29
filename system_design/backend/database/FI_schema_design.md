@@ -88,11 +88,32 @@ cost_calculations ── cost_calculation_items
     *   `source_id`: 關聯 SCM `suppliers.id` 或 SD `customers.id`。
     *   `partner_code` / `partner_name` / `tax_id`: 從 SCM/SD 同步的基礎資料副本（FI 只讀）。
     *   `gl_account_id`: 預設應收/應付統制科目（FI 維護）。
-    *   `payment_term_option_id`: 財務核准的付款條件。
+    *   `payment_term_id`: 財務核准的付款條件（FK `fi_payment_terms`）。
     *   `credit_limit`: 信用額度。
     *   `status`: `ACTIVE`, `INACTIVE`。
 *   **設計決策**: 基礎資料與財務屬性分離——SCM/SD 負責主檔，FI 負責科目、付款條件、信用控管。
 *   **唯一约束**: `(tenant_id, partner_type, source_id)`。
+
+### 3.3.1 付款條件 (fi_payment_terms / fi_payment_term_lines)
+
+*   **用途**: 獨立主檔，取代 ADM `PAYMENT_TERM` 選項。條件行展開為發票排程。
+*   **頭關鍵欄位**:
+    *   `code` / `name`: 短碼與名稱，`(tenant_id, code)` 唯一。
+    *   `base_date_type`: `INVOICE_DATE` / `SOURCE_DATE`。
+    *   `partner_scope`: `BOTH` / `CUSTOMER` / `SUPPLIER`。
+    *   `is_active`: 是否啟用。
+*   **行關鍵欄位**:
+    *   `percent`: 占發票 `total_amount` 比例，合計必須 `100.00`。
+    *   `calc_method`: `IMMEDIATE` / `NET_DAYS` / `EOM_PLUS_DAYS` / `FIXED_DAY`。
+    *   `days` / `extra_months` / `fixed_day`: 到期日算法參數。
+    *   `discount_percent` / `discount_days`: 現金折扣；截止日 = 基準日 + 折扣天數。
+*   **設計決策**: 不解析選項名稱；缺條件拒絕開單/立帳；公司 `default_payment_term_id` 僅新建 BP 帶出。
+
+### 3.3.2 發票付款排程 (ap_invoice_schedules / ar_invoice_schedules)
+
+*   **用途**: 發票到期真相。表頭 `due_date` 派生自 `MAX(排程.due_date)`。
+*   **關鍵欄位**: `percent` / `amount` / `due_date` / `due_date_overridden` / 折扣快照。
+*   **唯一约束**: `(tenant_id, invoice_id, line_no)`。
 
 ### 3.4 公司銀行帳戶 (company_bank_accounts)
 
@@ -154,7 +175,8 @@ cost_calculations ── cost_calculation_items
     *   `company_id`: 歸屬公司。
     *   `code`: 內部單據編號（如 AP-202606-0001）。
     *   `external_invoice_no`: 供應商稅務發票號。
-    *   `invoice_date` / `due_date`: 開票日與到期日（帳齡分析）。
+    *   `invoice_date` / `due_date`: 開票日與到期日（帳齡分析）。`due_date` 為 `MAX(ap_invoice_schedules.due_date)`，禁止手改。
+    *   `payment_term_id` / `base_date`: 付款條件與排程基準日。
     *   `partner_id` / `partner_code` / `partner_name`: 關聯 `business_partners` 及快照。
     *   `currency_option_id` / `exchange_rate`: 幣別與匯率。
     *   `subtotal_amount` / `tax_amount` / `total_amount`: 金額彙總。
@@ -187,7 +209,8 @@ cost_calculations ── cost_calculation_items
     *   `company_id`: 歸屬公司。
     *   `code`: 內部單據編號。
     *   `tax_invoice_no`: 稅務發票號。
-    *   `invoice_date` / `due_date`: 開票日與到期日。
+    *   `invoice_date` / `due_date`: 開票日與到期日。`due_date` 為 `MAX(ar_invoice_schedules.due_date)`，禁止手改。
+    *   `payment_term_id` / `base_date`: 付款條件與排程基準日。
     *   `partner_id` / `partner_code` / `partner_name`: 關聯 `business_partners` 及快照。
     *   `currency_option_id` / `exchange_rate`: 幣別與匯率。
     *   `subtotal_amount` / `tax_amount` / `total_amount`: 金額彙總。
@@ -235,6 +258,7 @@ cost_calculations ── cost_calculation_items
 *   **關鍵欄位**:
     *   `allocation_type`: `INVOICE` (核銷發票), `GL_ACCOUNT` (直接記帳), `PREPAYMENT` (核銷預付款)。
     *   `ar_invoice_id` / `ap_invoice_id`: 被核銷的發票（二選一）。
+    *   `ap_invoice_schedule_id` / `ar_invoice_schedule_id`: 可空；若填則必須與同行發票同屬一張票。
     *   `applied_payment_id`: 被抵扣的歷史預付款單 ID。
     *   `allocated_amount`: 本次核銷金額。
     *   `discount_amount`: 現金折扣金額（如提前付款折扣）。
@@ -456,14 +480,18 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 | :--- | :--- |
 | gl_accounts | `docs/database/sql/schema_tables/FI/gl_accounts.sql` |
 | fiscal_periods | `docs/database/sql/schema_tables/FI/fiscal_periods.sql` |
+| fi_payment_terms | `docs/database/sql/schema_tables/FI/fi_payment_terms.sql` |
+| fi_payment_term_lines | `docs/database/sql/schema_tables/FI/fi_payment_term_lines.sql` |
 | business_partners | `docs/database/sql/schema_tables/FI/business_partners.sql` |
 | company_bank_accounts | `docs/database/sql/schema_tables/FI/company_bank_accounts.sql` |
 | partner_bank_accounts | `docs/database/sql/schema_tables/FI/partner_bank_accounts.sql` |
 | journal_entries | `docs/database/sql/schema_tables/FI/journal_entries.sql` |
 | journal_entry_lines | `docs/database/sql/schema_tables/FI/journal_entry_lines.sql` |
 | ap_invoices | `docs/database/sql/schema_tables/FI/ap_invoices.sql` |
+| ap_invoice_schedules | `docs/database/sql/schema_tables/FI/ap_invoice_schedules.sql` |
 | ap_invoice_lines | `docs/database/sql/schema_tables/FI/ap_invoice_lines.sql` |
 | ar_invoices | `docs/database/sql/schema_tables/FI/ar_invoices.sql` |
+| ar_invoice_schedules | `docs/database/sql/schema_tables/FI/ar_invoice_schedules.sql` |
 | ar_invoice_lines | `docs/database/sql/schema_tables/FI/ar_invoice_lines.sql` |
 | payments | `docs/database/sql/schema_tables/FI/payments.sql` |
 | payment_lines | `docs/database/sql/schema_tables/FI/payment_lines.sql` |
@@ -486,7 +514,9 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 
 1. `gl_accounts.sql`
 2. `fiscal_periods.sql`
-3. `business_partners.sql`
+3. `fi_payment_terms.sql`
+3a. `fi_payment_term_lines.sql`
+3b. `business_partners.sql`
 4. `partner_bank_accounts.sql`
 5. `company_bank_accounts.sql`
 
@@ -498,8 +528,10 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 **應收/應付**
 
 8. `ap_invoices.sql`
+8a. `ap_invoice_schedules.sql`
 9. `ap_invoice_lines.sql`
 10. `ar_invoices.sql`
+10a. `ar_invoice_schedules.sql`
 11. `ar_invoice_lines.sql`
 
 **收付款**

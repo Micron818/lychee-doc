@@ -51,7 +51,7 @@ Pegging 約定：
     *   `supplier_type`: 枚舉 `MATERIAL` / `CONSUMABLE` / `OUTSOURCE`（**不是** `supplier_type_option_id`）。
     *   `active_status`: 啟用狀態。
     *   `currency_option_id`: 預設交易幣別。
-*   **沒有** `payment_terms` 文字欄。付款條件在 **PO 主檔** `payment_term_option_id`（option_values）。
+*   **沒有** `payment_terms` 文字欄。付款條件在 **PO / 委外主檔** `payment_term_id`（`fi_payment_terms`），供應商頁只讀展示。
 
 ### 3.2 物料供應商 (`material_suppliers`)
 
@@ -83,7 +83,7 @@ Source List + 簡版採購信息記錄。**不要**把預設供應商塞進 `mat
 *   **表頭關鍵欄位**:
     *   `supplier_id`: **NOT NULL**，下單對象。
     *   `currency_option_id` & `exchange_rate`: 幣別與匯率快照。預設來自 BASIS `exchange_rates`；收貨複製本快照，不重查主檔。
-    *   `payment_term_option_id`: 付款條件。
+    *   `payment_term_id`: 付款條件（FK `fi_payment_terms`；保存必填）。
     *   `subtotal_amount` / `tax_amount` / `total_amount`。
     *   `source_type`: `MRP` | `PURCHASE_REQUISITION` | `MANUAL`。創建後不改。**不加**泛型 `source_id`。
     *   `mrp_run_id`: **僅** `source_type = MRP`；轉單當時的 Run 快照；`ON DELETE SET NULL`。

@@ -16,7 +16,7 @@ CREATE TABLE lychee_erp.sales_orders
 	sales_person_id bigint NULL,
 	currency_option_id bigint NULL,
 	exchange_rate numeric(18,6) NOT NULL   DEFAULT 1,
-	payment_term_option_id bigint NULL,
+	payment_term_id bigint NULL,
 	billing_address text NULL,
 	shipping_address text NULL,
 	subtotal_amount numeric(18,2) NOT NULL   DEFAULT 0,
@@ -65,7 +65,7 @@ ALTER TABLE lychee_erp.sales_orders ADD CONSTRAINT fk_sales_orders_customer
 ;
 
 ALTER TABLE lychee_erp.sales_orders ADD CONSTRAINT fk_sales_orders_payment_term
-	FOREIGN KEY (payment_term_option_id) REFERENCES lychee_erp.option_values (id) ON DELETE No Action ON UPDATE No Action
+	FOREIGN KEY (payment_term_id) REFERENCES lychee_erp.fi_payment_terms (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 ALTER TABLE lychee_erp.sales_orders ADD CONSTRAINT fk_sales_orders_sales_person

@@ -19,7 +19,7 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
     *   `code`: 客戶代號，全 Tenant 唯一，作為訂單與發票的識別碼。
     *   `tax_id`: 統一編號/稅號，稅務申報關鍵欄位。
     *   `currency_option_id`: 預設交易幣別，減少開立訂單時的輸入錯誤。
-    *   `payment_term_option_id`: 付款條件 (如 Net 30, COD)，影響帳款到期日 (Due Date) 計算。
+    *   客戶主檔**不加**付款條件欄；條件在 FI `business_partners.payment_term_id`，客戶頁只讀展示。
     *   `credit_limit`: 信用額度，用於銷售流程中的信用控管 (Credit Check)。
     *   `sales_person_id`: 業務負責人，用於權限劃分 (Row-Level Security) 與業績歸屬。
 *   **設計決策**:
@@ -31,6 +31,7 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
 *   **關鍵欄位**:
     *   `customer_po_no`: 客戶採購單號，B2B 對帳關鍵。
     *   `currency_option_id` & `exchange_rate`: 記錄接單匯率快照，鎖定營收金額。預設來自 BASIS `exchange_rates`（`rate_date <= order_date`），允許覆寫；主檔變更不回溯已存訂單。
+    *   `payment_term_id`: 付款條件（FK `fi_payment_terms`；保存必填）。選客戶時帶出 BP 條件。
     *   `shipping_address`: 獨立儲存送貨地址 (Snapshot)，不隨客戶主檔變動而改變歷史訂單。
     *   `expected_delivery_date`: 明細層級的預計交貨日，支援分批交貨。
 

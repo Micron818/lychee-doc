@@ -12,6 +12,8 @@ CREATE TABLE lychee_erp.payment_lines
 	-- 关联发票 (二选一)
 	ar_invoice_id bigint NULL,
 	ap_invoice_id bigint NULL,
+	ap_invoice_schedule_id bigint NULL,
+	ar_invoice_schedule_id bigint NULL,
 	applied_payment_id bigint NULL,         -- 关联被抵扣的历史预付款单
 	
 	-- 核销与折扣金额
@@ -51,6 +53,12 @@ ALTER TABLE lychee_erp.payment_lines ADD CONSTRAINT fk_payment_lines_ar_invoice
 
 ALTER TABLE lychee_erp.payment_lines ADD CONSTRAINT fk_payment_lines_ap_invoice
 	FOREIGN KEY (ap_invoice_id) REFERENCES lychee_erp.ap_invoices (id) ON DELETE No Action ON UPDATE No Action;
+
+ALTER TABLE lychee_erp.payment_lines ADD CONSTRAINT fk_payment_lines_ap_schedule
+	FOREIGN KEY (ap_invoice_schedule_id) REFERENCES lychee_erp.ap_invoice_schedules (id) ON DELETE No Action ON UPDATE No Action;
+
+ALTER TABLE lychee_erp.payment_lines ADD CONSTRAINT fk_payment_lines_ar_schedule
+	FOREIGN KEY (ar_invoice_schedule_id) REFERENCES lychee_erp.ar_invoice_schedules (id) ON DELETE No Action ON UPDATE No Action;
 
 ALTER TABLE lychee_erp.payment_lines ADD CONSTRAINT fk_payment_lines_gl_account
 	FOREIGN KEY (gl_account_id) REFERENCES lychee_erp.gl_accounts (id) ON DELETE No Action ON UPDATE No Action;

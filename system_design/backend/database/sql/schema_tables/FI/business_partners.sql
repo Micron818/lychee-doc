@@ -14,7 +14,7 @@ CREATE TABLE lychee_erp.business_partners
 	
 	-- 财务属性（FI 模组独有，财务人员维护）
 	gl_account_id bigint NULL,              -- 默认的应收/应付统驭科目
-	payment_term_option_id bigint NULL,     -- 财务核准的付款条件
+	payment_term_id bigint NULL,            -- 财务核准的付款条件（FK fi_payment_terms）
 	credit_limit numeric(18,2) NULL,        -- 信用额度
 	status varchar(20) NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, INACTIVE
 	
@@ -37,7 +37,7 @@ ALTER TABLE lychee_erp.business_partners ADD CONSTRAINT fk_business_partners_gl_
 	FOREIGN KEY (gl_account_id) REFERENCES lychee_erp.gl_accounts (id) ON DELETE No Action ON UPDATE No Action;
 
 ALTER TABLE lychee_erp.business_partners ADD CONSTRAINT fk_business_partners_payment_term
-	FOREIGN KEY (payment_term_option_id) REFERENCES lychee_erp.option_values (id) ON DELETE No Action ON UPDATE No Action;
+	FOREIGN KEY (payment_term_id) REFERENCES lychee_erp.fi_payment_terms (id) ON DELETE No Action ON UPDATE No Action;
 
 ALTER TABLE lychee_erp.business_partners ADD CONSTRAINT fk_business_partners_created_by
 	FOREIGN KEY (created_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action;

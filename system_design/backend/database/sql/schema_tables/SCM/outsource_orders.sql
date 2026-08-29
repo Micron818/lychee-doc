@@ -17,6 +17,7 @@ CREATE TABLE lychee_erp.outsource_orders
 	total_amount numeric(18,2) NOT NULL   DEFAULT 0,
 	currency_option_id bigint NULL,
 	exchange_rate numeric(18,6) NOT NULL   DEFAULT 1,
+	payment_term_id bigint NULL,
 	remarks text NULL,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
@@ -44,6 +45,10 @@ ALTER TABLE lychee_erp.outsource_orders ADD CONSTRAINT fk_outsource_orders_creat
 
 ALTER TABLE lychee_erp.outsource_orders ADD CONSTRAINT fk_outsource_orders_currency
 	FOREIGN KEY (currency_option_id) REFERENCES lychee_erp.option_values (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.outsource_orders ADD CONSTRAINT fk_outsource_orders_payment_term
+	FOREIGN KEY (payment_term_id) REFERENCES lychee_erp.fi_payment_terms (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 ALTER TABLE lychee_erp.outsource_orders ADD CONSTRAINT fk_outsource_orders_factory

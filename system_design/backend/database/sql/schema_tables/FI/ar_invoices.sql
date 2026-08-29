@@ -12,7 +12,9 @@ CREATE TABLE lychee_erp.ar_invoices
 	code varchar(50) NOT NULL,
 	tax_invoice_no varchar(50) NOT NULL,
 	invoice_date date NOT NULL,
-	due_date date NOT NULL,
+	due_date date NOT NULL, -- MAX(ar_invoice_schedules.due_date); not a user-entered field
+	payment_term_id bigint NOT NULL,
+	base_date date NOT NULL,
 	partner_id bigint NOT NULL,
 	partner_code varchar(50) NOT NULL,
 	partner_name varchar(100) NOT NULL,
@@ -60,6 +62,14 @@ ALTER TABLE lychee_erp.ar_invoices ADD CONSTRAINT fk_ar_invoices_partner
 
 ALTER TABLE lychee_erp.ar_invoices ADD CONSTRAINT fk_ar_invoices_currency
 	FOREIGN KEY (currency_option_id) REFERENCES lychee_erp.option_values (id) ON DELETE No Action ON UPDATE No Action;
+
+ALTER TABLE lychee_erp.ar_invoices ADD CONSTRAINT fk_ar_invoices_payment_term
+	FOREIGN KEY (payment_term_id) REFERENCES lychee_erp.fi_payment_terms (id) ON DELETE No Action ON UPDATE No Action;
+
+CREATE INDEX ix_ar_invoices_payment_term ON lychee_erp.ar_invoices (payment_term_id);
+
+COMMENT ON COLUMN lychee_erp.ar_invoices.due_date
+	IS 'MAX(invoice schedules.due_date); not a user-entered field';
 
 ALTER TABLE lychee_erp.ar_invoices ADD CONSTRAINT fk_ar_invoices_journal_entry
 	FOREIGN KEY (journal_entry_id) REFERENCES lychee_erp.journal_entries (id) ON DELETE No Action ON UPDATE No Action;

@@ -19,6 +19,7 @@ CREATE TABLE lychee_erp.companies
 	description text NULL,
 	status_option_id bigint NULL,
 	local_currency_id bigint NOT NULL,
+	default_payment_term_id bigint NULL,
 	created_at timestamp without time zone NULL   DEFAULT CURRENT_TIMESTAMP,
 	updated_at timestamp without time zone NULL   DEFAULT CURRENT_TIMESTAMP,
 	created_by bigint NULL,
@@ -56,6 +57,10 @@ ALTER TABLE lychee_erp.companies ADD CONSTRAINT fk_companies_status_option
 
 ALTER TABLE lychee_erp.companies ADD CONSTRAINT fk_companies_local_currency
 	FOREIGN KEY (local_currency_id) REFERENCES lychee_erp.option_values (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.companies ADD CONSTRAINT fk_companies_default_payment_term
+	FOREIGN KEY (default_payment_term_id) REFERENCES lychee_erp.fi_payment_terms (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 ALTER TABLE lychee_erp.companies ADD CONSTRAINT fk_companies_created_by

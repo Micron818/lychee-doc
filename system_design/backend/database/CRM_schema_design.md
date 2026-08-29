@@ -8,7 +8,7 @@ CRM 模組負責管理企業與客戶之間的互動資料。在目前的 ERP �
 以 `customers` 表為核心，關聯至系統共用的選項與人員資料：
 
 *   **業務歸屬**: 透過 `sales_person_id` 連結至 `users` 表，定義客戶負責人。
-*   **交易屬性**: 透過 `currency_option_id` (幣別), `payment_term_option_id` (付款條件) 等欄位連結至 `option_values` 表，標準化交易規則。
+*   **交易屬性**: 幣別仍用 `currency_option_id`（`option_values`）。付款條件在 FI `business_partners.payment_term_id`（`fi_payment_terms`），客戶主檔不寫條件。
 
 ## 3. 資料表清單與設計備忘
 
@@ -18,7 +18,7 @@ CRM 模組負責管理企業與客戶之間的互動資料。在目前的 ERP �
     *   `code`: 客戶代號，全 Tenant 唯一，作為訂單與發票的識別碼。
     *   `tax_id`: 統一編號/稅號，稅務申報關鍵欄位。
     *   `currency_option_id`: 預設交易幣別，減少開立訂單時的輸入錯誤。
-    *   `payment_term_option_id`: 付款條件 (如 Net 30, COD)，影響帳款到期日 (Due Date) 計算。
+    *   付款條件不在客戶主檔；見 FI `business_partners.payment_term_id`。
     *   `credit_limit`: 信用額度，用於銷售流程中的信用控管 (Credit Check)。
     *   `sales_person_id`: 業務負責人，用於權限劃分 (Row-Level Security) 與業績歸屬。
 *   **設計決策**:

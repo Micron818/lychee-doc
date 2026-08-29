@@ -27,6 +27,7 @@ companies.local_currency_id ──► option_values (CURRENCY)
 *   **關鍵欄位**:
     *   `code`: 公司統編或代碼。
     *   `local_currency_id`: 本位幣（FK `option_values`）。現況預設 VND。
+    *   `default_payment_term_id`: 公司默認付款條件（FK `fi_payment_terms`，必須 `BOTH`）。僅新建業務伙伴帶出，不作為發票兜底。
 
 ### 3.2 工廠 (factories)
 *   **用途**: 生產或營運據點。
