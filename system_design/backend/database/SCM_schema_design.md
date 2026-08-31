@@ -108,6 +108,7 @@ P2P 的到貨過帳在 WM：`goods_receipts` / `goods_receipt_items`。
 
 *   表頭: `delivery_note_no`（供應商送貨單號，三單匹配用）、`receipt_date`、`receipt_type`（含 `PURCHASE` / `OUTSOURCE` 等）、`status` = `DRAFT` / `POSTED` / `REVERSED`。
 *   明細: `source_doc_type` + `source_doc_item_id` 指向採購/委外等來源行；`warehouse_id` 過帳庫存；`batch_no` / `expiry_date` 批次；幣別單價為來源快照。
+*   採購退貨過帳回減對應 PO 行 `received_quantity`（單據單位）；沖銷退貨再加回。行或表頭已 `CLOSED` 時只改已收、不改狀態。
 
 ## 4. 狀態（與程式枚舉對齊）
 

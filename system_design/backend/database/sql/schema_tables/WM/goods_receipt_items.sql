@@ -9,7 +9,7 @@ CREATE TABLE lychee_erp.goods_receipt_items
 	tenant_id bigint NOT NULL,
 	goods_receipt_id bigint NOT NULL,
 	item_no integer NOT NULL,
-	source_doc_type varchar(20) NOT NULL,    -- PURCHASE_ORDER_ITEM,CUSTOMER_RETURN_ITEM,PURCHASE_RETURN_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM
+	source_doc_type varchar(20) NOT NULL,    -- PURCHASE_ORDER_ITEM,CUSTOMER_RETURN_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM
 	source_doc_id bigint NOT NULL,
 	source_doc_no varchar(50) NULL,
 	source_doc_item_id bigint NULL,
@@ -26,6 +26,7 @@ CREATE TABLE lychee_erp.goods_receipt_items
 	base_unit_id bigint NOT NULL,
 	base_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	invoiced_quantity numeric(18,6) NOT NULL   DEFAULT 0,
+	returned_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	invoice_status varchar(20) NOT NULL DEFAULT 'UNINVOICED',    -- UNINVOICED, PARTIALLY_INVOICED, FULLY_INVOICED
 	expiry_date date NULL,
 	remarks text NULL,
@@ -69,7 +70,11 @@ ALTER TABLE lychee_erp.goods_receipt_items ADD CONSTRAINT fk_gr_items_material
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipt_items.source_doc_type
-	IS 'PURCHASE_ORDER_ITEM,CUSTOMER_RETURN_ITEM,PURCHASE_RETURN_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM'
+	IS 'PURCHASE_ORDER_ITEM,CUSTOMER_RETURN_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM'
+;
+
+COMMENT ON COLUMN lychee_erp.goods_receipt_items.returned_quantity
+	IS '已过账采购退货基本单位合计。可退单据量 = min(txn − SUM(已过账退货txn) − 草稿txn, txn − invoiced)；FOC 只用未退'
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipt_items.warehouse_id
