@@ -27,6 +27,7 @@ gl_accounts ──────────────────────�
      └── business_partners ── partner_bank_accounts              │
               │                                                  │
               ├── ap_invoices ── ap_invoice_lines                │
+              ├── ap_credit_memos ── ap_credit_memo_lines        │
               ├── ar_invoices ── ar_invoice_lines                │
               └── payments ── payment_lines                      │
                                                                  │
@@ -53,7 +54,7 @@ cost_calculations ── cost_calculation_items
 *   **成本政策**: `fi_costing_policies`（公司默認 `cost_method`、差異結轉、製造費用吸收基準、關帳是否強制已過帳 Cost Run）。
 *   **傳票結構**: Header-Line 結構；表頭彙總借貸金額供快速平衡校驗；明細含輔助核算維度 (部門、往來、來源行)。
 *   **期間控制**: `fiscal_periods` 管理會計年度與月份（含 `company_id`），控制 FI 關帳。
-*   **子帳管理 (Sub-Ledger)**: `ap_invoices` / `ar_invoices` 表頭 + 明細行，記錄未清餘額、稅額與到期日。
+*   **子帳管理 (Sub-Ledger)**: `ap_invoices` / `ap_credit_memos` / `ar_invoices` 表頭 + 明細行，記錄未清餘額、稅額與到期日。應付貸項過帳核銷原票 `remaining` 並回減收貨占用。
 *   **收付核銷**: `payments` 表頭記錄資金進出與銀行帳戶快照；`payment_lines` 明細支援發票核銷、預收/預付抵扣、直接記帳 (手續費/匯兌損益)。
 *   **固定資產 (FA)**: `asset_categories` → `fixed_assets` → `asset_depreciations`；折舊/取得/處分均透過 `journal_entry_id` 連結總帳 (`source_module = 'FA'`)。
 *   **成本計算 (Costing)**: 日常以 `STANDARD_COST` 出庫；月末 `cost_calculations` → items/allocations → `ACTUAL_COST` 快照；過帳 `source_module = 'COSTING'`。`MOVING_AVERAGE` 預留未實現。
@@ -181,7 +182,7 @@ cost_calculations ── cost_calculation_items
     *   `partner_id` / `partner_code` / `partner_name`: 關聯 `business_partners` 及快照。
     *   `currency_option_id` / `exchange_rate`: 幣別與匯率。
     *   `subtotal_amount` / `tax_amount` / `total_amount`: 金額彙總。
-    *   `paid_amount` / `remaining_amount`: 已付與剩餘未付金額。
+    *   `paid_amount` / `credited_amount` / `remaining_amount`: 已付、已過帳未作廢貸項合計、剩餘未付。`remaining = total − paid − credited_amount`。
     *   `invoice_status`: `DRAFT`, `PENDING_APPROVAL`, `APPROVED`, `POSTED`, `VOIDED`。
     *   `payment_status`: `UNPAID`, `PARTIAL`, `PAID`。
     *   `journal_entry_id`: 過帳憑證。
@@ -189,6 +190,20 @@ cost_calculations ── cost_calculation_items
 *   **唯一约束**:
     *   `(tenant_id, company_id, code)`
     *   `(tenant_id, company_id, partner_id, external_invoice_no)` — 同一供應商不可重複登錄相同稅務發票號。
+
+### 3.8b 應付貸項 (ap_credit_memos)
+
+*   **用途**: 獨立 FI 單據，一對一已過帳 AP 發票。數量與金額為正數，過帳時借應付、貸 GR/IR（及稅/價差），全額核銷該票剩餘並回減收貨 `invoiced_quantity`。
+*   **關鍵欄位**:
+    *   `original_ap_invoice_id`: 原應付發票（必須 `POSTED`）。
+    *   `credit_date` / `external_credit_note_no`: 貸項日期與供應商貸項號（提交前須替換草稿占位符）。
+    *   夥伴 / 幣別 / 匯率：從原票快照，貸項日不重估。
+    *   `invoice_status`: 與 AP 相同的 `FiDocumentStatus`；VOID 僅允許 `POSTED → VOIDED`。
+    *   `journal_entry_id`: `source_doc_type = AP_CREDIT_MEMO`。
+*   **明細 `ap_credit_memo_lines`**: 來源為原 AP 行；只改數量 / 票面稅額 / 備註。已成卡行禁止納入。唯一约束 `(tenant_id, credit_memo_id, line_no)`、`(tenant_id, credit_memo_id, original_ap_invoice_line_id)`。
+*   **唯一约束**:
+    *   `(tenant_id, company_id, code)`
+    *   `(tenant_id, company_id, partner_id, external_credit_note_no)`
 
 ### 3.9 應付發票明細 (ap_invoice_lines)
 
@@ -489,6 +504,8 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 | journal_entries | `docs/database/sql/schema_tables/FI/journal_entries.sql` |
 | journal_entry_lines | `docs/database/sql/schema_tables/FI/journal_entry_lines.sql` |
 | ap_invoices | `docs/database/sql/schema_tables/FI/ap_invoices.sql` |
+| ap_credit_memos | `docs/database/sql/schema_tables/FI/ap_credit_memos.sql` |
+| ap_credit_memo_lines | `docs/database/sql/schema_tables/FI/ap_credit_memo_lines.sql` |
 | ap_invoice_schedules | `docs/database/sql/schema_tables/FI/ap_invoice_schedules.sql` |
 | ap_invoice_lines | `docs/database/sql/schema_tables/FI/ap_invoice_lines.sql` |
 | ar_invoices | `docs/database/sql/schema_tables/FI/ar_invoices.sql` |
@@ -538,6 +555,8 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 
 8. `ap_invoices.sql`
 8a. `ap_invoice_schedules.sql`
+8b. `ap_credit_memos.sql`
+8c. `ap_credit_memo_lines.sql`
 9. `ap_invoice_lines.sql`
 10. `ar_invoices.sql`
 10a. `ar_invoice_schedules.sql`

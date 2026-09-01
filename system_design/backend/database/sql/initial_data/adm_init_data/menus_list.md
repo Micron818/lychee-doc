@@ -77,6 +77,7 @@ ORDER BY menus.sort_order::varchar ;
 |8030|FI.ARAP|AR & AP|menu.fi.arAp|
 |803010|FI3010|AR Invoices|menu.fi.arInvoices|
 |803020|FI3020|AP Invoices|menu.fi.apInvoices|
+|803025|FI3025|AP Credit Memos|menu.fi.apCreditMemos|
 |803030|FI3030|Payments|menu.fi.payments|
 |803040|FI3040|GR/IR Balance Analysis|menu.fi.grIrBalance|
 |8040|FI.FA|Fixed Assets Management|menu.fi.fixedAssetMgmt|
