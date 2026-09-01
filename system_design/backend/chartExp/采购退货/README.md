@@ -12,6 +12,8 @@
 | [03-schema设计.md](./03-schema设计.md) | `purchase_returns` / items、收货 `returned_quantity`、枚举更名 |
 | [04-实施清单.md](./04-实施清单.md) | **开发入口**：已锁定决策、改动面、提交顺序、验收 |
 
+已开票要退：先做 [应付贷项](../应付贷项/README.md)（FI 二期），不要在退货过账里生成贷项。
+
 对照已落地的内部退料：`StockIssueReturnServiceImpl` / `/wm/stock-issue-returns`。  
 采购退货骨架对齐退料单，上游改为收货 + PO，下游冲回 GR/IR。
 

@@ -15,7 +15,7 @@
 | `DocumentTypeEnum.PURCHASE_RETURN` | **新增** |
 | `GoodsReceiptSourceDocType.PURCHASE_RETURN_ITEM` | **删除**（未实现、无数据） |
 | `goods_receipts` 当退货单 | **不** |
-| AP 贷项表 | **不加**（接口预留，见 `02` §7） |
+| AP 贷项表 | **不加**（独立专题 [应付贷项](../应付贷项/03-schema设计.md)） |
 | `purchase_order_items.returned_quantity` | **不加**；退货回减 `received_quantity` |
 | pegging 新类型 | **不加**；用 `original_receipt_item_id` |
 
@@ -233,7 +233,7 @@ ADJUSTMENT, STOCK_TRANSFER, BACKFLUSH
 | `goods_receipt_items.returned_quantity` | WM 过账回写 |
 | PO `received_quantity` | 现有 SCM remote |
 | GR/IR 冲回 | FI `RemotePurchaseReturnFinanceService` |
-| 未开票断言 / 贷项 TODO | FI `RemotePurchaseReturnCreditMemoService` |
+| 未开票断言 | FI `RemotePurchaseReturnCreditMemoService`（V1；贷项见 [应付贷项](../应付贷项/README.md)） |
 | 前端 | `lychee-frontend/src/pages/wm/purchase-returns` |
 | 菜单 | `/wm/purchase-returns`（代码 / 排序见 `04` §4.6） |
 
@@ -248,7 +248,7 @@ ADJUSTMENT, STOCK_TRANSFER, BACKFLUSH
 4. UPDATE goods_receipt_items.returned_quantity；刷新 invoice_status
 5. RemotePurchaseOrderItemReceiveService.updateReceivedQuantity(−txn)
    （CLOSED：只改数量不改状态）
-6. CreditMemoService.afterPosted（V1：no-op）
+6. CreditMemoService.afterPosted（no-op；贷项在 FI 独立过账）
 7. postPurchaseReturn 凭证（传入冻结 unit_cost + 清尾行金额）→ journal_entry_id
 8. approved_by / approved_at；status = POSTED
 ```
