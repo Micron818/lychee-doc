@@ -17,6 +17,7 @@ ORDER BY menus.sort_order::varchar ;
 |2010|BASIS001|Companies|menu.basis.companies|
 |2020|BASIS002|Factories|menu.basis.factories|
 |2030|BASIS003|Departments|menu.basis.departments|
+|2040|BASIS004|Exchange Rates|menu.basis.exchangeRates|
 |30|MM|Material|menu.mm|
 |3010|MM01|Material categories|menu.mm.materialCategories|
 |3020|MM02|Material types|menu.mm.materialTypes|
@@ -27,7 +28,7 @@ ORDER BY menus.sort_order::varchar ;
 |3070|MM07|Materials|menu.mm.materials|
 |3080|MM08|Standard unit conversions|menu.mm.standardUnitConversions|
 |3090|MM09|Material unit conversions|menu.mm.materialUnitConversions|
-|3095|MM10|Material Factories|menu.mm.materialFactories|
+|3100|MM10|Material Factories|menu.mm.materialFactories|
 |40|SD|Sales and distribution|menu.sd|
 |4010|SD01|Customer management|menu.sd.customers|
 |4020|SD02|Sales orders(SO)|menu.sd.salesOrders|
@@ -36,34 +37,40 @@ ORDER BY menus.sort_order::varchar ;
 |5010|PP01|Bill of materials(BOM)|menu.pp.billOfMaterials|
 |5020|PP02|Factory orders(FO)|menu.pp.factoryOrders|
 |5030|PP03|MRP Parameters|menu.pp.mrpParameters|
-|5035|PP03S|MRP Schedules|menu.pp.mrpSchedules|
-|5040|PP04|MRP Runs|menu.pp.mrpRuns|
-|5050|PP05|Planned Orders(PLO)|menu.pp.plannedOrders|
-|5060|PP06|Manufacturing Orders(MO)|menu.pp.productionOrders|
-|5070|PP07|Manufacturing reports(MR)|menu.pp.productionReports|
-|5080|PP08|Backflush Exception Queue|menu.pp.backflushExceptions|
+|5040|PP04|MRP Schedules|menu.pp.mrpSchedules|
+|5050|PP05|MRP Runs|menu.pp.mrpRuns|
+|5060|PP06|Planned Orders(PLO)|menu.pp.plannedOrders|
+|5070|PP07|Manufacturing Orders(MO)|menu.pp.productionOrders|
+|5080|PP08|Manufacturing reports(MR)|menu.pp.productionReports|
+|5090|PP09|Backflush Exception Queue|menu.pp.backflushExceptions|
 |60|SCM|Purchase Management|menu.scm|
 |6010|SCM01|Suppliers|menu.scm.suppliers|
-|6020|SCM02|Purchase Requisitions(PR)|menu.scm.purchaseRequisitions|
-|6030|SCM03|Purchase Order(PO)|menu.scm.purchaseOrders|
-|6040|SCM04|Outsource Orders(OO)|menu.scm.outsourceOrders|
+|6020|SCM02|Material suppliers|menu.scm.materialSuppliers|
+|6030|SCM03|Purchase Requisitions(PR)|menu.scm.purchaseRequisitions|
+|6040|SCM04|Purchase Order(PO)|menu.scm.purchaseOrders|
+|6050|SCM05|Outsource Orders(OO)|menu.scm.outsourceOrders|
 |70|WM|Warehouse Management|menu.wm|
 |7010|WM01|Warehouse|menu.wm.warehouses|
 |7020|WM02|Goods receipts(GR)|menu.wm.goodsReceipts|
-|7030|WM03|Stock transfer(ST)|menu.wm.stockTransfers|
-|7040|WM04|Stock issues(SI)|menu.wm.stockIssues|
-|7045|WM04R|Stock issue returns(SIR)|menu.wm.stockIssueReturns|
-|7050|WM05|Stock onhand|menu.wm.stockOnHand|
-|7060|WM06|Stock transaction|menu.wm.stockTransactions|
-|7070|WM07|Physical inventories|menu.wm.physicalInventories|
-|7080|WM08|Inventory Balance|menu.wm.inventoryBalances|
-|7090|WM09|Inventory Period|menu.wm.inventoryPeriods|
+|7030|WM03|Purchase returns(PRT)|menu.wm.purchaseReturns|
+|7040|WM04|Stock transfer(ST)|menu.wm.stockTransfers|
+|7050|WM05|Stock issues(SI)|menu.wm.stockIssues|
+|7060|WM06|Stock issue returns(SIR)|menu.wm.stockIssueReturns|
+|7070|WM07|Stock onhand|menu.wm.stockOnHand|
+|7080|WM08|Stock transaction|menu.wm.stockTransactions|
+|7090|WM09|Physical inventories|menu.wm.physicalInventories|
+|7100|WM10|Inventory Balance|menu.wm.inventoryBalances|
+|7110|WM11|Inventory Period|menu.wm.inventoryPeriods|
 |80|FI|Financial Accounting|menu.fi|
 |8010|FI.MD|Master Data|menu.fi.masterData|
 |801010|FI1010|General Ledger Accounts|menu.fi.glAccounts|
 |801020|FI1020|Business Partners|menu.fi.businessPartners|
-|801030|FI1030|Company Bank Accounts|menu.fi.companyBankAccounts|
-|801040|FI1040|Partner Bank Accounts|menu.fi.partnerBankAccounts|
+|801030|FI1030|Payment Terms|menu.fi.paymentTerms|
+|801040|FI1040|Tax Classes|menu.fi.taxClasses|
+|801050|FI1050|Tax Codes|menu.fi.taxCodes|
+|801060|FI1060|Tax Determinations|menu.fi.taxDeterminations|
+|801070|FI1070|Company Bank Accounts|menu.fi.companyBankAccounts|
+|801080|FI1080|Partner Bank Accounts|menu.fi.partnerBankAccounts|
 |8020|FI.GL|General Ledger|menu.fi.generalLedger|
 |802010|FI2010|Journal Entries|menu.fi.journalEntries|
 |802020|FI2020|Fiscal Period Closing|menu.fi.fiscalPeriods|
