@@ -95,7 +95,7 @@ ALTER TABLE lychee_erp.ap_credit_memos
 | `original_ap_invoice_id` | 一张贷项只对一张已过账 AP |
 | `credit_date` | 凭证 `postDate`；已关期间由过账服务拦截。本波不强制 ≥ 原票 `invoice_date` |
 | `partner_*` / 币别 / 汇率 | 原票快照，不可改 |
-| `invoice_status` | 与 AP 同一套 `FiDocumentStatus`。无 `payment_status`（过账即全额核销） |
+| `invoice_status` | 与 AP 同一套 `FiDocumentStatus`。无 `payment_status`；过账拆 applied / refundable，现金退款走供应商退款 |
 | `journal_entry_id` | 本单凭证；VOID 后置空 |
 
 不加 `payment_term_id` / `due_date` / `remaining_amount`。
@@ -190,11 +190,11 @@ ALTER TABLE lychee_erp.ap_invoices
     ADD COLUMN credited_amount numeric(18,2) NOT NULL DEFAULT 0;
 
 COMMENT ON COLUMN lychee_erp.ap_invoices.credited_amount
-    IS '已过账未作废应付贷项合计。remaining = total − paid − credited_amount';
+    IS '已过账未作废应付贷项合计。remaining = total − paid − applied_credit_amount';
 ```
 
-付款核销、贷项过账/VOID、重算剩余都用该注释公式。  
-`paid_amount` 语义不变（仅资金核销）。
+付款核销、贷项过账/VOID、重算剩余都用 `remaining = total − paid − applied_credit_amount`。  
+`credited_amount` 仍表示贷项总额，不再进入 remaining。`paid_amount` 语义不变（仅资金核销）。
 
 ---
 
@@ -239,7 +239,7 @@ source_doc_id    = ap_credit_memos.id
 1. 锁 ap_credit_memos、原 ap_invoices、原 ap_invoice_lines
 2. 校验 POSTED 原票、APPROVED 本单、creditableQty、total ≤ remaining、未成卡
 3. 生成凭证（借贷对调）→ journal_entry_id
-4. 原票 credited_amount += total；remaining = total − paid − credited；刷新 payment_status
+4. 原票 credited_amount += total；applied_credit_amount += applied；remaining = total − paid − applied_credit；刷新 payment_status
 5. RECEIPT 行 updateInvoicedQuantity(−qty)
 6. invoice_status = POSTED；posted_by / posted_at
 ```

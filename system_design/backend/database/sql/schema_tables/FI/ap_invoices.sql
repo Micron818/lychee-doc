@@ -25,6 +25,7 @@ CREATE TABLE lychee_erp.ap_invoices
 	total_amount numeric(18,2) NOT NULL DEFAULT 0,
 	paid_amount numeric(18,2) NOT NULL DEFAULT 0,
 	credited_amount numeric(18,2) NOT NULL DEFAULT 0,
+	applied_credit_amount numeric(18,2) NOT NULL DEFAULT 0,
 	remaining_amount numeric(18,2) NOT NULL DEFAULT 0,
 	invoice_status varchar(20) NOT NULL DEFAULT 'DRAFT',    -- DRAFT, PENDING_APPROVAL, APPROVED, POSTED, VOIDED
 	payment_status varchar(20) NOT NULL DEFAULT 'UNPAID',    -- UNPAID, PARTIAL, PAID
@@ -99,9 +100,12 @@ COMMENT ON COLUMN lychee_erp.ap_invoices.payment_status
 	IS 'UNPAID, PARTIAL, PAID';
 
 COMMENT ON COLUMN lychee_erp.ap_invoices.credited_amount
-	IS '已过账未作废应付贷项合计。remaining = total − paid − credited_amount';
+	IS '已过账未作废应付贷项合计';
+
+COMMENT ON COLUMN lychee_erp.ap_invoices.applied_credit_amount
+	IS '已过账未作废贷项中实际冲减本票未付金额的合计';
 
 COMMENT ON COLUMN lychee_erp.ap_invoices.remaining_amount
-	IS 'remaining = total_amount − paid_amount − credited_amount';
+	IS 'remaining = total_amount − paid_amount − applied_credit_amount';
 
 

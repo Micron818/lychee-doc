@@ -10,6 +10,7 @@ CREATE TABLE lychee_erp.payments
 	company_id bigint NOT NULL,
 	payment_no varchar(50) NOT NULL,
 	payment_type varchar(20) NOT NULL,      -- RECEIPT (收款), DISBURSEMENT (付款)
+	payment_purpose varchar(30) NOT NULL DEFAULT 'STANDARD', -- STANDARD, SUPPLIER_REFUND
 	payment_date date NOT NULL,
 
 	-- 往来单位 (与 ap_invoices / ar_invoices 一致，指向 FI.business_partners)
@@ -69,6 +70,7 @@ CREATE INDEX idx_payments_status ON lychee_erp.payments (status ASC);
 CREATE INDEX idx_payments_journal_entry ON lychee_erp.payments (journal_entry_id ASC);
 CREATE INDEX idx_payments_partner_bank_account ON lychee_erp.payments (partner_bank_account_id ASC);
 CREATE INDEX idx_payments_internal_bank_account ON lychee_erp.payments (internal_bank_account_id ASC);
+CREATE INDEX idx_payments_purpose ON lychee_erp.payments (tenant_id, company_id, payment_purpose, status);
 
 ALTER TABLE lychee_erp.payments ADD CONSTRAINT fk_payments_tenant
 	FOREIGN KEY (tenant_id) REFERENCES lychee_erp.tenants (id) ON DELETE No Action ON UPDATE No Action;
@@ -111,6 +113,9 @@ COMMENT ON COLUMN lychee_erp.payments.status
 
 COMMENT ON COLUMN lychee_erp.payments.payment_type
 	IS 'RECEIPT (收款), DISBURSEMENT (付款)';
+
+COMMENT ON COLUMN lychee_erp.payments.payment_purpose
+	IS 'STANDARD, SUPPLIER_REFUND';
 
 COMMENT ON COLUMN lychee_erp.payments.unallocated_amount
 	IS '未核销金额 (用于处理预收款/预付款)';
