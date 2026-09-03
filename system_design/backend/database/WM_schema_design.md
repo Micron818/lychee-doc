@@ -11,10 +11,11 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
 以 `warehouses` 為物理儲存中心，透過不同單據進行數量增減：
 
 *   **入庫 (Inbound)**: 由 `goods_receipts` 觸發。涵蓋採購收貨、生產完工入庫、雜項入庫、託外收回等。
-*   **出庫 (Outbound - Sales)**: 由 SD 模組的 `shipments` / `DELIVERY` 觸發（銷售出貨）。
+*   **出庫 (Outbound - Sales)**: 由 SD 模組的 `deliveries` + 已過帳 `SALES_DELIVERY` 領料觸發（銷售出貨）。
 *   **出庫 (Outbound - Internal)**: 由 WM 模組的 `stock_issues` 觸發（生產領料、部門領用、報廢、樣品）。
 *   **退料入庫 (Issue Return)**: 由 `stock_issue_returns` 觸發。僅沖回內部領料，不是客戶退貨或採購退貨。
 *   **採購退貨出庫 (Purchase Return)**: 由 `purchase_returns` 觸發。僅沖回已過帳採購收貨，不是領料退料或客戶退貨。
+*   **客戶退貨入庫 (Customer Return)**: 由 `customer_returns` 觸發。僅沖回已過帳 `SALES_DELIVERY` 領料，不是收貨、不是退料、不是採購退貨。
 *   **庫存帳**: `stock_on_hand` 記錄當下餘額；`stock_transactions` 記錄每一筆異動軌跡。
 
 ## 3. 資料表清單與設計備忘
@@ -33,7 +34,7 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
     *   `receipt_type`: `PURCHASE`, `PRODUCTION_REPORT`, `MISC`, `OUTSOURCE`。
     *   `status`: `DRAFT`（編輯中）, `POSTED`（已過帳）, `REVERSED`（已沖銷）。
 *   **明細關鍵欄位**:
-    *   `source_doc_id` / `source_doc_type`: 來源追蹤。支援 `PURCHASE_ORDER_ITEM`, `PRODUCTION_REPORT`, `CUSTOMER_RETURN_ITEM`, `OUTSOURCE_ORDER_ITEM` 等。不含 `PURCHASE_RETURN_ITEM`；採購退貨走獨立 `purchase_returns`。
+    *   `source_doc_id` / `source_doc_type`: 來源追蹤。支援 `PURCHASE_ORDER_ITEM`, `PRODUCTION_REPORT`, `OUTSOURCE_ORDER_ITEM` 等。不含 `PURCHASE_RETURN_ITEM` / `CUSTOMER_RETURN_ITEM`；採購退貨走獨立 `purchase_returns`，客戶退貨走獨立 `customer_returns`。
     *   `returned_quantity`: 已過帳採購退貨基本單位合計。可退單據量見採購退貨設計，禁止把本欄反換算成單據單位。
     *   `batch_no`: 批號維度，無批號時預設空字串 `''`。
     *   `is_foc`: 贈品標記，影響 AP 核銷邏輯。
@@ -49,7 +50,7 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
     *   `status`: `DRAFT`, `POSTED`, `REVERSED`。
 *   **明細關鍵欄位**:
     *   `source_doc_id` / `source_doc_type`: 關聯來源，如 `PRODUCTION_ORDER_COMPONENT` 用於核銷工單預留量。
-    *   `returned_quantity`: 已過帳退料的基本單位合計。可退數量 = `base_quantity - returned_quantity`。
+    *   `returned_quantity`: 已過帳反向入庫基本單位合計。內部領料 = 退料；`SALES_DELIVERY` = 客戶退貨。草稿另按查詢加總。
     *   `transaction_unit` / `base_unit`: 與收貨相同的雙單位設計。
 
 ### 3.4 退料單 (stock_issue_returns / items)
@@ -80,6 +81,23 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
     *   `is_foc` / `unit_price` / 稅碼：從原收貨行複製。贈品只出庫，不沖 GR/IR。
 *   **數量**: 可退單據量 = `min(未退單據量, 未開票占用單據量)`；FOC 只用未退。已退單據量 = `SUM(POSTED 退貨行.transaction_quantity)`。
 *   **流水帳規則**: 過帳寫入 `PURCHASE_RETURN`（出庫）；沖銷沿用同類型、進出方向對調。原收貨存在草稿或已過帳採購退貨、或行上 `invoiced_quantity > 0` 時禁止沖銷收貨。
+
+### 3.4.2 客戶退貨 (customer_returns / items)
+*   **用途**: 已過帳銷售出庫領料的反向單。**不是**領料退料（`STOCK_ISSUE_RETURN`）、採購退貨（`PURCHASE_RETURN`）或負向交貨。
+*   **可退領料**: 僅已過帳 `issue_type = SALES_DELIVERY`。混客戶 / 混幣別領料不可退。不含內部領料。
+*   **主表關鍵欄位**:
+    *   `original_stock_issue_id`: 一張退貨單只對應一張已過帳銷售出庫領料。
+    *   `customer_id` / `currency_option_id` / `exchange_rate`: 從關聯交貨複製，過帳前凍結，不可改。
+    *   `status`: `DRAFT`, `POSTED`, `REVERSED`（複用 `GoodsReceiptStatus`）。
+    *   `approved_by` / `approved_at`: 過帳人，不是審批流。
+*   **明細關鍵欄位**:
+    *   `original_issue_item_id`: 必須參照原領料明細；同一退貨單內一行對應一條領料明細。
+    *   `delivery_item_id`: 從原領料行 `source_doc_item_id` 複製，不可改。開票占用與已退交貨量用此列。
+    *   倉庫與批號鎖定原領料明細，不可改。
+    *   `stock_type`: 預設 `UNRESTRICTED`，允許改。
+    *   `reason_code`: 自由文本，不掛 option。
+*   **數量**: 可退單據量 = `min(未退單據量, issued − invoiced − 其他草稿)`。`issued` 已淨減 POSTED 退貨，不要再減領料行已退。最後一筆退完該領料行時 `base = unreturnedBase`。
+*   **流水帳規則**: 過帳寫入 `CUSTOMER_RETURN`（入庫，僅庫存物料）；沖銷沿用同類型、進出方向對調。原領料存在草稿或已過帳客戶退貨、或所涉交貨行 `invoiced_quantity > 0` 時禁止沖銷該領料。
 
 ### 3.5 庫存帳務體系 (Stock Ledger)
 為了滿足即時查詢與歷史報表需求，採用三層式架構：
@@ -150,7 +168,7 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
     *   `PRODUCTION_RECEIPT`: 生產完工入庫 (+)。
     *   `PURCHASE_RETURN`: 採購退貨 (-)。僅用於採購退貨單，不是收貨來源類型。
     *   `DELIVERY`: 銷售出貨 (-)。
-    *   `CUSTOMER_RETURN`: 客戶退貨 (+)。
+    *   `CUSTOMER_RETURN`: 客戶退貨 (+)。僅用於客戶退貨單過帳 / 沖銷，不是收貨來源、不是退料、不是採購退貨。
     *   `STOCK_ISSUE`: 內部領用 (-)。領料單沖銷沿用此類型，進出方向對調。
     *   `STOCK_ISSUE_RETURN`: 領料退料單過帳 (+)。僅用於退料單，不是客戶退貨或採購退貨。
     *   `ADJUSTMENT`: 盤點調整 (+/-)。
@@ -170,6 +188,8 @@ WM 模組負責管理企業的庫存與物流作業。核心功能包含 **倉�
 | **stock_issue_return_items** | `docs/database/sql/schema_tables/WM/stock_issue_return_items.sql` | 退料單明細 |
 | **purchase_returns** | `docs/database/sql/schema_tables/WM/purchase_returns.sql` | 採購退貨表頭 |
 | **purchase_return_items** | `docs/database/sql/schema_tables/WM/purchase_return_items.sql` | 採購退貨明細 |
+| **customer_returns** | `docs/database/sql/schema_tables/WM/customer_returns.sql` | 客戶退貨表頭 |
+| **customer_return_items** | `docs/database/sql/schema_tables/WM/customer_return_items.sql` | 客戶退貨明細 |
 | **stock_on_hand** | `docs/database/sql/schema_tables/WM/stock_on_hand.sql` | 即時庫存量 |
 | **stock_transactions** | `docs/database/sql/schema_tables/WM/stock_transactions.sql` | 庫存異動流水帳 |
 | **inventory_periods** | `docs/database/sql/schema_tables/WM/inventory_periods.sql` | 庫存期間 |

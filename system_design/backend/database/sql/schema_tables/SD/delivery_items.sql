@@ -25,6 +25,7 @@ CREATE TABLE lychee_erp.delivery_items
 	subtotal_amount numeric(18,2) NOT NULL   DEFAULT 0,
 	tax_amount numeric(18,2) NOT NULL   DEFAULT 0,
 	total_amount numeric(18,2) NOT NULL   DEFAULT 0,
+	returned_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	status varchar(20) NOT NULL,
 	remarks text NULL,
 	created_at timestamp without time zone NULL,
@@ -79,4 +80,8 @@ ALTER TABLE lychee_erp.delivery_items ADD CONSTRAINT fk_delivery_items_tax_code
 
 COMMENT ON COLUMN lychee_erp.delivery_items.source_doc_type
 	IS 'SALES_ORDER, RETURN_PO, TRANSFER_ORDER, OTHER'
+;
+
+COMMENT ON COLUMN lychee_erp.delivery_items.returned_quantity
+	IS '已过账客户退货单据单位合计（审计）。可开票 = issued − invoiced；issued 已由 issueCallback 净减退货'
 ;

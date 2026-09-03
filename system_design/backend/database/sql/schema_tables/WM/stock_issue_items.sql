@@ -16,7 +16,7 @@ CREATE TABLE lychee_erp.stock_issue_items
 	transaction_quantity numeric(18,6) NOT NULL   DEFAULT 0,
 	base_unit_id bigint NOT NULL,
 	base_quantity numeric(18,6) NOT NULL   DEFAULT 0,
-	returned_quantity numeric(18,6) NOT NULL   DEFAULT 0,    -- 已过账退料基本单位合计
+	returned_quantity numeric(18,6) NOT NULL   DEFAULT 0,    -- 已过账反向入库基本单位合计。内部领料=退料；SALES_DELIVERY=客户退货
 	source_doc_type varchar(50) NOT NULL,    -- PRODUCTION_ORDER,PRODUCTION_ORDER_COMPONENT,PRODUCTION_REPORT_COMPONENT,SALES_ORDER,DELIVERY,DEPARTMENT,OTHER
 	source_doc_id bigint NULL,
 	source_doc_no varchar(50) NULL,
@@ -70,7 +70,7 @@ COMMENT ON COLUMN lychee_erp.stock_issue_items.source_doc_type
 ;
 
 COMMENT ON COLUMN lychee_erp.stock_issue_items.returned_quantity
-	IS '已过账退料的基本单位合计；可退数量 = base_quantity - returned_quantity；草稿退料另按查询加总'
+	IS '已过账反向入库基本单位合计。内部领料=退料；SALES_DELIVERY=客户退货。草稿另按查询加总'
 ;
 
  

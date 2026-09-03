@@ -9,7 +9,7 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
 
 *   **客戶來源**: 連結 `customers` (SD)，取得交易對象與預設商業條件。
 *   **商品內容**: 連結 `materials` (MM)，確認銷售的品項與庫存單位。
-*   **出貨執行**: 連結 `shipments` (出貨單)，將庫存扣帳。
+*   **出貨執行**: 連結 `deliveries` (交貨單) 與已過帳 `SALES_DELIVERY` 領料，將庫存扣帳。客戶退貨回減已發 / SO 已交。
 
 ## 3. 資料表清單與設計備忘
 
@@ -36,11 +36,13 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
     *   `shipping_address`: 獨立儲存送貨地址 (Snapshot)，不隨客戶主檔變動而改變歷史訂單。
     *   `expected_delivery_date`: 明細層級的預計交貨日，支援分批交貨。
 
-### 3.2 出貨單 (shipments / items)
-*   **用途**: 物流單位執行的出庫指令。
+### 3.2 交貨單 (deliveries / items)
+*   **用途**: 物流單位執行的出庫指令。銷售出庫過帳回寫 `issued_quantity`；客戶退貨過帳以 `issueCallback(−txn)` 回減已發，並回減 SO `delivered_quantity`。
 *   **關鍵欄位**:
-    *   `sales_order_item_id`: 連結回訂單明細，追蹤交貨進度 (Fulfillment Rate)。
-    *   `warehouse_id`: 實際扣帳倉庫。
+    *   `source_doc_*`: 連結回訂單明細，追蹤交貨進度 (Fulfillment Rate)。
+    *   `issued_quantity`: 已過帳銷售出庫單據單位淨額（含客戶退貨回減）。
+    *   `invoiced_quantity`: AR 占用（含草稿）。可開票 = `issued − invoiced`。
+    *   `returned_quantity`: 已過帳客戶退貨單據單位合計（審計列）。不刷新 `invoice_status`。
     *   `tracking_number`: 物流單號，供客戶查詢貨態。
 
 ## 4. 關鍵選項值建議 (Reference Data)
@@ -63,5 +65,5 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
 | **customers** | `docs/database/sql/schema_tables/SD/customers.sql` | 客戶主檔 |
 | **sales_orders** | `docs/database/sql/schema_tables/SD/sales_orders.sql` | 訂單表頭 |
 | **sales_order_items** | `docs/database/sql/schema_tables/SD/sales_order_items.sql` | 訂單明細 |
-| **shipments** | `docs/database/sql/schema_tables/SD/shipments.sql` | 出貨單表頭 |
-| **shipment_items** | `docs/database/sql/schema_tables/SD/shipment_items.sql` | 出貨單明細 |
+| **deliveries** | `docs/database/sql/schema_tables/SD/deliveries.sql` | 交貨單表頭 |
+| **delivery_items** | `docs/database/sql/schema_tables/SD/delivery_items.sql` | 交貨單明細 |

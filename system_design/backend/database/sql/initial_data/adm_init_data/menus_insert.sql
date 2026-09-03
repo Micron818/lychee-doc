@@ -46,6 +46,7 @@ INSERT INTO menus (id,tenant_id,"name",parent_id,"path",icon,sort_order,is_visib
 	 (52,1,'Warehouse',50,'/wm/warehouses',NULL,7010,true,1,'2026-04-28 18:16:48.898088','2026-04-28 18:16:48.898088',1,1,'menu.wm.warehouses','WM01'),
 	 (49,1,'Goods receipts(GR)',50,'/wm/goods-receipts',NULL,7020,true,1,'2026-04-14 15:12:11.831012','2026-05-08 10:48:57.350546',1,1,'menu.wm.goodsReceipts','WM02'),
 	 (106,1,'Purchase returns(PRT)',50,'/wm/purchase-returns',NULL,7030,true,1,'2026-08-31 13:26:19.944137','2026-09-01 10:03:12.665796',1,1,'menu.wm.purchaseReturns','WM03'),
+	 (108,1,'Customer returns(CRT)',50,'/wm/customer-returns',NULL,7035,true,1,'2026-09-03 09:00:00.000000','2026-09-03 09:00:00.000000',1,1,'menu.wm.customerReturns','WM12'),
 	 (60,1,'Stock transfer(ST)',50,'/wm/stock-transfers',NULL,7040,true,1,'2026-06-13 09:12:29.612095','2026-09-01 10:03:12.65889',1,1,'menu.wm.stockTransfers','WM04'),
 	 (54,1,'Stock issues(SI)',50,'/wm/stock-issues',NULL,7050,true,1,'2026-05-08 10:48:46.022402','2026-09-01 10:03:12.649817',1,1,'menu.wm.stockIssues','WM05'),
 	 (98,1,'Stock issue returns(SIR)',50,'/wm/stock-issue-returns',NULL,7060,true,1,'2026-08-21 18:04:30.874157','2026-09-01 10:03:12.663148',1,1,'menu.wm.stockIssueReturns','WM06'),

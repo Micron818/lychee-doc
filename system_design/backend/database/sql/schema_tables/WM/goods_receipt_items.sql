@@ -9,7 +9,7 @@ CREATE TABLE lychee_erp.goods_receipt_items
 	tenant_id bigint NOT NULL,
 	goods_receipt_id bigint NOT NULL,
 	item_no integer NOT NULL,
-	source_doc_type varchar(20) NOT NULL,    -- PURCHASE_ORDER_ITEM,CUSTOMER_RETURN_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM
+	source_doc_type varchar(20) NOT NULL,    -- PURCHASE_ORDER_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM
 	source_doc_id bigint NOT NULL,
 	source_doc_no varchar(50) NULL,
 	source_doc_item_id bigint NULL,
@@ -70,7 +70,7 @@ ALTER TABLE lychee_erp.goods_receipt_items ADD CONSTRAINT fk_gr_items_material
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipt_items.source_doc_type
-	IS 'PURCHASE_ORDER_ITEM,CUSTOMER_RETURN_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM'
+	IS 'PURCHASE_ORDER_ITEM,PRODUCTION_REPORT,MISC_RECEIPT,OUTSOURCE_ORDER_ITEM'
 ;
 
 COMMENT ON COLUMN lychee_erp.goods_receipt_items.returned_quantity

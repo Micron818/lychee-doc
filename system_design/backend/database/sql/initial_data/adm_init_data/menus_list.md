@@ -53,6 +53,7 @@ ORDER BY menus.sort_order::varchar ;
 |7010|WM01|Warehouse|menu.wm.warehouses|
 |7020|WM02|Goods receipts(GR)|menu.wm.goodsReceipts|
 |7030|WM03|Purchase returns(PRT)|menu.wm.purchaseReturns|
+|7035|WM12|Customer returns(CRT)|menu.wm.customerReturns|
 |7040|WM04|Stock transfer(ST)|menu.wm.stockTransfers|
 |7050|WM05|Stock issues(SI)|menu.wm.stockIssues|
 |7060|WM06|Stock issue returns(SIR)|menu.wm.stockIssueReturns|
