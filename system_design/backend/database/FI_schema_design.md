@@ -29,6 +29,7 @@ gl_accounts ──────────────────────�
               ├── ap_invoices ── ap_invoice_lines                │
               ├── ap_credit_memos ── ap_credit_memo_lines        │
               ├── ar_invoices ── ar_invoice_lines                │
+              ├── ar_credit_memos ── ar_credit_memo_lines        │
               └── payments ── payment_lines                      │
                                                                  │
 fiscal_periods ── journal_entries ── journal_entry_lines ────────┘
@@ -54,7 +55,7 @@ cost_calculations ── cost_calculation_items
 *   **成本政策**: `fi_costing_policies`（公司默認 `cost_method`、差異結轉、製造費用吸收基準、關帳是否強制已過帳 Cost Run）。
 *   **傳票結構**: Header-Line 結構；表頭彙總借貸金額供快速平衡校驗；明細含輔助核算維度 (部門、往來、來源行)。
 *   **期間控制**: `fiscal_periods` 管理會計年度與月份（含 `company_id`），控制 FI 關帳。
-*   **子帳管理 (Sub-Ledger)**: `ap_invoices` / `ap_credit_memos` / `ar_invoices` 表頭 + 明細行，記錄未清餘額、稅額與到期日。應付貸項過帳核銷原票 `remaining` 並回減收貨占用。
+*   **子帳管理 (Sub-Ledger)**: `ap_invoices` / `ap_credit_memos` / `ar_invoices` / `ar_credit_memos` 表頭 + 明細行，記錄未清餘額、稅額與到期日。應付貸項過帳核銷原票 `remaining` 並回減收貨占用；應收貸項過帳拆 applied/refundable 並回減交貨占用。
 *   **收付核銷**: `payments` 表頭記錄資金進出與銀行帳戶快照；`payment_lines` 明細支援發票核銷、預收/預付抵扣、直接記帳 (手續費/匯兌損益)。
 *   **固定資產 (FA)**: `asset_categories` → `fixed_assets` → `asset_depreciations`；折舊/取得/處分均透過 `journal_entry_id` 連結總帳 (`source_module = 'FA'`)。
 *   **成本計算 (Costing)**: 日常以 `STANDARD_COST` 出庫；月末 `cost_calculations` → items/allocations → `ACTUAL_COST` 快照；過帳 `source_module = 'COSTING'`。`MOVING_AVERAGE` 預留未實現。
@@ -231,11 +232,26 @@ cost_calculations ── cost_calculation_items
     *   `partner_id` / `partner_code` / `partner_name`: 關聯 `business_partners` 及快照。
     *   `currency_option_id` / `exchange_rate`: 幣別與匯率。
     *   `subtotal_amount` / `tax_amount` / `total_amount`: 金額彙總。
-    *   `received_amount` / `remaining_amount`: 已收與剩餘未收金額。
+    *   `received_amount` / `credited_amount` / `applied_credit_amount` / `remaining_amount`: 已收、已過帳貸項總額、實際衝減未收、剩餘未收。`remaining = total − received − applied_credit`。
     *   `invoice_status`: `DRAFT`, `PENDING_APPROVAL`, `APPROVED`, `POSTED`, `VOIDED`。
     *   `receipt_status`: `UNRECEIVED`, `PARTIAL`, `RECEIVED`。
     *   `journal_entry_id`: 過帳憑證。
 *   **唯一约束**: `(tenant_id, company_id, code)`。
+
+### 3.10b 應收貸項 (ar_credit_memos)
+
+*   **用途**: 獨立 FI 單據，一對一已過帳 AR 發票。數量與金額為正數，過帳時貸應收、借收入/銷項稅，拆 `applied` / `refundable` 並回減交貨 `invoiced_quantity`。
+*   **關鍵欄位**:
+    *   `original_ar_invoice_id`: 原應收發票（必須 `POSTED`）。
+    *   `credit_date` / `tax_credit_note_no`: 貸項日期與稅務貸項號（提交前須替換草稿占位符）。
+    *   夥伴 / 幣別 / 匯率：從原票快照，貸項日不重估。
+    *   `invoice_status`: 與 AR 相同的 `FiDocumentStatus`；VOID 僅允許 `POSTED → VOIDED`。
+    *   `applied_amount` / `refundable_amount`：過帳時拆分的衝未收與待退款；`refunded_amount` / `refund_remaining_amount` / `refund_status` 預留給客戶退款回寫。
+    *   `journal_entry_id`: `source_doc_type = AR_CREDIT_MEMO`。
+*   **明細 `ar_credit_memo_lines`**: 來源為原 AR 行；只改數量 / 票面稅額 / 備註。最後一筆貸完該 AR 行時金額取剩餘。唯一约束 `(tenant_id, credit_memo_id, line_no)`、`(tenant_id, credit_memo_id, original_ar_invoice_line_id)`。
+*   **唯一约束**:
+    *   `(tenant_id, company_id, code)`
+    *   `(tenant_id, company_id, partner_id, tax_credit_note_no)`
 
 ### 3.11 應收發票明細 (ar_invoice_lines)
 
@@ -519,6 +535,8 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 | ap_invoice_schedules | `docs/database/sql/schema_tables/FI/ap_invoice_schedules.sql` |
 | ap_invoice_lines | `docs/database/sql/schema_tables/FI/ap_invoice_lines.sql` |
 | ar_invoices | `docs/database/sql/schema_tables/FI/ar_invoices.sql` |
+| ar_credit_memos | `docs/database/sql/schema_tables/FI/ar_credit_memos.sql` |
+| ar_credit_memo_lines | `docs/database/sql/schema_tables/FI/ar_credit_memo_lines.sql` |
 | ar_invoice_schedules | `docs/database/sql/schema_tables/FI/ar_invoice_schedules.sql` |
 | ar_invoice_lines | `docs/database/sql/schema_tables/FI/ar_invoice_lines.sql` |
 | payments | `docs/database/sql/schema_tables/FI/payments.sql` |
@@ -570,6 +588,8 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 9. `ap_invoice_lines.sql`
 10. `ar_invoices.sql`
 10a. `ar_invoice_schedules.sql`
+10b. `ar_credit_memos.sql`
+10c. `ar_credit_memo_lines.sql`
 11. `ar_invoice_lines.sql`
 
 **收付款**

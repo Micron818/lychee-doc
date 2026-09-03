@@ -24,7 +24,9 @@ CREATE TABLE lychee_erp.ar_invoices
 	tax_amount numeric(18,2) NOT NULL DEFAULT 0,
 	total_amount numeric(18,2) NOT NULL DEFAULT 0,
 	received_amount numeric(18,2) NOT NULL DEFAULT 0,
-	remaining_amount numeric(18,2) NOT NULL DEFAULT 0,
+	credited_amount numeric(18,2) NOT NULL DEFAULT 0,
+	applied_credit_amount numeric(18,2) NOT NULL DEFAULT 0,
+	remaining_amount numeric(18,2) NOT NULL DEFAULT 0, -- remaining = total − received − applied_credit
 	invoice_status varchar(20) NOT NULL DEFAULT 'DRAFT',    -- DRAFT, PENDING_APPROVAL, APPROVED, POSTED, VOIDED
 	receipt_status varchar(20) NOT NULL DEFAULT 'UNRECEIVED',    -- UNRECEIVED, PARTIAL, RECEIVED
 	journal_entry_id bigint NULL,

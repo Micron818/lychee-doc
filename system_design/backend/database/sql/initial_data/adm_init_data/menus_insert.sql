@@ -72,6 +72,7 @@ INSERT INTO menus (id,tenant_id,"name",parent_id,"path",icon,sort_order,is_visib
 	 (73,1,'AR Invoices',86,'/fi/ar-invoices',NULL,803010,true,1,'2026-06-29 17:19:41.006203','2026-07-13 11:11:49.58214',1,1,'menu.fi.arInvoices','FI3010'),
 	 (74,1,'AP Invoices',86,'/fi/ap-invoices',NULL,803020,true,1,'2026-06-29 17:20:17.050666','2026-07-13 11:11:54.34233',1,1,'menu.fi.apInvoices','FI3020'),
 	 (107,1,'AP Credit Memos(CM)',86,'/fi/ap-credit-memos',NULL,803025,true,1,'2026-09-01 15:00:00.000000','2026-09-01 15:00:00.000000',1,1,'menu.fi.apCreditMemos','FI3025'),
+	 (109,1,'AR Credit Memos(RM)',86,'/fi/ar-credit-memos',NULL,803026,true,1,'2026-09-03 23:00:00.000000','2026-09-03 23:00:00.000000',1,1,'menu.fi.arCreditMemos','FI3026'),
 	 (75,1,'Payments',86,'/fi/payments',NULL,803030,true,1,'2026-06-29 17:23:18.806035','2026-07-13 11:11:59.108296',1,1,'menu.fi.payments','FI3030'),
 	 (82,1,'GR/IR Balance Analysis',86,'/fi/gr-ir-balance',NULL,803040,true,1,'2026-07-11 14:50:20.57453','2026-07-13 11:12:03.481263',1,1,'menu.fi.grIrBalance','FI3040'),
 	 (87,1,'Fixed Assets Management',64,'/fi/fixed-asset-mgmt',NULL,8040,true,1,'2026-07-13 10:15:40.851035','2026-07-23 09:19:44.076912',1,1,'menu.fi.fixedAssetMgmt','FI.FA'),
