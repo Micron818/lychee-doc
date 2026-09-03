@@ -19,3 +19,5 @@
 客户退货骨架对齐采购退货，上游改为 `SALES_DELIVERY` 领料 + 交货/SO，下游冲回 COGS。
 
 三件套一起设计、实施可分波：建议 **应收贷项 → 客户退货 → 客户退款**。本目录只覆盖库存退货；贷项过账前本波仍只退未占用数量。
+
+跨专题归属：`existsPostedByDeliveryItemIds` 由本波实现（贷项波可先 stub）。`refundable/page` 归 [应收贷项](../应收贷项/README.md)，本目录不写。

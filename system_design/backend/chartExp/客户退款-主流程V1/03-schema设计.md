@@ -104,7 +104,7 @@ ArCreditMemoRepository.findByIdForUpdate
 ArInvoiceRepository.findByIdForUpdate
 ```
 
-退款 POST：Payment → ArCreditMemo → 原 AR。
+退款 POST / VOID 都按此全序拿锁：Payment → ArCreditMemo → 原 AR。VOID 不改原 AR 金额，仍要锁，避免与贷项 POST（CM→AR）交叉。
 
 ### 5.1 退款 POST
 
@@ -161,4 +161,5 @@ Customer Refund POSTED:
 - Liquibase：`ar_credit_memo_id`、约束、索引、`CR` 单号、purpose 注释
 - `schema_tables/FI/payments.sql`、`payment_lines.sql`
 - `FI_schema_design.md`、`财务/02.1-API端点与状态矩阵.md`
+- `journal_entries.source_doc_type` 注释补 `CUSTOMER_REFUND, CUSTOMER_REFUND_ALLOC`（对标供应商退款 changeset）
 - **不要**把 `clearing_date` / `allocation_status` 写进本期 changeset

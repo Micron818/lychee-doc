@@ -168,7 +168,8 @@ ALTER TABLE lychee_erp.customer_return_items
 | `warehouse_id` / `batch_no` | 从原领料行复制，应用层锁定 |
 | `unit_price` / `tax_*` | 交货行快照 |
 | `stock_type` | 默认 `UNRESTRICTED`，允许改 |
-| `transaction_*` / `base_*` | 双单位；库存 / 领料 `returned_quantity` 用基本单位；可退 vs 开票、回写交货已发用单据单位 |
+| `reason_code` | 自由文本 `varchar(50)`，V1 **不**挂 `option_values`（对标采购退货） |
+| `transaction_*` / `base_*` | 双单位；库存 / 领料 `returned_quantity` 用基本单位；可退 vs 开票、回写交货已发用单据单位。最后一笔退完该领料行时 `base` 取 `unreturnedBase` |
 
 跨单部分退由领料行 `returned_quantity` + 交货行 `returned_quantity` + 草稿加总控制。
 
@@ -184,13 +185,13 @@ ALTER TABLE lychee_erp.delivery_items
     ADD COLUMN returned_quantity numeric(18,6) NOT NULL DEFAULT 0;
 
 COMMENT ON COLUMN lychee_erp.delivery_items.returned_quantity
-    IS '已过账客户退货单据单位合计。可开票 = txn − invoiced − returned；可退还受领料未退量约束';
+    IS '已过账客户退货单据单位合计（审计）。可开票 = issued − invoiced；issued 已由 issueCallback 净减退货';
 ```
 
 - 仅 `POSTED` 客户退货累加；冲销退货单时减少
 - 草稿不写这两列
 - `invoiced_quantity` 含义不变（单据单位，含 AR 草稿占用）
-- 过账 / 冲销后退货后刷新该交货行与表头 `invoice_status`（总量 = `txn − returned`）
+- 过账 / 冲销后退货：`issueCallback` 改 `issued` 并刷新 `invoice_status`；`updateReturnedQuantity` 只写审计列。顺序不再影响状态
 
 不要在领料行再加 `customer_returned_quantity`。`SALES_DELIVERY` 与内部退料互斥，一列够用。
 
@@ -204,7 +205,8 @@ COMMENT ON COLUMN lychee_erp.delivery_items.returned_quantity
 收货冲销回取类型列表：**删除** `CUSTOMER_RETURN`（退货不再走收货单）。  
 冲销客户退货单：类型仍为 `CUSTOMER_RETURN`，进出方向对调。
 
-`source_doc_type` / `source_doc_id` 写 `CUSTOMER_RETURN` + 客户退货主档 id；`source_doc_item_id` 写明细 id。
+`source_doc_type` / `source_doc_id` 写 `CUSTOMER_RETURN` + 客户退货主档 id；`source_doc_item_id` 写明细 id。  
+`transaction_date`：过账用过账时刻，冲销用冲销时刻。冲销类型仍为 `CUSTOMER_RETURN`，进出对调。
 
 `DELIVERY` 枚举值本波仍不使用，不要用它写客户退货。
 
@@ -240,11 +242,67 @@ ADJUSTMENT, STOCK_TRANSFER, BACKFLUSH
 |----------|------|
 | `customer_returns` CRUD + 过账 | `lychee-erp-wm` |
 | `stock_issue_items.returned_quantity` | WM 过账回写（仅 SALES_DELIVERY） |
-| `delivery_items.returned_quantity` + 已发 / SO 已交 | 现有 / 扩展 `RemoteDeliveryService` |
+| `delivery_items.returned_quantity` + 已发 / SO 已交 | 扩展 `RemoteDeliveryService`（见 §6.1） |
 | COGS 冲回 | FI `RemoteCustomerReturnFinanceService` |
-| 未开票断言 | FI `RemoteCustomerReturnCreditMemoService`（V1；贷项见 [应收贷项](../应收贷项/README.md)） |
+| 未开票断言 | FI `RemoteCustomerReturnCreditMemoService`（V1；只看开票占用） |
+| 已过账退货查询 | WM `RemoteCustomerReturnService.existsPostedByDeliveryItemIds`（给贷项 VOID） |
 | 前端 | `lychee-frontend/src/pages/wm/customer-returns` |
 | 菜单 | `/wm/customer-returns`（建议代码 `WM12`，排序靠采购退货之后如 7030） |
+
+### 6.1 Remote 签名（本波必须落地，禁止 TODO）
+
+```java
+public interface RemoteCustomerReturnService {
+    /** POSTED 客户退货行挂在这些交货行上则为 true。REVERSED 不算。 */
+    boolean existsPostedByDeliveryItemIds(Collection<Long> deliveryItemIds);
+}
+
+public interface RemoteCustomerReturnCreditMemoService {
+    void assertReturnableAgainstInvoice(Long deliveryItemId, BigDecimal returnTxnQty);
+    void afterPosted(Long customerReturnId);    // V1 no-op
+    void afterReversed(Long customerReturnId);  // V1 no-op
+}
+
+public interface RemoteCustomerReturnFinanceService {
+    Long postCustomerReturn(RemoteCustomerReturnFinancePostRequest request);
+    void reverseCustomerReturn(Long journalEntryId, String reason);
+}
+
+public class RemoteCustomerReturnFinancePostRequest {
+    Long companyId;
+    Long customerReturnId;
+    String returnNo;
+    LocalDate returnDate;
+    Long currencyId;
+    BigDecimal exchangeRate;
+    List<Line> lines;
+
+    public static class Line {
+        Long sourceLineId;      // customer_return_items.id
+        Long materialId;
+        String description;
+        BigDecimal quantity;    // 基本单位
+        BigDecimal unitCost;    // 原领料流水冻结；禁止 FI 重查
+        BigDecimal cogsAmount;  // WM 算好（含最后一行剩余金额）；FI 原样入账
+    }
+}
+
+// RemoteDeliveryService 新增
+void updateReturnedQuantity(List<InvoiceQuantityCallbackDTO> requests); // 只写审计列，不刷新 invoice_status
+Optional<RemoteDeliveryItemQuantityDTO> findItemQuantity(Long deliveryItemId);
+
+public record RemoteDeliveryItemQuantityDTO(
+    Long deliveryItemId,
+    BigDecimal transactionQuantity,
+    BigDecimal issuedQuantity,
+    BigDecimal invoicedQuantity,
+    BigDecimal returnedQuantity
+) {}
+```
+
+`findItemQuantity` 返回 `Optional`，对标 `RemoteGoodsReceiptService.findItemQuantity`；FI 断言用 `orElseThrow`。`issuedQuantity` 必带，供 `returnTxnQty ≤ issued − invoiced`。
+
+贷项波可先把 `existsPostedByDeliveryItemIds` stub 为 `false`，但 **接口必须先有**；本波补真实查询。FI 不得依赖 WM 实体。
 
 ---
 
@@ -252,14 +310,15 @@ ADJUSTMENT, STOCK_TRANSFER, BACKFLUSH
 
 ```text
 1. 锁 customer_returns、原 stock_issue_items、关联 delivery_items
-2. CreditMemoService.assertReturnableAgainstInvoice（V1：未开票占用，按交货行共享池）
-3. 库存入库 + 写 stock_transactions（CUSTOMER_RETURN）；unit_cost = 原领料流水
-4. UPDATE stock_issue_items.returned_quantity
-5. UPDATE delivery_items.returned_quantity；刷新 invoice_status
-6. RemoteDeliveryService.issueCallback(−txn)（含 SO 负向状态）
-7. CreditMemoService.afterPosted（no-op；贷项在 FI 独立过账）
-8. postCustomerReturn 凭证（传入冻结 unit_cost + 清尾行金额）→ journal_entry_id
-9. approved_by / approved_at；status = POSTED
+2. WM 计算器重算 returnableTxn / unreturnedBase（含其他草稿）
+3. CreditMemoService.assertReturnableAgainstInvoice（只看 issued−invoiced）
+4. 库存入库 + 写 stock_transactions（CUSTOMER_RETURN，仅库存物料）；unit_cost = 原领料流水
+5. UPDATE stock_issue_items.returned_quantity
+6. RemoteDeliveryService.issueCallback(−txn)（减 issued / SO，并刷新 invoice_status）
+7. RemoteDeliveryService.updateReturnedQuantity(+txn)（只写审计列）
+8. CreditMemoService.afterPosted（no-op）
+9. postCustomerReturn（传入冻结 unitCost + cogsAmount，含清尾行）→ journal_entry_id
+10. approved_by / approved_at；status = POSTED
 ```
 
 并发：两张草稿同时过账同一领料行或同一交货行未开票池时，步骤 1–2 校验失败回滚。

@@ -16,3 +16,5 @@
 客户退货见 [../客户退货/README.md](../客户退货/README.md)。真实现金退款见 [客户退款-主流程V1](../客户退款-主流程V1/README.md)。
 
 本专题按 **应付贷项当前口径** 一次设计：贷项可超过未收剩余并拆 applied / refundable。不要先做「只能贷未收」再打补丁。
+
+跨专题归属：`refundable/page` **本波交付**。[客户退货](../客户退货/README.md) 实现 `existsPostedByDeliveryItemIds`（本波先 stub）。现金退款见 [客户退款-主流程V1](../客户退款-主流程V1/README.md)。

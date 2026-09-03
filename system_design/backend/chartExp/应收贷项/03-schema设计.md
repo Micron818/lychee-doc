@@ -119,7 +119,9 @@ COMMENT ON COLUMN lychee_erp.ar_invoices.remaining_amount
 remaining_amount = total − received − applied_credit ≥ 0
 ```
 
-现网无历史贷项，两列默认 0，不必回填。过账后校验 remaining 公式，有差异则中止，禁止 `max(0, ...)`。
+现网无历史贷项，两列默认 0，不必回填。过账 / 收款 / 撤核销后校验 remaining 公式，有差异则中止，禁止 `max(0, ...)`（含删掉现网 `restoreAr` 的 `.max(ZERO)`）。
+
+审批流复用 `FiDocumentStatus`（与 `ar_invoices` 相同）。**不加** `submitted_at` / `submitted_by`——现网 AR / 应付贷项都没有这两列。
 
 ---
 
@@ -129,7 +131,8 @@ remaining_amount = total − received − applied_credit ≥ 0
 |----------|------|
 | `ar_credit_memos` CRUD + 过账 | `lychee-erp-fi` |
 | 交货占用 | 现有 SD remote |
-| 已过账客户退货查询 | WM `RemoteCustomerReturnService` |
+| 已过账客户退货查询 | WM `RemoteCustomerReturnService`（本波先加接口 + stub；客户退货波补实现） |
+| 可退款列表 | 本波 `POST /fi/ar-credit-memos/refundable/page` |
 | 前端 | `pages/fi/ar-credit-memos` |
 | 菜单 | `/fi/ar-credit-memos`（建议 `FI3026`，803026，挂 `/fi/ar-ap`） |
 
@@ -139,9 +142,9 @@ remaining_amount = total − received − applied_credit ≥ 0
 
 ```text
 1. 锁贷项、原 AR、原 AR 行
-2. 重算 quantity 与 grossCreditAvailable
+2. 重算 quantity 与 grossCreditAvailable；最后一行数量贷完则金额取剩余
 3. 拆 applied / refundableGross
-4. 校验实收现金上限
+4. 校验 cashAvailable（cashReceived − cashReserved；仅 INVOICE 实收）
 5. 写交易币与重乘本位币快照
 6. 完整贷项凭证
 7. AR credited / appliedCredit / remaining / receipt_status

@@ -36,4 +36,4 @@ payment_purpose = CUSTOMER_REFUND
 | [03-schema设计.md](./03-schema设计.md) | V1 字段、约束、迁移 |
 | [04-实施清单.md](./04-实施清单.md) | **开发入口** |
 
-前置：[应收贷项](../应收贷项/README.md)（含待退款拆分）。库存仍以 [客户退货](../客户退货/README.md) 为准。
+前置：[应收贷项](../应收贷项/README.md)（含待退款拆分与 `refundable/page`）。库存仍以 [客户退货](../客户退货/README.md) 为准。本波不重做可退款查询、不改交货占用。
