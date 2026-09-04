@@ -268,7 +268,7 @@ cost_calculations ── cost_calculation_items
     *   `company_id`: 歸屬公司。
     *   `payment_no`: 收付款編號。
     *   `payment_type`: `RECEIPT` (收款), `DISBURSEMENT` (付款)。
-    *   `payment_purpose`: `STANDARD`（標準收付款）、`SUPPLIER_REFUND`（供應商退款，固定 `RECEIPT + SUPPLIER`）。
+    *   `payment_purpose`: `STANDARD`（標準收付款）、`SUPPLIER_REFUND`（供應商退款，固定 `RECEIPT + SUPPLIER`）、`CUSTOMER_REFUND`（客戶退款，固定 `DISBURSEMENT + CUSTOMER`）。
     *   `payment_date`: 收付日期。
     *   `partner_type` / `partner_id` / `partner_code` / `partner_name`: 往來對象。
     *   `partner_bank_account_id` + 銀行快照欄位 (`partner_bank_name`, `partner_account_no` 等): 對方帳戶，提交/過帳時寫入快照。
@@ -290,15 +290,16 @@ cost_calculations ── cost_calculation_items
     *   支援預收/預付抵扣 (`PREPAYMENT`)。
     *   支援直接記帳行 (`GL_ACCOUNT`)，如銀行手續費、匯兌損益。
 *   **關鍵欄位**:
-    *   `allocation_type`: `INVOICE` (核銷發票), `GL_ACCOUNT` (直接記帳), `PREPAYMENT` (核銷預付款), `AP_CREDIT_MEMO` (供應商退款核銷應付貸項)。
+    *   `allocation_type`: `INVOICE` (核銷發票), `GL_ACCOUNT` (直接記帳), `PREPAYMENT` (核銷預付款), `AP_CREDIT_MEMO` (供應商退款核銷應付貸項), `AR_CREDIT_MEMO` (客戶退款核銷應收貸項)。
     *   `ar_invoice_id` / `ap_invoice_id`: 被核銷的發票（二選一）。
     *   `ap_credit_memo_id`: 供應商退款核銷的應付貸項。
+    *   `ar_credit_memo_id`: 客戶退款核銷的應收貸項。
     *   `ap_invoice_schedule_id` / `ar_invoice_schedule_id`: 可空；若填則必須與同行發票同屬一張票。
     *   `applied_payment_id`: 被抵扣的歷史預付款單 ID。
     *   `allocated_amount`: 本次核銷金額。
     *   `discount_amount`: 現金折扣金額（如提前付款折扣）。
     *   `gl_account_id` / `department_id`: 對應應收/應付科目，或直接記帳的費用科目。
-    *   `journal_entry_id`: 折扣 / `GL_ACCOUNT` 核銷調整憑證，或供應商退款匯兌憑證（純 `INVOICE` 行為 NULL；銀行資金憑證在 `payments.journal_entry_id`）。
+    *   `journal_entry_id`: 折扣 / `GL_ACCOUNT` 核銷調整憑證，或退款匯兌憑證（純 `INVOICE` 行為 NULL；銀行資金憑證在 `payments.journal_entry_id`）。
     *   退款核銷匯兌快照：`source_exchange_rate` / `source_base_amount` / `settlement_base_amount` / `exchange_difference_amount`。
 *   **唯一约束**: `(tenant_id, payment_id, line_no)`。
 
@@ -481,11 +482,13 @@ FI 模組中下列欄位以 `varchar` 儲存，由應用層常數或 CHECK 約�
 *   `GL_ACCOUNT`: 直接記帳（手續費、匯兌損益等）。
 *   `PREPAYMENT`: 核銷預收/預付款。
 *   `AP_CREDIT_MEMO`: 供應商退款核銷應付貸項。
+*   `AR_CREDIT_MEMO`: 客戶退款核銷應收貸項。
 
 ### 4.15b 收付款用途 (payments.payment_purpose)
 
 *   `STANDARD`: 標準收款/付款。
 *   `SUPPLIER_REFUND`: 供應商退款。
+*   `CUSTOMER_REFUND`: 客戶退款。
 
 ### 4.16 收付款狀態 (payments.status)
 

@@ -10,7 +10,7 @@ CREATE TABLE lychee_erp.payments
 	company_id bigint NOT NULL,
 	payment_no varchar(50) NOT NULL,
 	payment_type varchar(20) NOT NULL,      -- RECEIPT (收款), DISBURSEMENT (付款)
-	payment_purpose varchar(30) NOT NULL DEFAULT 'STANDARD', -- STANDARD, SUPPLIER_REFUND
+	payment_purpose varchar(30) NOT NULL DEFAULT 'STANDARD', -- STANDARD, SUPPLIER_REFUND, CUSTOMER_REFUND
 	payment_date date NOT NULL,
 
 	-- 往来单位 (与 ap_invoices / ar_invoices 一致，指向 FI.business_partners)
@@ -115,7 +115,7 @@ COMMENT ON COLUMN lychee_erp.payments.payment_type
 	IS 'RECEIPT (收款), DISBURSEMENT (付款)';
 
 COMMENT ON COLUMN lychee_erp.payments.payment_purpose
-	IS 'STANDARD, SUPPLIER_REFUND';
+	IS 'STANDARD, SUPPLIER_REFUND, CUSTOMER_REFUND';
 
 COMMENT ON COLUMN lychee_erp.payments.unallocated_amount
 	IS '未核销金额 (用于处理预收款/预付款)';

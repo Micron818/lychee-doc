@@ -25,7 +25,7 @@ CREATE TABLE lychee_erp.journal_entries
 	
 	-- 来源单据追溯 (主表级别)
 	source_module varchar(20) NOT NULL,    -- GL, AR, AP, FA, IN, CASH, COSTING
-	source_doc_type varchar(50) NULL,      -- AR_INVOICE, AP_INVOICE, AP_CREDIT_MEMO, AR_CREDIT_MEMO, PAYMENT, PAYMENT_ALLOC, SUPPLIER_REFUND, SUPPLIER_REFUND_ALLOC
+	source_doc_type varchar(50) NULL,      -- AR_INVOICE, AP_INVOICE, AP_CREDIT_MEMO, AR_CREDIT_MEMO, PAYMENT, PAYMENT_ALLOC, SUPPLIER_REFUND, SUPPLIER_REFUND_ALLOC, CUSTOMER_REFUND, CUSTOMER_REFUND_ALLOC
 	source_doc_id bigint NULL,             -- 关联来源单据的主键ID
 	reference_no varchar(100) NULL,        -- 来源单据号 (如发票号，方便财务人员直观查看)
 	
