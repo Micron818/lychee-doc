@@ -31,6 +31,7 @@ ORDER BY menus.sort_order::varchar ;
 |3100|MM10|Material Factories|menu.mm.materialFactories|
 |40|SD|Sales and distribution|menu.sd|
 |4010|SD01|Customer management|menu.sd.customers|
+|4015|SD04|Sales forecasts(SFO)|menu.sd.salesForecasts|
 |4020|SD02|Sales orders(SO)|menu.sd.salesOrders|
 |4030|SD03|Delivery Notes(DN)|menu.sd.deliveries|
 |50|PP|Production planning|menu.pp|

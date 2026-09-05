@@ -36,6 +36,17 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
     *   `shipping_address`: 獨立儲存送貨地址 (Snapshot)，不隨客戶主檔變動而改變歷史訂單。
     *   `expected_delivery_date`: 明細層級的預計交貨日，支援分批交貨。
 
+### 3.1.2 預告訂單 (sales_forecasts / items)
+*   **用途**: 客戶可滾動的計劃需求（預告訂單 / `SALES_FORECAST`）。確認後可匯入 FO；正式 SO 確認時按公司+客戶+物料+桶消耗，並接管已轉 FO 量。**不進 MRP 種子，不能交貨/開票**。
+*   **關鍵欄位**:
+    *   頭：`company_id`、`customer_id`、`version`、`bucket_type`（DAY/WEEK/MONTH）、`forecast_status`（DRAFT/ACTIVE/CLOSED/CANCELLED）、`supersedes_id`。
+    *   行：`required_date`、服務端歸一化 `bucket_date`、`forecast_quantity`、`allocated_quantity`（仍掛在預告上的 FO）、`consumed_quantity`（已被 SO 吃掉）。
+    *   開量：`open_to_allocate = forecast − allocated − consumed`；`CHECK allocated + consumed <= forecast`。
+*   **設計決策**:
+    *   同一 `(tenant, company, customer)` 最多一張 ACTIVE；確認新版本同事務關舊單並寫 `supersedes_id`。關單不要求開量歸零，未轉開量作廢，`allocated` 保留供換版接管。
+    *   Pegging：`SALES_FORECAST → FACTORY_ORDER` / `SALES_FORECAST → SALES_ORDER`；接管後 FO 上游改為 `SALES_ORDER`，FO `source_type` 仍為誕生時的 `FORECAST`。
+    *   單號 `SFO`；菜單 `/sd/sales-forecasts`，`SD04`，排序 4015。
+
 ### 3.2 交貨單 (deliveries / items)
 *   **用途**: 物流單位執行的出庫指令。銷售出庫過帳回寫 `issued_quantity`；客戶退貨過帳以 `issueCallback(−txn)` 回減已發，並回減 SO `delivered_quantity`。
 *   **關鍵欄位**:
@@ -65,5 +76,7 @@ SD 模組負責管理企業的銷售流程，從報價、訂單接收、出貨�
 | **customers** | `docs/database/sql/schema_tables/SD/customers.sql` | 客戶主檔 |
 | **sales_orders** | `docs/database/sql/schema_tables/SD/sales_orders.sql` | 訂單表頭 |
 | **sales_order_items** | `docs/database/sql/schema_tables/SD/sales_order_items.sql` | 訂單明細 |
+| **sales_forecasts** | `docs/database/sql/schema_tables/SD/sales_forecasts.sql` | 預告訂單表頭 |
+| **sales_forecast_items** | `docs/database/sql/schema_tables/SD/sales_forecast_items.sql` | 預告訂單明細 |
 | **deliveries** | `docs/database/sql/schema_tables/SD/deliveries.sql` | 交貨單表頭 |
 | **delivery_items** | `docs/database/sql/schema_tables/SD/delivery_items.sql` | 交貨單明細 |

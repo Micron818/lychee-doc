@@ -24,6 +24,7 @@ INSERT INTO menus (id,tenant_id,"name",parent_id,"path",icon,sort_order,is_visib
 	 (51,1,'Material Factories',24,'/mm/material-factories',NULL,3100,true,1,'2026-04-27 19:44:14.986895','2026-09-01 10:03:12.648817',1,1,'menu.mm.materialFactories','MM10'),
 	 (35,1,'Sales and distribution',NULL,'/sd','ShopOutlined',40,true,1,'2026-01-01 23:00:21.814','2026-01-01 23:00:21.814',1,1,'menu.sd','SD'),
 	 (34,1,'Customer management',35,'/sd/customers',NULL,4010,true,1,'2025-12-31 07:51:00.177','2025-12-31 08:18:50.934',1,1,'menu.sd.customers','SD01'),
+	 (112,1,'Sales forecasts(SFO)',35,'/sd/sales-forecasts',NULL,4015,true,1,'2026-09-04 00:00:00.000000','2026-09-04 00:00:00.000000',1,1,'menu.sd.salesForecasts','SD04'),
 	 (36,1,'Sales orders(SO)',35,'/sd/sales-orders',NULL,4020,true,1,'2026-01-01 23:02:57.944','2026-03-14 08:16:04.153648',1,1,'menu.sd.salesOrders','SD02'),
 	 (37,1,'Delivery Notes(DN)',35,'/sd/deliveries',NULL,4030,true,1,'2026-01-03 23:37:26.585','2026-01-03 23:37:26.585',1,1,'menu.sd.deliveries','SD03'),
 	 (38,1,'Production planning',NULL,'/pp','BuildOutlined',50,true,1,'2026-01-13 15:52:39.33868','2026-01-13 15:52:39.33871',1,1,'menu.pp','PP'),
