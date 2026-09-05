@@ -31,9 +31,9 @@ ORDER BY menus.sort_order::varchar ;
 |3100|MM10|Material Factories|menu.mm.materialFactories|
 |40|SD|Sales and distribution|menu.sd|
 |4010|SD01|Customer management|menu.sd.customers|
-|4015|SD04|Sales forecasts(SFO)|menu.sd.salesForecasts|
-|4020|SD02|Sales orders(SO)|menu.sd.salesOrders|
-|4030|SD03|Delivery Notes(DN)|menu.sd.deliveries|
+|4020|SD02|Sales forecasts(SFO)|menu.sd.salesForecasts|
+|4030|SD03|Sales orders(SO)|menu.sd.salesOrders|
+|4040|SD04|Delivery Notes(DN)|menu.sd.deliveries|
 |50|PP|Production planning|menu.pp|
 |5010|PP01|Bill of materials(BOM)|menu.pp.billOfMaterials|
 |5020|PP02|Factory orders(FO)|menu.pp.factoryOrders|
@@ -54,15 +54,15 @@ ORDER BY menus.sort_order::varchar ;
 |7010|WM01|Warehouse|menu.wm.warehouses|
 |7020|WM02|Goods receipts(GR)|menu.wm.goodsReceipts|
 |7030|WM03|Purchase returns(PRT)|menu.wm.purchaseReturns|
-|7035|WM12|Customer returns(CRT)|menu.wm.customerReturns|
-|7040|WM04|Stock transfer(ST)|menu.wm.stockTransfers|
-|7050|WM05|Stock issues(SI)|menu.wm.stockIssues|
-|7060|WM06|Stock issue returns(SIR)|menu.wm.stockIssueReturns|
-|7070|WM07|Stock onhand|menu.wm.stockOnHand|
-|7080|WM08|Stock transaction|menu.wm.stockTransactions|
-|7090|WM09|Physical inventories|menu.wm.physicalInventories|
-|7100|WM10|Inventory Balance|menu.wm.inventoryBalances|
-|7110|WM11|Inventory Period|menu.wm.inventoryPeriods|
+|7040|WM04|Customer returns(CRT)|menu.wm.customerReturns|
+|7050|WM05|Stock transfer(ST)|menu.wm.stockTransfers|
+|7060|WM06|Stock issues(SI)|menu.wm.stockIssues|
+|7070|WM07|Stock issue returns(SIR)|menu.wm.stockIssueReturns|
+|7080|WM08|Stock onhand|menu.wm.stockOnHand|
+|7090|WM09|Stock transaction|menu.wm.stockTransactions|
+|7100|WM10|Physical inventories|menu.wm.physicalInventories|
+|7110|WM11|Inventory Balance|menu.wm.inventoryBalances|
+|7120|WM12|Inventory Period|menu.wm.inventoryPeriods|
 |80|FI|Financial Accounting|menu.fi|
 |8010|FI.MD|Master Data|menu.fi.masterData|
 |801010|FI1010|General Ledger Accounts|menu.fi.glAccounts|
@@ -79,10 +79,10 @@ ORDER BY menus.sort_order::varchar ;
 |8030|FI.ARAP|AR & AP|menu.fi.arAp|
 |803010|FI3010|AR Invoices|menu.fi.arInvoices|
 |803020|FI3020|AP Invoices|menu.fi.apInvoices|
-|803025|FI3025|AP Credit Memos|menu.fi.apCreditMemos|
-|803026|FI3026|AR Credit Memos|menu.fi.arCreditMemos|
-|803030|FI3030|Payments|menu.fi.payments|
-|803040|FI3040|GR/IR Balance Analysis|menu.fi.grIrBalance|
+|803030|FI3030|AP Credit Memos(CM)|menu.fi.apCreditMemos|
+|803040|FI3040|AR Credit Memos(RM)|menu.fi.arCreditMemos|
+|803050|FI3050|Payments|menu.fi.payments|
+|803060|FI3060|GR/IR Balance Analysis|menu.fi.grIrBalance|
 |8040|FI.FA|Fixed Assets Management|menu.fi.fixedAssetMgmt|
 |804010|FI4010|Asset Categories|menu.fi.assetCategories|
 |804020|FI4020|Fixed Assets|menu.fi.fixedAssets|
