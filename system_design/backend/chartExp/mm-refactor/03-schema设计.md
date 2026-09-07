@@ -102,7 +102,6 @@ CREATE TABLE lychee_erp.product_size_group_items
     updated_by      bigint    NULL,
     CONSTRAINT pk_product_size_group_items PRIMARY KEY (id),
     CONSTRAINT uk_size_group_items_group_size UNIQUE (tenant_id, size_group_id, product_size_id),
-    CONSTRAINT uk_size_group_items_group_seq UNIQUE (tenant_id, size_group_id, sequence),
     CONSTRAINT fk_size_group_items_group FOREIGN KEY (size_group_id)
         REFERENCES lychee_erp.product_size_groups (id),
     CONSTRAINT fk_size_group_items_size FOREIGN KEY (product_size_id)
@@ -110,7 +109,7 @@ CREATE TABLE lychee_erp.product_size_group_items
 );
 ```
 
-`sequence` 组内唯一，决定「谁更小」（生成 01 的依据）。建议 10,20,30。组被款号引用则不可删。组内尺码若已被绑该组的款号物料占用，不可删该行。
+`sequence` **不**建库唯一（拖拽换位 / `saveAll` 会瞬间撞号）。排序一律 `ORDER BY sequence ASC, product_size_id ASC`。建议 10,20,30，允许暂重，同分用 `product_size_id` 打破平局。组被款号引用则不可删。组内尺码若已被绑该组的款号物料占用，不可删该行。
 
 ### 3.4 款号绑组
 
@@ -123,7 +122,9 @@ ALTER TABLE lychee_erp.product_models
         FOREIGN KEY (size_group_id) REFERENCES lychee_erp.product_size_groups (id);
 ```
 
-生成器要求非空。该款已有完整变体（`product_model_id` + `product_size_id` 均非空）后禁止换组。
+生成器要求非空。
+
+保存 `size_group_id`（含首次绑定）：该款已有 `product_size_id IS NOT NULL` 的物料，其尺码必须 ⊆ 目标组；否则拒绝，`validation.productModel.sizeGroup.incompatibleSizes`。该款已有完整变体后禁止换组（`null → 组` 算绑定，须过兼容校验；`组 A → 组 B` 禁止）。
 
 ### 3.5 本款颜色
 
@@ -206,7 +207,9 @@ CREATE UNIQUE INDEX uk_pmsc_model_nocolor_sku
 
 生成 / 单笔保存写入。行一旦写入：**不改号、不删行**（物料删除也不级联）。再为同一款+色+码建 SKU 时复用该 `sku_code`。
 
-存量物料**不重编码**。该作用域首次分配时，已有同款同色（或不分色同款）同尺码、但尚无流水行的物料，按组 `sequence` 先占号写入本表，再给新尺码 `max+1`。不解析旧 `materials.code`。
+存量物料**不重编码**。该作用域首次分配时，已有同款同色（或不分色同款）同尺码、但尚无流水行的物料，按组 `sequence, product_size_id` 先占号写入本表，再给新尺码 `max+1`。不解析旧 `materials.code`。存量尺码必须 ∈ 该款尺码组（绑组时已校验）。
+
+若存量 `materials.code` 已长得像新公式（如 `12345-02`）且与拟分配号撞车 → `CODE_CONFLICT`，不自动改号。上线前核对该款是否已有 `-01`～`-99` 形态但尺码顺序与组序不符的编码。
 
 ---
 
