@@ -30,8 +30,8 @@ product_models 1───* product_model_colors *───1 colors   // 0 行=SK
          └──* product_model_size_codes
                 (model, color_id NULLABLE, size) → sku_code 01–99
 
-区分色： code = model.code || '-' || letter || sizeSku     12345-A01
-不分色： code = model.code || '-' || sizeSku               12345-01
+区分色： code = model.code || '-' || letter || sizeSku     A12345-A01
+不分色： code = model.code || '-' || sizeSku               A12345-01
 ```
 
 ---
@@ -209,7 +209,7 @@ CREATE UNIQUE INDEX uk_pmsc_model_nocolor_sku
 
 存量物料**不重编码**。该作用域首次分配时，已有同款同色（或不分色同款）同尺码、但尚无流水行的物料，按组 `sequence, product_size_id` 先占号写入本表，再给新尺码 `max+1`。不解析旧 `materials.code`。存量尺码必须 ∈ 该款尺码组（绑组时已校验）。
 
-若存量 `materials.code` 已长得像新公式（如 `12345-02`）且与拟分配号撞车 → `CODE_CONFLICT`，不自动改号。上线前核对该款是否已有 `-01`～`-99` 形态但尺码顺序与组序不符的编码。
+若存量 `materials.code` 已长得像新公式（如 `A12345-02`）且与拟分配号撞车 → `CODE_CONFLICT`，不自动改号。上线前核对该款是否已有 `-01`～`-99` 形态但尺码顺序与组序不符的编码。
 
 ---
 

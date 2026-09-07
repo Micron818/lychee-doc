@@ -2025,6 +2025,354 @@
                     }
                 }
             }
+        },
+        "/api/v1/mm/materials/variant-preview": {
+            "post": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "previewVariants",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialVariantPreviewRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialVariantPreviewResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/materials/variant-generate": {
+            "post": {
+                "tags": [
+                    "material-controller"
+                ],
+                "operationId": "generateVariants",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaterialVariantGenerateRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMaterialVariantGenerateResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/{id}/colors": {
+            "get": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "getProductModelColors",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductModelColorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "replaceProductModelColors",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProductModelColorRequest"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductModelColorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-models/{id}/variant-setup": {
+            "get": {
+                "tags": [
+                    "product-model-controller"
+                ],
+                "operationId": "getVariantSetup",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductModelVariantSetupResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-size-groups": {
+            "post": {
+                "tags": [
+                    "product-size-group-controller"
+                ],
+                "operationId": "createProductSizeGroup",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductSizeGroupRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductSizeGroupResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-size-groups/page": {
+            "post": {
+                "tags": [
+                    "product-size-group-controller"
+                ],
+                "operationId": "getProductSizeGroupPage",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProPageRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListProductSizeGroupResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-size-groups/list": {
+            "get": {
+                "tags": [
+                    "product-size-group-controller"
+                ],
+                "operationId": "getProductSizeGroupList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListOptionValueDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-size-groups/{id}": {
+            "get": {
+                "tags": [
+                    "product-size-group-controller"
+                ],
+                "operationId": "getProductSizeGroup",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductSizeGroupResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "product-size-group-controller"
+                ],
+                "operationId": "updateProductSizeGroup",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductSizeGroupRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseProductSizeGroupResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mm/product-size-groups/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "product-size-group-controller"
+                ],
+                "operationId": "deleteProductSizeGroupBulk",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -2042,7 +2390,7 @@
                     },
                     "conversionRate": {
                         "type": "number",
-                        "minimum": 0.000001
+                        "minimum": 1e-06
                     },
                     "remarks": {
                         "type": "string"
@@ -2419,7 +2767,7 @@
                     },
                     "conversionRate": {
                         "type": "number",
-                        "minimum": 0.000001
+                        "minimum": 1e-06
                     },
                     "remarks": {
                         "type": "string"
@@ -3167,6 +3515,16 @@
                     },
                     "updatedByName": {
                         "type": "string"
+                    },
+                    "sizeGroupId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sizeGroupCode": {
+                        "type": "string"
+                    },
+                    "sizeGroupName": {
+                        "type": "string"
                     }
                 }
             },
@@ -3203,6 +3561,10 @@
                         "type": "string"
                     },
                     "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sizeGroupId": {
                         "type": "integer",
                         "format": "int64"
                     }
@@ -4037,6 +4399,668 @@
                     "total": {
                         "type": "integer",
                         "format": "int64"
+                    }
+                }
+            },
+            "ProductSizeGroupItemRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productSizeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "required": [
+                    "productSizeId",
+                    "sequence"
+                ]
+            },
+            "ProductSizeGroupRequest": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductSizeGroupItemRequest"
+                        }
+                    }
+                },
+                "required": [
+                    "code"
+                ]
+            },
+            "ProductSizeGroupItemResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sizeGroupId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productSizeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productSizeCode": {
+                        "type": "string"
+                    },
+                    "productSizeName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProductSizeGroupResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionName": {
+                        "type": "string"
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductSizeGroupItemResponse"
+                        }
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdByName": {
+                        "type": "string"
+                    },
+                    "updatedByName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProductModelColorRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "colorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "skuCode": {
+                        "type": "string",
+                        "maxLength": 1
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "required": [
+                    "colorId"
+                ]
+            },
+            "ProductModelColorResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productModelId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "colorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "skuCode": {
+                        "type": "string"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "colorCode": {
+                        "type": "string"
+                    },
+                    "colorName": {
+                        "type": "string"
+                    },
+                    "hexCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProductModelVariantSetupResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "sizeGroupId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sizeGroupCode": {
+                        "type": "string"
+                    },
+                    "sizeGroupName": {
+                        "type": "string"
+                    },
+                    "sizes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductSizeGroupItemResponse"
+                        }
+                    },
+                    "colors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductModelColorResponse"
+                        }
+                    }
+                }
+            },
+            "MaterialVariantPreviewRequest": {
+                "type": "object",
+                "properties": {
+                    "productModelId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "colorIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    "productSizeIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                },
+                "required": [
+                    "productModelId",
+                    "productSizeIds"
+                ]
+            },
+            "MaterialVariantPreviewSizeColumn": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "MaterialVariantPreviewColorRow": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "skuCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "MaterialVariantPreviewCell": {
+                "type": "object",
+                "properties": {
+                    "colorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productSizeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sizeSkuCode": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "NEW",
+                            "EXISTS",
+                            "CODE_CONFLICT",
+                            "OVERFLOW",
+                            "MISSING_TOKEN"
+                        ]
+                    },
+                    "proposedCode": {
+                        "type": "string"
+                    },
+                    "proposedName": {
+                        "type": "string"
+                    },
+                    "existingMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "existingCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "MaterialVariantPreviewResponse": {
+                "type": "object",
+                "properties": {
+                    "distinguishColor": {
+                        "type": "boolean"
+                    },
+                    "sizeColumns": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialVariantPreviewSizeColumn"
+                        }
+                    },
+                    "colorRows": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialVariantPreviewColorRow"
+                        }
+                    },
+                    "cells": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialVariantPreviewCell"
+                        }
+                    }
+                }
+            },
+            "MaterialVariantGenerateCellRequest": {
+                "type": "object",
+                "properties": {
+                    "colorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productSizeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "productSizeId"
+                ]
+            },
+            "MaterialVariantCommonRequest": {
+                "type": "object",
+                "properties": {
+                    "materialCategoryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materialTypeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "valuationClassId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "taxClassId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "specification": {
+                        "type": "string"
+                    },
+                    "baseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "purchaseUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "salesUnitId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "statusOptionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "unlimitedOverReceipt": {
+                        "type": "boolean"
+                    },
+                    "overReceiptTolerance": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "materialCategoryId",
+                    "taxClassId",
+                    "baseUnitId"
+                ]
+            },
+            "MaterialVariantGenerateRequest": {
+                "type": "object",
+                "properties": {
+                    "productModelId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "cells": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialVariantGenerateCellRequest"
+                        }
+                    },
+                    "common": {
+                        "$ref": "#/components/schemas/MaterialVariantCommonRequest"
+                    },
+                    "copyFactoryAssignments": {
+                        "type": "boolean"
+                    },
+                    "copyImages": {
+                        "type": "boolean"
+                    },
+                    "copyBom": {
+                        "type": "boolean"
+                    },
+                    "templateMaterialId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "productModelId",
+                    "cells",
+                    "common"
+                ]
+            },
+            "MaterialVariantGenerateResponse": {
+                "type": "object",
+                "properties": {
+                    "created": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MaterialResponse"
+                        }
+                    },
+                    "skippedExisting": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "ApiResponseProductSizeGroupResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductSizeGroupResponse"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListProductSizeGroupResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductSizeGroupResponse"
+                        }
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListProductModelColorResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductModelColorResponse"
+                        }
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseProductModelVariantSetupResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ProductModelVariantSetupResponse"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseMaterialVariantPreviewResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MaterialVariantPreviewResponse"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OptionValueDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "activeStatus": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListOptionValueDTO": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OptionValueDTO"
+                        }
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "traceId": {
+                        "type": "string"
                     }
                 }
             }

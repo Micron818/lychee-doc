@@ -10,6 +10,7 @@ CREATE TABLE lychee_erp.product_models
 	code varchar(50) NOT NULL,
 	name varchar(100) NULL,
 	description text NULL,
+	size_group_id bigint NULL,
 	status_option_id bigint NULL,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
@@ -34,6 +35,13 @@ ALTER TABLE lychee_erp.product_models ADD CONSTRAINT fk_product_models_tenant
 
 ALTER TABLE lychee_erp.product_models ADD CONSTRAINT fk_product_models_status_option
 	FOREIGN KEY (status_option_id) REFERENCES lychee_erp.option_values (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE lychee_erp.product_models ADD CONSTRAINT fk_product_models_size_group
+	FOREIGN KEY (size_group_id) REFERENCES lychee_erp.product_size_groups (id) ON DELETE No Action ON UPDATE No Action
+;
+
+CREATE INDEX idx_product_models_size_group ON lychee_erp.product_models (size_group_id ASC)
 ;
 
 ALTER TABLE lychee_erp.product_models ADD CONSTRAINT fk_product_models_created_by

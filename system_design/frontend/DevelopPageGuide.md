@@ -114,13 +114,21 @@ Page 層是使用者操作的介面。
 -   定義各數據字段的展示方式。
 -   定義操作列，包含編輯和刪除按鈕，並綁定相應事件。
 
-#### c. 編輯/新增表單 (`components/CreateForm.tsx`)
+#### c. 編輯/新增表單 (`components/<Entity>Form.tsx`)
 
-創建 `src/pages/system/menu/components/CreateForm.tsx` 組件，用於新增和編輯菜單。
+創建 `src/pages/system/menu/components/MenuForm.tsx` 組件，用於新增和編輯菜單。
 
--   使用 `ProForm` 相關組件構建表單。
--   接收 `onCancel` 和 `onSubmit` 回調函數來處理表單的關閉和提交。
--   在編輯模式下，使用 `initialValues` 屬性回填表單數據。
+-   封裝為獨立的抽屜（`DrawerForm`）或彈窗（`ModalForm`）組件。
+-   使用 `@/utils` 的 `useFormOpenChangeHandler` 攔截表單關閉事件，防止未保存數據意外丟失。
+-   **動態基線同步**：
+    -   若表單需異步二次加載數據（如 `getDetail` 或子表接口），**嚴禁**將 `initialValues` 固定寫死為靜態空值；
+    -   必須在異步加載成功後同步更新組件內的初始狀態，並傳遞給 `useFormOpenChangeHandler` 的 `initialValues`，避免未修改資料關閉時誤觸髒檢查提示。
+-   **內嵌明細自定義髒檢查 (`customHasChanges`)**：
+    -   若表單包含 `EditableProTable` 或嵌套行項，建議通過 `customHasChanges` 配合 `normalize` 業務字段與 `lodash.isEqual` 進行精準比對。
+-   **提交成功標記**：
+    -   在保存成功的 `onSuccess` 回調中，調用 `setFormOpen(false)` 前必須先調用 `formRef.current?.setFieldsValue({ submitted: true })`，通知攔截器已正常提交。
+-   **防誤觸關閉**：
+    -   必須將 `drawerProps` 綁定保存加載狀態：`maskClosable: !saveLoading, closable: !saveLoading, keyboard: !saveLoading`。
 
 ### 3. 路由和菜單配置
 

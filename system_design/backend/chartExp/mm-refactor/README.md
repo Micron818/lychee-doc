@@ -7,7 +7,7 @@
 尺码排序 Phase 1（`PrefixedCode`）只服务色卡/尺码主数据列表序，**不**拼进物料号。存量 SKU **不重编码**；该款+色首次分配时按已有变体占用流水。
 
 ```text
-款号 ProductModel.code                    例 12345
+款号 ProductModel.code                    例 A12345
   ├─ 可选：本款颜色 sku_code（1 位 A–Z）     黑→A  白→B     ≠ colors.code
   │     不区分颜色 → 无此字母
   ├─ 尺码流水（2 位 01–99）
@@ -15,8 +15,8 @@
   │     ≠ product_sizes.code，≠ 尺码组档位号
   └─ 变体矩阵（可剔除格子）
         ▼
-     区分颜色：12345-A01
-     不分颜色：12345-01
+     区分颜色：A12345-A01
+     不分颜色：A12345-01
      materials.code varchar(50) 不扩
 ```
 

@@ -38,6 +38,20 @@ ALTER TABLE lychee_erp.materials ADD CONSTRAINT materials_pkey
 ALTER TABLE lychee_erp.materials ADD CONSTRAINT uk_materials_tenant_code UNIQUE (tenant_id,code)
 ;
 
+CREATE UNIQUE INDEX uk_materials_tenant_variant_color
+    ON lychee_erp.materials (tenant_id, product_model_id, color_id, product_size_id)
+    WHERE product_model_id IS NOT NULL
+      AND color_id IS NOT NULL
+      AND product_size_id IS NOT NULL
+;
+
+CREATE UNIQUE INDEX uk_materials_tenant_variant_nocolor
+    ON lychee_erp.materials (tenant_id, product_model_id, product_size_id)
+    WHERE product_model_id IS NOT NULL
+      AND color_id IS NULL
+      AND product_size_id IS NOT NULL
+;
+
 CREATE INDEX idx_materials_color ON lychee_erp.materials (color_id ASC)
 ;
 
