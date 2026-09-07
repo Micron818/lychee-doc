@@ -4,7 +4,7 @@
 
 `materials` 仍是库存与单据唯一引用的 SKU。`product_models` / `colors` / `product_sizes` 仍是变体维度，不并进物料表。
 
-尺码排序 Phase 1（`PrefixedCode`）只服务色卡/尺码主数据列表序，**不**拼进物料号。
+尺码排序 Phase 1（`PrefixedCode`）只服务色卡/尺码主数据列表序，**不**拼进物料号。存量 SKU **不重编码**；该款+色首次分配时按已有变体占用流水。
 
 ```text
 款号 ProductModel.code                    例 12345
