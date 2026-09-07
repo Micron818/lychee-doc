@@ -21,6 +21,8 @@ CREATE TABLE lychee_erp.companies
 	local_currency_id bigint NOT NULL,
 	default_payment_term_id bigint NULL,
 	country_code varchar(2) NOT NULL DEFAULT 'VN',
+	logo_file_path varchar(500) NULL,
+	logo_file_name varchar(255) NULL,
 	created_at timestamp without time zone NULL   DEFAULT CURRENT_TIMESTAMP,
 	updated_at timestamp without time zone NULL   DEFAULT CURRENT_TIMESTAMP,
 	created_by bigint NULL,
@@ -74,6 +76,14 @@ ALTER TABLE lychee_erp.companies ADD CONSTRAINT fk_companies_updated_by
 
 COMMENT ON COLUMN lychee_erp.companies.country_code
 	IS 'ISO 3166-1 alpha-2; tax code catalog filter'
+;
+
+COMMENT ON COLUMN lychee_erp.companies.logo_file_path
+	IS 'OSS object path of the company letterhead logo'
+;
+
+COMMENT ON COLUMN lychee_erp.companies.logo_file_name
+	IS 'Original file name of the company letterhead logo'
 ;
 
  

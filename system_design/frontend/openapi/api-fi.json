@@ -7386,8 +7386,6 @@
           }
         },
         "required": [
-          "partnerCode",
-          "partnerName",
           "partnerType",
           "sourceId",
           "status"
