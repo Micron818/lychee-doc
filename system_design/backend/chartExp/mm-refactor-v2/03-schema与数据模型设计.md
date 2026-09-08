@@ -11,8 +11,8 @@
 │ 表名                         │ 动作                                    │
 ├──────────────────────────────┼─────────────────────────────────────────┤
 │ lychee_erp.material_categories│ ALTER: 扩展编码策略与轻量序列字段 (ADD) │
-│ lychee_erp.materials         │ DROP INDEX: 移除 V1 硬性物理部分唯一索引│
-│                              │ 解耦至策略服务与流水表排他 (保持code v50)│
+│ lychee_erp.materials         │ ALTER: 增加物化策略标记列 is_fashion_variant (ADD) │
+│                              │ REFACTOR INDEX: 将 V1 硬性无条件索引重构为精细条件部分唯一索引 (保持code v50)│
 │ lychee_erp.sys_doc_sequence  │ 100% 复用现有高并发原子序列表 (零改动)  │
 │ lychee_erp.sys_doc_rule      │ 彻底解耦，不依赖也不侵入该表            │
 │ V1 变体生成相关表            │ 不改动 (完整保留款号、尺码组等)          │
@@ -21,7 +21,7 @@
 
 1. **零破坏性（Zero Breaking Change）**：
    - 现有的 `materials` 核心字段完全不作修改（保持 `code varchar(50)`）；
-   - 移除 V1 在 `materials` 物理表上过度绑定的两条部分唯一索引，解除对 OEM 客供料号及非变体成品的硬性误伤；
+   - 将 V1 在 `materials` 物理表上过度绑定的两条硬性部分唯一索引重构为精准条件索引，解除对 OEM 客供料号及非变体成品的误伤，同时不牺牲变体排他底线；
 2. **渐进式生效（Progressive Enhancement）**：
    - `material_categories.code_strategy` 允许为 `NULL`，为 `NULL` 时按层级向上继承；
    - 未配置任何策略的历史存量顶级分类，系统算法安全回退为 MANUAL（开放手工录入，不强制按变体或流水公式发号）；
@@ -56,6 +56,18 @@ ALTER TABLE lychee_erp.material_categories
     ADD CONSTRAINT ck_material_categories_shared 
     CHECK (NOT (parent_id IS NULL AND is_seq_shared = true));
 
+ALTER TABLE lychee_erp.material_categories
+    DROP CONSTRAINT IF EXISTS ck_material_categories_seq_length;
+ALTER TABLE lychee_erp.material_categories
+    ADD CONSTRAINT ck_material_categories_seq_length
+    CHECK (seq_length IS NULL OR (seq_length >= 2 AND seq_length <= 10));
+
+ALTER TABLE lychee_erp.material_categories
+    DROP CONSTRAINT IF EXISTS ck_material_categories_prefix;
+ALTER TABLE lychee_erp.material_categories
+    ADD CONSTRAINT ck_material_categories_prefix
+    CHECK (code_prefix IS NULL OR code_prefix ~ '^[A-Z0-9_-]{1,20}$');
+
 COMMENT ON COLUMN lychee_erp.material_categories.code_strategy IS 
     '编码策略: FASHION_VARIANT(款色码变体), SEQUENTIAL(序列流水号), MANUAL(手工输入). 为空则继承父分类';
 
@@ -63,10 +75,10 @@ COMMENT ON COLUMN lychee_erp.material_categories.code_prefix IS
     '自定义编码前缀 (仅限大写英文字母、数字及连字符，如 FAB, MAT-01). 若为空则默认使用分类自身 code 作为流水号前缀';
 
 COMMENT ON COLUMN lychee_erp.material_categories.seq_length IS 
-    '流水号长度 (补零位宽). 数据库允许为空以支持向上继承，全链为空时由系统服务默认 5 位';
+    '流水号长度 (补零位宽 2~10 位). 数据库允许为空以支持向上继承，全链为空时由系统服务默认 5 位';
 
 COMMENT ON COLUMN lychee_erp.material_categories.date_format IS 
-    '可选日期掩码 (如 yyMM). 主数据建议为空 (避免跨年断号/重置)';
+    '可选静态日期掩码 (如 yyMM). 主数据建议为空 (主数据跨期永不重置)';
 
 COMMENT ON COLUMN lychee_erp.material_categories.is_seq_shared IS 
     '是否与上级号池属主共用同一流水号池 (true 时 seq_key 锚定号池属主分类 ID)';
@@ -77,32 +89,58 @@ CREATE INDEX IF NOT EXISTS idx_material_categories_strategy
     WHERE code_strategy IS NOT NULL;
 ```
 
-### 2.2 解除 `materials` 表上的硬性变体唯一索引（解耦至策略层）
+### 2.2 重构 `materials` 表变体部分唯一索引（物化分流）
 
-V1 版本在 `materials` 表上创建了两条部分唯一索引：
+V1 版本在 `materials` 表上创建了两条无条件的部分唯一索引：
 * `uk_materials_tenant_variant_color (tenant_id, product_model_id, color_id, product_size_id)`
 * `uk_materials_tenant_variant_nocolor (tenant_id, product_model_id, product_size_id)`
 
-#### 为什么必须在 V2 移除？
-1. **DB 物理索引无法感知业务策略**：PostgreSQL 索引的 `WHERE` 条件无法跨表感知 `material_categories.code_strategy`。只要物料挂载了款号和尺码，无论走什么策略，数据库一律强制拒绝重复；
-2. **严重破坏 OEM / 客户指定料号场景（MANUAL 策略死局）**：代工厂客户 A 和客户 B 订购同一款版型的尺码 40，客户 A 要求编码为 `NIKE-40`，客户 B 要求编码为 `ADIDAS-40`。两笔物料具有相同的 `(product_model_id, product_size_id)` 但不同的 `code`，V1 的硬性索引会直接阻断第二笔保存；
-3. **标品周边配件受限**：同一款号下的配件周边等标品物料（非变体）受到无差别的变体排他限制。
+#### 为什么不能直接裸 DROP 索引？
+若单纯直接 `DROP INDEX` 并完全交由 Java 代码 `SELECT` 查重，存在显著风险：
+1. **款号变更后防线失守**：若款号 `code` 发生更名修改，变体生成的物料编码随之改变，失去 `UNIQUE(tenant_id, code)` 的兜底效果，可能并发插入完全相同款色码的物料；
+2. **高并发竞争漏洞**：若两笔请求并发到达且越过应用层查询，没有数据库唯一索引作底线，将产生变体三维重复的脏数据。
 
-#### 移除后的唯一性与并发安全保障机制：
-移除 `materials` 上的硬性约束后，标准 ERP（如 SAP）的做法是：**「物理表保留 `UNIQUE(tenant_id, code)` 作为全局兜底，变体排他性由业务策略服务与全局唯一索引双重保障」**：
-1. **上线依赖约束（安全红线）**：
-   **严禁在波次 1 中孤立执行 DROP INDEX！** 移除这两条索引必须与波次 2 的「后端策略路由工厂及多策略保存逻辑」同步上线。在策略服务就绪前，物理索引是现有生产环境防止变体撞车的最后一道硬防线。
-2. **`FASHION_VARIANT` 场景下的双保险机制**：
-   - 业务防线：`FashionVariantCodeGenerator` 在落库前调用 `assertVariantUnique()` 严格查重，并限制尺码属于款号绑定的尺码组；
-   - 并发兜底：由于变体物料编码严格由公式生成（如 `A12345-A01`），两笔并发请求即便同时绕过 Java 查重，第二笔也必然被 `materials` 表的 `uk_materials_tenant_code` 唯一约束拦截并抛出并发冲突，绝不可能产生重复变体物料。
-3. **`MANUAL` 和 `SEQUENTIAL` 策略赋能**：
-   - 跳过 `assertVariantUnique`，仅校验 `code` 唯一性，赋能 OEM 代工与配件标品。
+#### 优雅方案：物化策略列（`is_fashion_variant`）+ 条件唯一索引
+我们通过在 `materials` 增加物化标记列，将无条件索引精准重构为条件索引：
 
 ```sql
--- DDL 执行：移除 materials 上的硬性物理唯一索引 (必须与波次 2 后端业务策略同批次发布)
+-- 1. materials 增加物化策略列 (默认 false，仅变体物料落库/生成时写入 true)
+ALTER TABLE lychee_erp.materials
+    ADD COLUMN IF NOT EXISTS is_fashion_variant boolean NOT NULL DEFAULT false;
+
+COMMENT ON COLUMN lychee_erp.materials.is_fashion_variant IS
+    '物化标记: 所属物料分类是否生效 FASHION_VARIANT 变体策略 (用于变体子系统索引与查询分流)';
+
+CREATE INDEX IF NOT EXISTS idx_materials_fashion_variant
+    ON lychee_erp.materials (tenant_id, is_fashion_variant, product_model_id);
+
+-- 2. 移除 V1 无条件物理索引
 DROP INDEX IF EXISTS lychee_erp.uk_materials_tenant_variant_color;
 DROP INDEX IF EXISTS lychee_erp.uk_materials_tenant_variant_nocolor;
+
+-- 3. 重建为精细化变体条件唯一索引 (仅对变体物料生效，OEM与标品物料完全不进该索引)
+CREATE UNIQUE INDEX uk_materials_tenant_fashion_variant_color
+    ON lychee_erp.materials (tenant_id, product_model_id, color_id, product_size_id)
+    WHERE is_fashion_variant = true
+      AND product_model_id IS NOT NULL
+      AND color_id IS NOT NULL
+      AND product_size_id IS NOT NULL;
+
+CREATE UNIQUE INDEX uk_materials_tenant_fashion_variant_nocolor
+    ON lychee_erp.materials (tenant_id, product_model_id, product_size_id)
+    WHERE is_fashion_variant = true
+      AND product_model_id IS NOT NULL
+      AND color_id IS NULL
+      AND product_size_id IS NOT NULL;
 ```
+
+#### 重构收益：
+1. **上线依赖约束（安全红线）**：
+   此 DDL 必须与波次 2 后端业务策略同批次发布；
+2. **变体物料硬防线保留**：
+   鞋服变体（`is_fashion_variant = true`）依然在数据库层面享受绝对唯一性保护；
+3. **彻底赋能代工与标品**：
+   `MANUAL`（客供定制）与 `SEQUENTIAL`（标品）物料写入时 `is_fashion_variant = false`，不进入该部分索引，即使款号尺码相同也绝不会被拦截！
 
 ---
 
@@ -152,26 +190,30 @@ export interface EffectiveCodingPolicy {
   strategy: CodingStrategy;
   sourceCategoryId: number;       // 策略由哪一级分类继承而来
   sourceCategoryName?: string;
-  codePrefix?: string;
-  seqLength?: number;
+  codePrefix?: string;           // 原始配置的前缀
+  effectivePrefix: string;       // 计算继承/属主后的最终生效前缀 (用于前端提示与展示)
+  seqLength: number;             // 最终生效位宽 (默认 5)
   dateFormat?: string;
-  isSeqShared?: boolean;
+  isSeqShared: boolean;
   seqScopeCategoryId: number;     // 物理流水池锚定分类 ID (seq_key 归宿)
   categoryId: number;             // 当前分类 ID
   categoryCode: string;           // 当前分类代码
 }
 ```
 
-### 3.3 Bean Validation 与 DTO 改造规格（解决空 Code 契约冲突）
+### 3.3 实体与 DTO 改造规格（解决物化列与空 Code 契约冲突）
 
-现网 `MaterialRequest.java` 中对编码字段标注了 `@NotBlank(message = "{validation.material.code.required}")`。若前端在 `SEQUENTIAL` 策略下传空 `code`，请求会在进入 Controller 前被 Spring MVC 的 `@Valid` 机制直接拦截并报 400 校验错误。
-
-**解决方案**：
-1. **DTO 注解调整**：将 `MaterialRequest.code` 上的 `@NotBlank` 降级为 `@Size(max = 50)`，不再强求入参必须非空；
-2. **策略层动态校验**：
-   - 当策略为 `MANUAL`：`ManualCodeGenerator.validate()` 强行要求 `StringUtils.hasText(request.getCode())`，为空时抛出 `validation.material.code.required`；
-   - 当策略为 `FASHION_VARIANT`：若传入了 `code`，校验其是否符合生成公式；若为空，则由生成器自动生成回填；
-   - 当策略为 `SEQUENTIAL`：允许 `code` 为空，保存前自动调用发号器分配流水；若显式手填了 `code`，则原样校验唯一性。
+1. **`Material.java` 实体扩展**：
+   ```java
+   @Column(name = "is_fashion_variant", nullable = false)
+   private Boolean isFashionVariant = false;
+   ```
+2. **Bean Validation 注解降级**：
+   现网 `MaterialRequest.java` 中对编码字段标注了 `@NotBlank(message = "{validation.material.code.required}")`。将 `MaterialRequest.code` 上的 `@NotBlank` 降级为 `@Size(max = 50)`，不再强求入参必须非空；
+3. **策略层动态校验与物化标记写入**：
+   - 当策略为 `MANUAL`：`ManualCodeGenerator.validate()` 强行要求 `StringUtils.hasText(request.getCode())`，为空时抛出 `validation.material.code.required`，落库时 `entity.setIsFashionVariant(false)`；
+   - 当策略为 `FASHION_VARIANT`：前端通过款式色码动态回填建议编码，保存时由发号器严格核验并落库流水，落库时 `entity.setIsFashionVariant(true)`；
+   - 当策略为 `SEQUENTIAL`：允许 `code` 为空，保存前自动调用发号器分配流水，落库时 `entity.setIsFashionVariant(false)`。
 
 ---
 
@@ -229,53 +271,181 @@ export interface EffectiveCodingPolicy {
 
 ## 5. 存量历史数据平滑迁移与上线安全指南
 
-为确保上线时不破坏老系统既有逻辑，迁移应遵循**「数据预检 -> 显式白名单打标 -> 安全兜底回退」**的稳妥步骤：
+为确保上线时不破坏老系统既有逻辑，迁移应遵循**「数据预检 -> 显式打标 -> 物料物化列补齐 -> 号池流水种子初始化 -> 索引无缝切换」**的严密步骤：
 
-### 5.1 上线前预检脚本（审查分类及其物料形态）
+### 5.1 上线前预检脚本（审查分类树及其物料形态）
+
+> **关键修正**：ERP 物料往往挂接在末级子分类上。预检脚本必须使用递归 CTE 将全部下级子分类的物料汇总到顶级分类，杜绝顶级分类统计显示 0 笔的误导。
 
 ```sql
--- 预检 1: 统计各顶级分类及其下属物料的变体特征 (帮助运营与实施人员确认品类性质)
+-- 预检 1: 递归汇总各顶级大类及其全树枝叶物料的变体特征分布
+WITH RECURSIVE cat_tree AS (
+    -- 锚点：所有顶级分类
+    SELECT id AS root_id, id AS current_id, code AS root_code, name AS root_name
+    FROM lychee_erp.material_categories
+    WHERE parent_id IS NULL
+    UNION ALL
+    -- 递归向下展开子孙分类
+    SELECT ct.root_id, c.id, ct.root_code, ct.root_name
+    FROM lychee_erp.material_categories c
+    INNER JOIN cat_tree ct ON c.parent_id = ct.current_id
+)
 SELECT 
-    c.id AS category_id,
-    c.code AS category_code,
-    c.name AS category_name,
+    ct.root_id,
+    ct.root_code,
+    ct.root_name,
     COUNT(m.id) AS total_materials,
     COUNT(CASE WHEN m.product_model_id IS NOT NULL AND m.product_size_id IS NOT NULL THEN 1 END) AS fashion_variant_count,
-    COUNT(CASE WHEN m.product_model_id IS NULL AND m.color_id IS NULL AND m.product_size_id IS NULL THEN 1 END) AS standard_sku_count
-FROM lychee_erp.material_categories c
-LEFT JOIN lychee_erp.materials m ON m.material_category_id = c.id
-WHERE c.level = 1
-GROUP BY c.id, c.code, c.name
-ORDER BY c.code;
+    COUNT(CASE WHEN m.product_model_id IS NULL AND m.product_size_id IS NULL THEN 1 END) AS standard_sku_count
+FROM cat_tree ct
+LEFT JOIN lychee_erp.materials m ON m.material_category_id = ct.current_id
+GROUP BY ct.root_id, ct.root_code, ct.root_name
+ORDER BY ct.root_code;
 ```
 
-### 5.2 生产平滑迁移脚本（按明确代码白名单打标）
+```sql
+-- 预检 2 (安全红线门禁): 检查是否有存量具有款号与尺码的变体物料，但挂在有效策略非 FASHION_VARIANT 的分类下
+-- 必须使用递归 CTE 解析分类继承的最终有效策略 (避免因子分类未直接设策略 code_strategy IS NULL 造成误漏)
+WITH RECURSIVE cat_strategy AS (
+    SELECT id, parent_id, code_strategy, code, name
+    FROM lychee_erp.material_categories
+    WHERE parent_id IS NULL
+    UNION ALL
+    SELECT c.id, c.parent_id, 
+           COALESCE(c.code_strategy, cs.code_strategy) AS code_strategy,
+           c.code, c.name
+    FROM lychee_erp.material_categories c
+    INNER JOIN cat_strategy cs ON c.parent_id = cs.id
+)
+SELECT m.id, m.code, m.name, cs.code AS cat_code, cs.name AS cat_name, cs.code_strategy AS effective_strategy
+FROM lychee_erp.materials m
+JOIN cat_strategy cs ON m.material_category_id = cs.id
+WHERE m.product_model_id IS NOT NULL 
+  AND m.product_size_id IS NOT NULL
+  AND cs.code_strategy IS DISTINCT FROM 'FASHION_VARIANT';
+```
 
-严禁使用模糊匹配（如 `LIKE '%鞋%'`），避免多语言（如英文、越南文）环境误伤或将鞋垫、鞋盒等包装辅料误判为鞋服变体。
+> **门禁性质与执行机制（发布流程人工/流水线硬卡点）**：
+> 特别说明：此预检是 **发布流程与运维部署的硬性门禁（Gating Check）**，由 DBA、运维实施人员或 CI/CD 部署流水线在触发 Liquibase 迁移前显式执行校验。**Liquibase changeset 本身为纯 SQL 执行器，不会因 SELECT 结果自动报错终止**，因此防线必须设在发布执行前。
+> 
+> **发布操作前置规范**：
+> 1. 在生产/测试环境执行 `0908-002` 脚本前，必须先在目标库手动或通过 CI 脚本运行预检 2 查询；
+> 2. 凡确认属于企业自制成衣/鞋靴变体的物料，必须追溯其分类链并在祖先分类上显式打标为 `FASHION_VARIANT`，确保其在迁移时被正确刷为 `is_fashion_variant = true` 并进入精准变体索引保护；
+> 3. 仅当确认属于 OEM 客户指定料号或代工定制时，将相关物料 ID 录入发布审批白名单，其余非白名单物料记录数**必须严格为 0**；
+> 4. **若预检 2 存在未归正的非白名单物料，部署流水线必须立刻中止，严禁触发 `0908-002` 执行**，防止变体物料因分类漏标而失守三维排他防线。
+
+### 5.2 生产平滑迁移与打标脚本
 
 ```sql
 -- 1. 服装成衣/鞋靴类 (鞋服变体矩阵)
 UPDATE lychee_erp.material_categories
 SET code_strategy = 'FASHION_VARIANT'
-WHERE level = 1 
+WHERE parent_id IS NULL
   AND code IN ('APP', 'SHOE', 'CLOTH', 'GARMENT', 'FOOTWEAR')
   AND code_strategy IS NULL;
 
--- 2. 原材料与辅料类 (序列流水号，默认 5 位流水，分类 code 作为前缀)
+-- 2. 原材料与辅料类 (序列流水号，默认 5 位流水，分类 code 作为默认前缀)
 UPDATE lychee_erp.material_categories
 SET code_strategy = 'SEQUENTIAL',
     seq_length = 5
-WHERE level = 1 
+WHERE parent_id IS NULL
   AND code IN ('FAB', 'ACC', 'ROH', 'TRIM', 'PKG', 'RAW_MAT')
   AND code_strategy IS NULL;
 
 -- 3. 定制加工/客供料/外协类 (手工录入)
 UPDATE lychee_erp.material_categories
 SET code_strategy = 'MANUAL'
-WHERE level = 1 
+WHERE parent_id IS NULL
   AND code IN ('OEM', 'ODM', 'CUST', 'EXT')
   AND code_strategy IS NULL;
 
--- 4. 其余未显式打标的存量顶级分类：
--- 保持 code_strategy IS NULL，由系统算法安全回退为 MANUAL (避免未知品类被系统强行按照错误前缀分配流水号)
+-- 4. 其余未显式打标的顶级分类保持 NULL (算法安全回退为 MANUAL，避免未知品类强行发号)
 ```
+
+### 5.3 存量物料物化列补齐（`is_fashion_variant`）
+
+```sql
+-- 根据分类有效策略，将所有成衣变体物料的物化列设置为 true (支撑条件唯一索引与切面查询)
+WITH RECURSIVE cat_strategy AS (
+    SELECT id, parent_id, code_strategy, id AS root_id
+    FROM lychee_erp.material_categories
+    WHERE parent_id IS NULL
+    UNION ALL
+    SELECT c.id, c.parent_id, 
+           COALESCE(c.code_strategy, cs.code_strategy) AS code_strategy,
+           cs.root_id
+    FROM lychee_erp.material_categories c
+    INNER JOIN cat_strategy cs ON c.parent_id = cs.id
+)
+UPDATE lychee_erp.materials m
+SET is_fashion_variant = true
+FROM cat_strategy cs
+WHERE m.material_category_id = cs.id
+  AND cs.code_strategy = 'FASHION_VARIANT'
+  AND m.product_model_id IS NOT NULL
+  AND m.product_size_id IS NOT NULL;
+```
+
+### 5.4 流水号池种子数据初始化（Seed `sys_doc_sequence`，防止重号）
+
+> **必须执行！** 若已有物料存在如 `FAB-00042`，新建物料若计数器从 1 开始分配，系统重试 3 次后立刻报主键/编码冲突。
+> **关键设计**：初始化脚本必须使用递归 CTE **完整解析分类树的继承策略与号池属主（`seq_scope_category_id`）**，确保挂载在叶子分类上的存量物料、以及配置了 `is_seq_shared=true` 共享号池的分类，其流水能够准确汇总并初始化到正确的号池键（`MATERIAL_CAT:{seqScopeCategoryId}`）：
+
+```sql
+-- 针对生效策略为 SEQUENTIAL 的分类及其号池，从存量物料中提取最大流水号初始化
+WITH RECURSIVE cat_tree AS (
+    -- 锚点: 所有顶级分类 (根节点 is_seq_shared 恒为 false，号池属主即为自身)
+    SELECT 
+        id, 
+        parent_id, 
+        code_strategy AS effective_strategy,
+        id AS seq_scope_category_id
+    FROM lychee_erp.material_categories
+    WHERE parent_id IS NULL
+    UNION ALL
+    -- 递归向下展开子孙分类，推导继承策略与号池属主
+    SELECT 
+        c.id, 
+        c.parent_id, 
+        COALESCE(c.code_strategy, ct.effective_strategy) AS effective_strategy,
+        CASE 
+            WHEN c.is_seq_shared = true THEN ct.seq_scope_category_id
+            ELSE c.id
+        END AS seq_scope_category_id
+    FROM lychee_erp.material_categories c
+    INNER JOIN cat_tree ct ON c.parent_id = ct.id
+)
+INSERT INTO lychee_erp.sys_doc_sequence (tenant_id, seq_key, current_value)
+SELECT 
+    m.tenant_id,
+    'MATERIAL_CAT:' || ct.seq_scope_category_id AS seq_key,
+    COALESCE(MAX(
+        CASE 
+            WHEN m.code ~ '^[A-Z0-9_-]+-([0-9]+)$' 
+            THEN CAST(SUBSTRING(m.code FROM '[0-9]+$') AS BIGINT)
+            ELSE 0 
+        END
+    ), 0) AS current_value
+FROM cat_tree ct
+JOIN lychee_erp.materials m ON m.material_category_id = ct.id
+WHERE ct.effective_strategy = 'SEQUENTIAL'
+GROUP BY m.tenant_id, ct.seq_scope_category_id
+ON CONFLICT (tenant_id, seq_key) 
+DO UPDATE SET current_value = GREATEST(sys_doc_sequence.current_value, EXCLUDED.current_value);
+```
+
+### 5.5 Liquibase Changelog 变更规划
+
+遵循工程目录 `lychee-erp/src/main/resources/db/changelog/v1/2026/` 结构：
+1. `2026/0908-001-mm-category-coding-policy.sql`（波次 1）：
+   - `material_categories` 新增 5 列及 CHECK 约束；
+   - 历史顶级分类白名单策略初始化；
+2. `2026/0908-002-mm-materials-variant-decouple.sql`（波次 2，与后端业务逻辑同批发布）：
+   - **发布流水线前置门禁（CI / DBA 手工卡点）**：
+     该 changeset 本身为纯 DDL/DML，不会自动终止于数据异常。因此在流水线触发该文件前，必须由 CI 部署脚本或 DBA 手工执行预检 2 查询，确认异常成衣变体数已清零（或全部纳入 OEM 白名单），方可触发执行；
+   - **单事务强一致性保证**：以下所有操作必须在同一个 Liquibase changeset 内以单数据库事务（`runInTransaction: true`）执行，绝不允许出现索引缺失的中间空窗期：
+     1. `materials` 增加 `is_fashion_variant` 字段及索引；
+     2. 执行递归 CTE，将存量成衣物料 `is_fashion_variant` 刷为 `true`；
+     3. 执行递归 CTE，初始化 `sys_doc_sequence` 种子流水号；
+     4. `DROP INDEX uk_materials_tenant_variant_color / nocolor`；
+     5. `CREATE UNIQUE INDEX uk_materials_tenant_fashion_variant_color / nocolor`。
