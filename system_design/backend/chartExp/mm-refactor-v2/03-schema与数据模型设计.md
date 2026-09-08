@@ -39,25 +39,37 @@
 ALTER TABLE lychee_erp.material_categories
     ADD COLUMN IF NOT EXISTS code_strategy varchar(30) NULL,
     ADD COLUMN IF NOT EXISTS code_prefix varchar(20) NULL,
-    ADD COLUMN IF NOT EXISTS seq_length integer NULL DEFAULT 5,
+    ADD COLUMN IF NOT EXISTS seq_length integer NULL,
     ADD COLUMN IF NOT EXISTS date_format varchar(20) NULL,
     ADD COLUMN IF NOT EXISTS is_seq_shared boolean NOT NULL DEFAULT false;
 
--- 2. 字段业务注释
+-- 2. 字段业务注释与合法性约束
+ALTER TABLE lychee_erp.material_categories
+    DROP CONSTRAINT IF EXISTS ck_material_categories_strategy;
+ALTER TABLE lychee_erp.material_categories
+    ADD CONSTRAINT ck_material_categories_strategy 
+    CHECK (code_strategy IS NULL OR code_strategy IN ('FASHION_VARIANT', 'SEQUENTIAL', 'MANUAL'));
+
+ALTER TABLE lychee_erp.material_categories
+    DROP CONSTRAINT IF EXISTS ck_material_categories_shared;
+ALTER TABLE lychee_erp.material_categories
+    ADD CONSTRAINT ck_material_categories_shared 
+    CHECK (NOT (parent_id IS NULL AND is_seq_shared = true));
+
 COMMENT ON COLUMN lychee_erp.material_categories.code_strategy IS 
     '编码策略: FASHION_VARIANT(款色码变体), SEQUENTIAL(序列流水号), MANUAL(手工输入). 为空则继承父分类';
 
 COMMENT ON COLUMN lychee_erp.material_categories.code_prefix IS 
-    '自定义编码前缀. 若为空则默认使用分类自身 code 作为流水号前缀 (如 FAB)';
+    '自定义编码前缀 (仅限大写英文字母、数字及连字符，如 FAB, MAT-01). 若为空则默认使用分类自身 code 作为流水号前缀';
 
 COMMENT ON COLUMN lychee_erp.material_categories.seq_length IS 
-    '流水号长度 (补零位宽)，默认 5 位. 为空则向上继承';
+    '流水号长度 (补零位宽). 数据库允许为空以支持向上继承，全链为空时由系统服务默认 5 位';
 
 COMMENT ON COLUMN lychee_erp.material_categories.date_format IS 
     '可选日期掩码 (如 yyMM). 主数据建议为空 (避免跨年断号/重置)';
 
 COMMENT ON COLUMN lychee_erp.material_categories.is_seq_shared IS 
-    '是否与父分类共用同一流水号池 (true 时 seq_key 锚定父分类)';
+    '是否与上级号池属主共用同一流水号池 (true 时 seq_key 锚定号池属主分类 ID)';
 
 -- 3. 索引优化 (用于树状策略继承递归查询)
 CREATE INDEX IF NOT EXISTS idx_material_categories_strategy 
@@ -72,26 +84,29 @@ V1 版本在 `materials` 表上创建了两条部分唯一索引：
 * `uk_materials_tenant_variant_nocolor (tenant_id, product_model_id, product_size_id)`
 
 #### 为什么必须在 V2 移除？
-1. **DB 物理索引无法感知业务策略**：PostgreSQL 索引的 `WHERE` 条件无法跨表感知 `material_categories.code_strategy`。只要物料挂载了款号和尺码，无论走什么策略，資料庫一律強制拒絕重複；
-2. **嚴重破壞 OEM / 客戶指定料號場景（MANUAL 策略死局）**：代工廠客戶 A 和客戶 B 訂購同一款版型的尺碼 40，客戶 A 要求編碼為 `NIKE-40`，客戶 B 要求編碼為 `ADIDAS-40`。兩筆物料具有相同的 `(product_model_id, product_size_id)` 但不同的 `code`，V1 的硬性索引會直接阻斷第二筆保存；
-3. **樣品/大貨及改版場景受限**：無法在同一款色碼下並存樣品物料與大貨物料。
+1. **DB 物理索引无法感知业务策略**：PostgreSQL 索引的 `WHERE` 条件无法跨表感知 `material_categories.code_strategy`。只要物料挂载了款号和尺码，无论走什么策略，数据库一律强制拒绝重复；
+2. **严重破坏 OEM / 客户指定料号场景（MANUAL 策略死局）**：代工厂客户 A 和客户 B 订购同一款版型的尺码 40，客户 A 要求编码为 `NIKE-40`，客户 B 要求编码为 `ADIDAS-40`。两笔物料具有相同的 `(product_model_id, product_size_id)` 但不同的 `code`，V1 的硬性索引会直接阻断第二笔保存；
+3. **样品/大货及改版场景受限**：无法在同一款型下并存样品物料与大货物料。
 
-#### 移除後的唯一性與並發安全保障機制：
-移除 `materials` 上的硬性約束後，標準 ERP（如 SAP）的做法是：**「物理表僅保留 `UNIQUE(tenant_id, code)`，變體排他性由業務策略與流水表保障」**：
-1. **並發物理排他門禁（流水表已由 DB 鎖死）**：
-   在 `FASHION_VARIANT` 策略下，變體生成必須先分配並持久化 `product_model_size_codes` 流水。該表在 V1 中已具備嚴格的四條部分唯一索引（`(tenant_id, product_model_id, color_id, product_size_id)`）。因此，**物理上絕不可能並發生成兩筆相同的變體流水**！
-2. **業務領域層校驗（Domain Assertion）**：
-   `FashionVariantCodeGenerator` 在落庫前調用 `assertVariantUnique()` 執行查重；而 `MANUAL` 和 `SEQUENTIAL` 策略則跳過該限制，賦予代工與多渠道業務充分的彈性。
+#### 移除后的唯一性与并发安全保障机制：
+移除 `materials` 上的硬性约束后，标准 ERP（如 SAP）的做法是：**「物理表保留 `UNIQUE(tenant_id, code)` 作为全局兜底，变体排他性由业务策略服务与流水表双重保障」**：
+1. **上线依赖约束（安全红线）**：
+   **严禁在波次 1 中孤立执行 DROP INDEX！** 移除这两条索引必须与波次 2 的「后端策略路由工厂及多策略保存逻辑」同步上线。在策略服务就绪前，物理索引是现有生产环境防止变体撞车的最后一道硬防线。
+2. **`FASHION_VARIANT` 场景下的双保险机制**：
+   - 业务防线：`FashionVariantCodeGenerator` 在落库前调用 `assertVariantUnique()` 严格查重，并限制尺码属于款号绑定的尺码组；
+   - 并发兜底：由于变体物料编码严格由公式生成（如 `A12345-A01`），两笔并发请求即便同时绕过 Java 查重，第二笔也必然被 `materials` 表的 `uk_materials_tenant_code` 唯一约束拦截并抛出并发冲突，绝不可能产生重复变体物料。
+3. **`MANUAL` 和 `SEQUENTIAL` 策略赋能**：
+   - 跳过 `assertVariantUnique`，仅校验 `code` 唯一性，赋能 OEM 代工与配件标品。
 
 ```sql
--- DDL 执行：移除 materials 上的硬性物理唯一索引
+-- DDL 执行：移除 materials 上的硬性物理唯一索引 (必须与波次 2 后端业务策略同批次发布)
 DROP INDEX IF EXISTS lychee_erp.uk_materials_tenant_variant_color;
 DROP INDEX IF EXISTS lychee_erp.uk_materials_tenant_variant_nocolor;
 ```
 
 ---
 
-## 3. 枚举类型定义（Java / TypeScript）
+## 3. 枚举与数据传输对象定义（Java / TypeScript）
 
 ### 3.1 后端 Java 枚举（`CodingStrategyEnum`）
 
@@ -135,14 +150,28 @@ export type CodingStrategy = 'FASHION_VARIANT' | 'SEQUENTIAL' | 'MANUAL';
 
 export interface EffectiveCodingPolicy {
   strategy: CodingStrategy;
-  sourceCategoryId: number; // 策略由哪一级分类继承而来
+  sourceCategoryId: number;       // 策略由哪一级分类继承而来
+  sourceCategoryName?: string;
   codePrefix?: string;
   seqLength?: number;
   dateFormat?: string;
   isSeqShared?: boolean;
-  parentCategoryId?: number;
+  seqScopeCategoryId: number;     // 物理流水池锚定分类 ID (seq_key 归宿)
+  categoryId: number;             // 当前分类 ID
+  categoryCode: string;           // 当前分类代码
 }
 ```
+
+### 3.3 Bean Validation 与 DTO 改造规格（解决空 Code 契约冲突）
+
+现网 `MaterialRequest.java` 中对编码字段标注了 `@NotBlank(message = "{validation.material.code.required}")`。若前端在 `SEQUENTIAL` 策略下传空 `code`，请求会在进入 Controller 前被 Spring MVC 的 `@Valid` 机制直接拦截并报 400 校验错误。
+
+**解决方案**：
+1. **DTO 注解调整**：将 `MaterialRequest.code` 上的 `@NotBlank` 降级为 `@Size(max = 50)`，不再强求入参必须非空；
+2. **策略层动态校验**：
+   - 当策略为 `MANUAL`：`ManualCodeGenerator.validate()` 强行要求 `StringUtils.hasText(request.getCode())`，为空时抛出 `validation.material.code.required`；
+   - 当策略为 `FASHION_VARIANT`：若传入了 `code`，校验其是否符合生成公式；若为空，则由生成器自动生成回填；
+   - 当策略为 `SEQUENTIAL`：允许 `code` 为空，保存前自动调用发号器分配流水；若显式手填了 `code`，则原样校验唯一性。
 
 ---
 
@@ -185,42 +214,68 @@ export interface EffectiveCodingPolicy {
 └────────────────────────────────────────────────────────┘
                            │ ON CONFLICT RETURNING
                            ▼
-           最終物料編碼: "FAB-00042" (連續無跳號)
+           最终物料编码: "FAB-00042" (原子自增保证全局唯一)
 ```
 
-#### `seq_key` 生成規則：
-1. **獨立計數模式（默認，`is_seq_shared = false`）**：
+#### `seq_key` 生成规则：
+1. **独立计数模式（默认，`is_seq_shared = false`）**：
    $$\text{seq\_key} = \text{"MATERIAL\_CAT:"} + \text{categoryId}$$
-   * 範例：面料大類（ID=10）為 `MATERIAL_CAT:10`，拉鍊大類（ID=20）為 `MATERIAL_CAT:20`。兩者計數器徹底隔離，各自從 1 開始連續遞增。
-2. **共用父級流水模式（`is_seq_shared = true` 且存在 `parent_id`）**：
-   $$\text{seq\_key} = \text{"MATERIAL\_CAT:"} + \text{parentCategoryId}$$
-   * 範例：梭織面料（ID=101）與針織面料（ID=102）勾選共用流水，發號時統一錨定父級面料大類（ID=10）的流水池，共享總序列。
+   * 范例：面料大类（ID=10）为 `MATERIAL_CAT:10`，拉链大类（ID=20）为 `MATERIAL_CAT:20`。两者计数器彻底隔离，各自从 1 开始连续递增。
+2. **共用上级流水模式（`is_seq_shared = true` 且存在父级）**：
+   $$\text{seq\_key} = \text{"MATERIAL\_CAT:"} + \text{seqScopeCategoryId}$$
+   * 范例：梭织面料（ID=101）与针织面料（ID=102）勾选共用流水，发号时统一锚定上级面料大类（ID=10）的流水池，共享总序列。该 ID 由策略解析算法统一追溯计算得出。
 
 ---
 
-## 5. 存量歷史數據平滑遷移腳本
+## 5. 存量历史数据平滑迁移与上线安全指南
 
-為確保上線時老數據不受影響，可通過一次性數據補錄腳本，僅為頂級分類（`level = 1`）打上策略標籤，子分類自動繼承：
+为确保上线时不破坏老系统既有逻辑，迁移应遵循**「数据预检 -> 显式白名单打标 -> 安全兜底回退」**的稳妥步骤：
+
+### 5.1 上线前预检脚本（审查分类及其物料形态）
 
 ```sql
--- 1. 服裝類頂級分類設為 FASHION_VARIANT
+-- 预检 1: 统计各顶级分类及其下属物料的变体特征 (帮助运营与实施人员确认品类性质)
+SELECT 
+    c.id AS category_id,
+    c.code AS category_code,
+    c.name AS category_name,
+    COUNT(m.id) AS total_materials,
+    COUNT(CASE WHEN m.product_model_id IS NOT NULL AND m.product_size_id IS NOT NULL THEN 1 END) AS fashion_variant_count,
+    COUNT(CASE WHEN m.product_model_id IS NULL AND m.color_id IS NULL AND m.product_size_id IS NULL THEN 1 END) AS standard_sku_count
+FROM lychee_erp.material_categories c
+LEFT JOIN lychee_erp.materials m ON m.material_category_id = c.id
+WHERE c.level = 1
+GROUP BY c.id, c.code, c.name
+ORDER BY c.code;
+```
+
+### 5.2 生产平滑迁移脚本（按明确代码白名单打标）
+
+严禁使用模糊匹配（如 `LIKE '%鞋%'`），避免多语言（如英文、越南文）环境误伤或将鞋垫、鞋盒等包装辅料误判为鞋服变体。
+
+```sql
+-- 1. 服装成衣/鞋靴类 (鞋服变体矩阵)
 UPDATE lychee_erp.material_categories
 SET code_strategy = 'FASHION_VARIANT'
 WHERE level = 1 
-  AND (code IN ('APP', 'SHOE', 'CLOTH') OR name LIKE '%服装%' OR name LIKE '%成衣%' OR name LIKE '%鞋%')
+  AND code IN ('APP', 'SHOE', 'CLOTH', 'GARMENT', 'FOOTWEAR')
   AND code_strategy IS NULL;
 
--- 2. 原料與輔料類設為 SEQUENTIAL (默認 5 位長度，自身 code 作為前綴)
+-- 2. 原材料与辅料类 (序列流水号，默认 5 位流水，分类 code 作为前缀)
 UPDATE lychee_erp.material_categories
 SET code_strategy = 'SEQUENTIAL',
     seq_length = 5
 WHERE level = 1 
-  AND (code IN ('FAB', 'ACC', 'ROH', 'MAT') OR name LIKE '%原料%' OR name LIKE '%辅料%' OR name LIKE '%面料%')
+  AND code IN ('FAB', 'ACC', 'ROH', 'TRIM', 'PKG', 'RAW_MAT')
   AND code_strategy IS NULL;
 
--- 3. 其餘未匹配的頂級分類，默認初始化為 MANUAL，避免未知類型強行算號
+-- 3. 定制加工/客供料/外协类 (手工录入)
 UPDATE lychee_erp.material_categories
 SET code_strategy = 'MANUAL'
 WHERE level = 1 
+  AND code IN ('OEM', 'ODM', 'CUST', 'EXT')
   AND code_strategy IS NULL;
+
+-- 4. 其余未显式打标的存量顶级分类：
+-- 保持 code_strategy IS NULL，由系统算法安全回退为 MANUAL (避免未知品类被系统强行按照错误前缀分配流水号)
 ```
