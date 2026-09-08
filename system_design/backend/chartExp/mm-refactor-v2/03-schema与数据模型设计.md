@@ -11,7 +11,8 @@
 │ 表名                         │ 动作                                    │
 ├──────────────────────────────┼─────────────────────────────────────────┤
 │ lychee_erp.material_categories│ ALTER: 扩展编码策略与轻量序列字段 (ADD) │
-│ lychee_erp.materials         │ 不改动 (保持 code varchar(50))          │
+│ lychee_erp.materials         │ DROP INDEX: 移除 V1 硬性物理部分唯一索引│
+│                              │ 解耦至策略服务与流水表排他 (保持code v50)│
 │ lychee_erp.sys_doc_sequence  │ 100% 复用现有高并发原子序列表 (零改动)  │
 │ lychee_erp.sys_doc_rule      │ 彻底解耦，不依赖也不侵入该表            │
 │ V1 变体生成相关表            │ 不改动 (完整保留款号、尺码组等)          │
@@ -19,8 +20,8 @@
 ```
 
 1. **零破坏性（Zero Breaking Change）**：
-   - 现有的 `materials` 核心表完全不作修改；
-   - V1 建立的 `product_models`, `product_size_groups`, `product_model_colors`, `product_model_size_codes` 及两条变体唯一索引原封不动保留；
+   - 现有的 `materials` 核心字段完全不作修改（保持 `code varchar(50)`）；
+   - 移除 V1 在 `materials` 物理表上过度绑定的两条部分唯一索引，解除对 OEM 客供料号及非变体成品的硬性误伤；
 2. **渐进式生效（Progressive Enhancement）**：
    - `material_categories.code_strategy` 允许为 `NULL`，为 `NULL` 时按层级向上继承；
    - 未配置任何策略的历史存量数据，系统安全回退为现网既有逻辑，完全不影响老系统运行；
@@ -62,6 +63,30 @@ COMMENT ON COLUMN lychee_erp.material_categories.is_seq_shared IS
 CREATE INDEX IF NOT EXISTS idx_material_categories_strategy 
     ON lychee_erp.material_categories (tenant_id, code_strategy)
     WHERE code_strategy IS NOT NULL;
+```
+
+### 2.2 解除 `materials` 表上的硬性变体唯一索引（解耦至策略层）
+
+V1 版本在 `materials` 表上创建了两条部分唯一索引：
+* `uk_materials_tenant_variant_color (tenant_id, product_model_id, color_id, product_size_id)`
+* `uk_materials_tenant_variant_nocolor (tenant_id, product_model_id, product_size_id)`
+
+#### 为什么必须在 V2 移除？
+1. **DB 物理索引无法感知业务策略**：PostgreSQL 索引的 `WHERE` 条件无法跨表感知 `material_categories.code_strategy`。只要物料挂载了款号和尺码，无论走什么策略，資料庫一律強制拒絕重複；
+2. **嚴重破壞 OEM / 客戶指定料號場景（MANUAL 策略死局）**：代工廠客戶 A 和客戶 B 訂購同一款版型的尺碼 40，客戶 A 要求編碼為 `NIKE-40`，客戶 B 要求編碼為 `ADIDAS-40`。兩筆物料具有相同的 `(product_model_id, product_size_id)` 但不同的 `code`，V1 的硬性索引會直接阻斷第二筆保存；
+3. **樣品/大貨及改版場景受限**：無法在同一款色碼下並存樣品物料與大貨物料。
+
+#### 移除後的唯一性與並發安全保障機制：
+移除 `materials` 上的硬性約束後，標準 ERP（如 SAP）的做法是：**「物理表僅保留 `UNIQUE(tenant_id, code)`，變體排他性由業務策略與流水表保障」**：
+1. **並發物理排他門禁（流水表已由 DB 鎖死）**：
+   在 `FASHION_VARIANT` 策略下，變體生成必須先分配並持久化 `product_model_size_codes` 流水。該表在 V1 中已具備嚴格的四條部分唯一索引（`(tenant_id, product_model_id, color_id, product_size_id)`）。因此，**物理上絕不可能並發生成兩筆相同的變體流水**！
+2. **業務領域層校驗（Domain Assertion）**：
+   `FashionVariantCodeGenerator` 在落庫前調用 `assertVariantUnique()` 執行查重；而 `MANUAL` 和 `SEQUENTIAL` 策略則跳過該限制，賦予代工與多渠道業務充分的彈性。
+
+```sql
+-- DDL 执行：移除 materials 上的硬性物理唯一索引
+DROP INDEX IF EXISTS lychee_erp.uk_materials_tenant_variant_color;
+DROP INDEX IF EXISTS lychee_erp.uk_materials_tenant_variant_nocolor;
 ```
 
 ---
