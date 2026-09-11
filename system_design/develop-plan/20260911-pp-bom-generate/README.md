@@ -29,6 +29,6 @@
 | [03-schema设计.md](./03-schema设计.md) | 不改两表粒度；枚举、`sizeQuantities` 契约、解析/换算 |
 | [04-实施清单.md](./04-实施清单.md) | **开发入口**：已锁定决策、改动面、提交顺序、验收 |
 
-对照已落地的物料变体：`VariantGenerateDrawer` + `preview` / `generateVariants`。BOM 对齐其「矩阵预览 + 坏格整批 400 + 1～200 NEW」，**去掉建料**，**加上模板行解析与按码用量**，**一次写入头+行**。
+对照已落地的物料变体：`VariantGenerateModal` + `preview` / `generateVariants`。BOM 对齐其「矩阵预览 + 坏格整批 400 + 1～200 NEW」，**去掉建料**，**加上模板行解析与按码用量**，**一次写入头+行**。
 
 关联前序：`../20260911-mm-refactor-v1`（款色码 SKU）、`../20260911-mm-refactor-v2`（分类策略）。V1 Wave C 的 `copyBom` 开关 **本专题作废，不要实现**。
