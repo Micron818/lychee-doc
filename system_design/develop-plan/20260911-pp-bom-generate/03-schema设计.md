@@ -123,10 +123,10 @@ public class BomGenerateRequest {
     JsonNullable<LocalDate> validTo;
     String description;
 
-    /** preview 可空 = 用 colorIds×productSizeIds 展开；generate 必填 */
+    /** preview 可空 = 用 colorIds×productSizeIds 展开；generate 必填。不要在字段上 @NotEmpty */
     @Size(max = 200) List<BomGenerateCellRequest> cells;
     List<Long> colorIds;           // 区分色；不分色必须空
-    @NotEmpty List<Long> productSizeIds;
+    List<Long> productSizeIds;     // preview 展开用；服务层校验，不要 @NotEmpty
 
     @Valid @Size(max = 50) List<BomGenerateItemRequest> items;
 }
@@ -156,9 +156,25 @@ public class BomGenerateSizeQuantity {
 
 public class BomGeneratePreviewResponse {
     boolean distinguishColor;
-    List<MaterialVariantPreviewSizeColumn> sizeColumns; // 可复用 MM 列 DTO，或 PP 自建同形
-    List<MaterialVariantPreviewColorRow> colorRows;
+    List<BomGeneratePreviewSizeColumn> sizeColumns; // PP 自建；形状同 MM 预览列，禁止 import MM
+    List<BomGeneratePreviewColorRow> colorRows;
     List<BomGeneratePreviewCell> cells;
+}
+
+/** 与 MaterialVariantPreviewSizeColumn 同形，放 lychee-erp-pp */
+public class BomGeneratePreviewSizeColumn {
+    Long id;
+    String code;
+    String name;
+    Integer sequence;
+}
+
+/** 与 MaterialVariantPreviewColorRow 同形，放 lychee-erp-pp */
+public class BomGeneratePreviewColorRow {
+    Long id;
+    String code;
+    String name;
+    Integer sequence;
 }
 
 public class BomGeneratePreviewCell {
@@ -177,12 +193,15 @@ public class BomGeneratePreviewItem {
     BomComponentMatchMode matchMode;
     Long seedMaterialId;
     String seedMaterialCode;
+    String seedMaterialName;
     BomGenerateLineResolveStatus resolveStatus;
     Long resolvedMaterialId;
     String resolvedMaterialCode;
     String resolvedMaterialName;
     BigDecimal quantity;          // 该格 resolvedQty
     boolean usedDefaultQuantity;  // true = 回退行级 quantity
+    String baseUnitCode;          // 解析子件基本单位；UNRESOLVED 等可空
+    String baseUnitName;
     BigDecimal scrapRate;
     Boolean isBackflush;
 }
@@ -195,55 +214,60 @@ public class BomGenerateResponse {
 
 `generate` 入参复用 `BomGenerateRequest`。服务先跑与 preview **同一套**解析；细胞状态与提交前 preview 不一致（并发插了同版本）→ 400 + 新 preview，不要静默跳过变坏格。
 
-校验分组：
+校验分组（**服务层**判定，对标 `MaterialVariantServiceImpl.prepareContext`；Controller 只用 `@Valid` 做字段格式，**不要** Validation Group，也**不要**给 `cells` / `productSizeIds` / `items` 加 `@NotEmpty`）：
 
 ```text
 preview：productModelId、productSizeIds、version、validFrom 必填
-         items 可空
-generate：上述 + items 非空 + cells 非空且 1～200
+         items 可空（有则按模板规则校验）
+generate：productModelId、version、validFrom 必填
+         items 非空；cells 非空且 1～200
+         colorIds / productSizeIds 前端向导应回传；若省略则从 cells 去重推导后再校验色模式
 ```
 
 ---
 
 ## 5. 解析查找（应用层，无新索引）
 
-PP 已有 `MaterialRepository` 变体查找。本波 **新增** 非变体家族查找（对色面料常为 `is_fashion_variant = false` 但挂了 `product_model_id`）：
-
-```java
-// 建议挂在 MaterialRepository（basis），供 PP 生成器用
-
-List<Material> findByProductModelIdAndColorIdAndProductSizeIdIsNullAndActiveStatus(
-        Long productModelId, Long colorId, ActiveStatus status);
-
-List<Material> findByProductModelIdAndColorIdIsNullAndProductSizeIdIsNullAndActiveStatus(
-        Long productModelId, ActiveStatus status);
-
-List<Material> findByProductModelIdAndProductSizeIdAndColorIdAndActiveStatus(
-        Long productModelId, Long productSizeId, Long colorId, ActiveStatus status);
-
-List<Material> findByProductModelIdAndProductSizeIdAndColorIdIsNullAndActiveStatus(
-        Long productModelId, Long productSizeId, ActiveStatus status);
-
-List<Material> findByProductModelIdAndProductSizeIdIsNotNullAndIsFashionVariantTrue(
-        Long productModelId);   // 已存在，列目标 SKU
-```
-
-父件格子：用现网
+色码池用现网 basis 仓储（**不要**新增、不要调 MM）：
 
 ```text
-distinguish
-  ? findByProductModelIdAndColorIdAndProductSizeIdAndIsFashionVariantTrue
-  : findByProductModelIdAndColorIdIsNullAndProductSizeIdAndIsFashionVariantTrue
+ProductModelRepository.findWithSizeGroupById
+ProductModelColorRepository.findFetchedByProductModelId
+ProductSizeGroupItemRepository.findFetchedBySizeGroupId
+MaterialRepository.findByProductModelIdAndProductSizeIdIsNotNullAndIsFashionVariantTrue  // 父件 SKU
 ```
 
-再在内存判 `isManufactured` / `ACTIVE`（需要 fetch `materialType`，或一次查出该款全部候选后过滤）。
+家族预取（对色面料常为 `is_fashion_variant = false` 但挂了 `product_model_id`）**按款一次查出，内存过滤**。禁止按格、按行、按色打四套单键 finder：
+
+```java
+// MaterialRepository（basis）本波新增：父款 + 各种子款一次预取
+@Query("""
+        SELECT DISTINCT m FROM Material m
+        LEFT JOIN FETCH m.materialType
+        LEFT JOIN FETCH m.baseUnit
+        WHERE m.productModelId IN :productModelIds
+          AND m.activeStatus = :status
+        """)
+List<Material> findByProductModelIdInAndActiveStatusFetchTypeAndUnit(
+        Collection<Long> productModelIds, ActiveStatus status);
+```
+
+父件格子：从该款 fashion variant 列表按 `colorId` / `productSizeId` 入 Map，再在内存判 `isManufactured` / `ACTIVE`。  
+匹配行：从种子 `productModelId` 的家族 List 按 §3.3 过滤。0 / 1 / >1 → `UNRESOLVED` / `RESOLVED` / `CONFLICT`。
 
 **不要**为「分类 + 颜色」加查询。  
-**不要**用 `COALESCE(color_id, 0)` 唯一索引；0 条 / 多条在服务层变成 `UNRESOLVED` / `CONFLICT`。
+**不要**用 `COALESCE(color_id, 0)` 唯一索引。  
+**不要**每格调用现网 `findByProductModelIdAndColorIdAndProductSizeIdAndIsFashionVariantTrue`。
 
 `COLOR_SIZE_MATCH` 命中变体时，现网条件唯一索引保证最多 1 条完整变体；仍用 `List` + 计数，避免漏掉「同款同色同码但 `is_fashion_variant = false`」的 OEM 料造成双命中。
 
-EXISTS：`BillOfMaterialRepository.existsByProductMaterialIdAndVersion`（已有）。需要 `existingBomId` 时再 `findFirstByProductMaterialIdAndVersion`（本波补）。
+EXISTS：一次查出本批 version，不要 200 次 `exists`：
+
+```java
+// BillOfMaterialRepository 本波补
+List<BillOfMaterial> findAllByProductMaterialIdInAndVersion(
+        Collection<Long> productMaterialIds, String version);
+```
 
 用量换算（无 SQL）：见 `02` §3.4。`sizeQuantities` 在校验模板时编成 `Map<productSizeId, qty>`（重复键 400）；`productSizeId` 必须 ∈ 本款尺码组。解析行：`resolvedQty = map.getOrDefault(parent.productSizeId, item.quantity)`。
 
@@ -266,7 +290,8 @@ DRAFT ──批准──► APPROVED ──作废──► OBSOLETE
 | 能力 | 模块 |
 |------|------|
 | `BomGenerateService` / preview / generate | `lychee-erp-pp` |
-| 仓储查找补面 | `lychee-erp-basis` `MaterialRepository` + PP `BillOfMaterialRepository` |
+| 仓储查找补面 | basis：`MaterialRepository` 家族预取（fetch type+unit）；PP：`findAllByProductMaterialIdInAndVersion`。色码池用现网 `ProductModel*` / `ProductSizeGroupItem*` |
+| DTO 归属 | 预览行列 / 格子 / 行态 **全部放 PP**。禁止 `lychee-erp-pp` 依赖 `lychee-erp-mm` |
 | 枚举 | `lychee-erp-common`：`BomComponentMatchMode`（前端要）；格子/行态可留 PP |
 | `RemoteMaterialService` | **不扩**款色码字段 |
 | `RemoteBomService` | **不扩**生成 |
@@ -286,7 +311,15 @@ public interface BomGenerateService {
 `generate` 内部必须调用与 `preview` 相同的解析函数（同一类 package-private 方法），禁止两套 if/else。  
 `BillOfMaterialServiceImpl` **不**塞进生成逻辑（头行 CRUD 已经够长）。Controller 两行委托即可。
 
-落库用 `saveAll` / `persist` 批量，不要 per-cell `flush`。撞唯一键转 `validation.billOfMaterial.version.duplicate` 或专用 `validation.bom.generate.concurrent`。
+现网头行 **无** `@OneToMany` 级联，`id` 是 `IDENTITY`。落库必须两阶段、仍在同一事务：
+
+```text
+1. saveAll(headers) + flush 一次          // 拿到头 id，并触发 uk_bom_product_version
+2. 给各行填 bomId
+3. saveAll(items)                         // 不要再每格 flush
+```
+
+`DataIntegrityViolationException`（并发撞版本）在 Service 内转 `validation.billOfMaterial.version.duplicate` 或 `validation.bom.generate.concurrent`（400），不要落到全局 409。禁止调用 `createBillOfMaterial` / `createBomItem`。
 
 ---
 
@@ -309,7 +342,7 @@ public interface BomGenerateService {
 ```text
 1. 无 DDL（description 列已在）
 2. common：BomComponentMatchMode + EnumController
-3. basis：MaterialRepository 查找方法
+3. basis：MaterialRepository 按款批量预取（fetch type+unit）
 4. pp：DTO、BomGenerateService、Controller 两路由
 5. BillOfMaterial Entity 补 description
 6. 前端 Drawer + i18n
