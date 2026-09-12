@@ -68,7 +68,7 @@ PP 模組負責管理生產製造相關的基礎資料與流程。本模組設�
     *   `is_backflush`: 是否採用倒扣料模式。
 
 ### 3.5 BOM 表頭 (bill_of_materials)
-*   **用途**: 定義一個產品 (成品/半成品) 的 BOM 版本與生效資訊。
+*   **用途**: 定義一個產品 (成品/半成品) 的 BOM 版本與生效資訊。變體成品用「按款生成 BOM」寫入 SKU 級表頭，**沒有**款號級 BOM 表；執行鏈仍只認 `product_material_id` + `version`。
 *   **關鍵欄位**:
     *   `product_material_id`: 對應到 MM 模組的父階物料 ID。
     *   `version`: 版本號 (如 V1.0, 2023-Q1)。
