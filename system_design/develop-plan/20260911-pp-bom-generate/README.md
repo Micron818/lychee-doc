@@ -11,7 +11,7 @@
 
 ```text
 选款号 + 共用版本/生效日
-  → 勾选本款已存在的自制变体 SKU（色 × 码）
+  → 勾选本款已存在的自制色 × 码 SKU（不看 is_fashion_variant）
   → 维护模板行（FIXED / COLOR_MATCH / SIZE_MATCH / COLOR_SIZE_MATCH）
   → 可选：按尺码填绝对用量（SIZE_SCALE）；空表则全码同量
   → 预览：每格解析子件 + 该格用量，坏格整批拒绝

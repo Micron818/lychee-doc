@@ -34,7 +34,7 @@
 ## 2. 实体关系（执行层不变）
 
 ```text
-product_models 1───* materials (fashion variant SKU)
+product_models 1───* materials (色 × 码 SKU；不限定 is_fashion_variant)
                         │
                         └── 1───* bill_of_materials 1───* bom_items *───1 materials (component)
 
@@ -234,7 +234,7 @@ generate：productModelId、version、validFrom 必填
 ProductModelRepository.findWithSizeGroupById
 ProductModelColorRepository.findFetchedByProductModelId
 ProductSizeGroupItemRepository.findFetchedBySizeGroupId
-MaterialRepository.findByProductModelIdAndProductSizeIdIsNotNullAndIsFashionVariantTrue  // 父件 SKU
+MaterialRepository.findByProductModelIdAndProductSizeIdIsNotNullFetchTypeAndUnit  // 父件 SKU（有码即可，不看 is_fashion_variant）
 ```
 
 家族预取（对色面料常为 `is_fashion_variant = false` 但挂了 `product_model_id`）**按款一次查出，内存过滤**。禁止按格、按行、按色打四套单键 finder：
@@ -252,12 +252,12 @@ List<Material> findByProductModelIdInAndActiveStatusFetchTypeAndUnit(
         Collection<Long> productModelIds, ActiveStatus status);
 ```
 
-父件格子：从该款 fashion variant 列表按 `colorId` / `productSizeId` 入 Map，再在内存判 `isManufactured` / `ACTIVE`。  
-匹配行：从种子 `productModelId` 的家族 List 按 §3.3 过滤。0 / 1 / >1 → `UNRESOLVED` / `RESOLVED` / `CONFLICT`。
+父件格子：从该款 `productSizeId ≠ null` 列表按 `colorId` / `productSizeId` 分组（不看 `is_fashion_variant`），再在内存判 `isManufactured` / `ACTIVE` / 色模式。0 条 → `MISSING_SKU`；有料但合格 0 → `INELIGIBLE`；合格 >1 → `CONFLICT`（不静默覆盖、不用变体标记决胜）。  
+匹配行：从种子 `productModelId` 的家族 List 按 `02` §3.3 过滤。0 / 1 / >1 → `UNRESOLVED` / `RESOLVED` / `CONFLICT`。
 
 **不要**为「分类 + 颜色」加查询。  
 **不要**用 `COALESCE(color_id, 0)` 唯一索引。  
-**不要**每格调用现网 `findByProductModelIdAndColorIdAndProductSizeIdAndIsFashionVariantTrue`。
+**不要**每格调用现网变体单键 finder（`...AndIsFashionVariantTrue`）。父件按款一次预取有码物料即可。
 
 `COLOR_SIZE_MATCH` 命中变体时，现网条件唯一索引保证最多 1 条完整变体；仍用 `List` + 计数，避免漏掉「同款同色同码但 `is_fashion_variant = false`」的 OEM 料造成双命中。
 
