@@ -19,7 +19,7 @@ CREATE TABLE lychee_erp.product_model_images
 ;
 
 COMMENT ON TABLE lychee_erp.product_model_images IS
-	'款色产品图。仅 is_fashion_variant = true 的物料共享；color_id 空表示本款不分色'
+	'款色产品图。按 (款号, 颜色) 共享，不分尺码；color_id 空表示本款不分色。与 materials.is_fashion_variant 无关'
 ;
 
 ALTER TABLE lychee_erp.product_model_images ADD CONSTRAINT product_model_images_pkey

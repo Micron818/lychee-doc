@@ -1,62 +1,76 @@
-# 变体注记与分类发号解耦 + 款色共享图片
+# 变体尺码组硬校验 + 款色共享图片
 
-> 日期：2026-09-15  
+> 日期：2026-09-15（范围收缩后定稿）  
 > 关联：`../20260911-mm-refactor-v1`（款色码矩阵）、`../20260911-mm-refactor-v2`（分类编码策略）、`../20260818-report/15-工厂订单与销售订单型号色号展示.md`（样图已按款色取）  
-> 状态：设计定稿（评估可行后落文档；实现按 [04](./04-实施清单.md)）
+> 状态：设计定稿；实现按 [04](./04-实施清单.md)
 
-本专题拆开 V2 绑在一起的两件事，并按拆开后的身份做产品图：
+本专题做两件独立的事，**不**把它们绑在 `is_fashion_variant` 上：
 
 ```text
-物料分类 code_strategy     → 只决定 materials.code 怎么来（公式 / 流水 / 手工）
-materials.is_fashion_variant → 这颗 SKU 是否占用款×色×码矩阵的那一格
-产品图                     → 只在 is_fashion_variant = true 的 (款, 色) 上共享，不分尺码
+物料分类 code_strategy
+  → 只决定 materials.code 怎么来（公式 / 流水 / 手工）
+  → 落库时抄写 is_fashion_variant = (strategy == FASHION_VARIANT)
+
+materials.is_fashion_variant
+  → 系统物化列：是否占用款×色×码矩阵那一格
+  → 表单不提供开关；请求体不接收用户改写
+
+产品图（两套资产，两套 API）
+  → 款色图 product_model_images：款号 / 本款色抽屉上传
+  → SKU 图 material_images：物料抽屉上传（现网，不改入口）
+  → 展示：有款号则款色 primary 优先，没有再回退本 SKU 图
 ```
 
 **不是**退回 V1「有款有码就算变体」。  
+**不是**让用户在物料表单勾选/取消变体注记。  
+**不是**按注记或分类策略决定图写进哪张表。  
 **不是** Wave C 按尺码复制 `material_images`。  
+**不是**存量打标或 OSS 迁图。  
 **不是**把 BOM / 工厂物料改到款色层（仍按 SKU）。
 
 主流程：
 
 ```text
-分类 FASHION_VARIANT
-  → 强制 is_fashion_variant = true + 公式发号 + 尺码流水 token
+变体分类保存
+  → 注记强制 true；公式发号 + 尺码流水 token
+  → 尺码必填；款号必须已绑尺码组；尺码必须在组内
 
-分类 MANUAL / SEQUENTIAL
-  → 默认 false（挂款号只当属性，OEM 不占格）
-  → 用户可勾选 true（须款+码齐全；分色则色在本款池）
-  → 可再改回 false（资料面可逆；组合生成该格从 EXISTS 回到 NEW）
+MANUAL / SEQUENTIAL
+  → 注记恒 false；挂款号只当属性；不占格
+  → 物料抽屉只读写本 SKU 图
 
-变体注记 = true 的 SKU
-  → 图片读写 product_model_images(款, 色)，各尺码同一套
-非变体 SKU
-  → 仍用 material_images（本 SKU）
+要同色共用样图
+  → 在本款色抽屉上传 product_model_images
+  → 列表 / FO/SO 该 (款, 色) 优先用这套图
+  → 未传款色图时，继续显示已有 SKU 图（无迁移）
 ```
 
 | 文档 | 说明 |
 |------|------|
-| [01-现状与问题.md](./01-现状与问题.md) | 分类与注记被绑死、图片挂 SKU、Wave C 复制为何不做 |
-| [02-目标流程.md](./02-目标流程.md) | 注记写入规则、表单、图片解析、生命周期 |
-| [03-schema与数据模型.md](./03-schema与数据模型.md) | `product_model_images` DDL、存量打标与迁图 |
+| [01-现状与问题.md](./01-现状与问题.md) | 变体尺码组可空窗、图挂 SKU、为何不做注记开关与迁图 |
+| [02-目标流程.md](./02-目标流程.md) | 注记仍抄分类、尺码组硬校验、两套图 API、展示回退 |
+| [03-schema与数据模型.md](./03-schema与数据模型.md) | `product_model_images` DDL；无存量脚本 |
 | [04-实施清单.md](./04-实施清单.md) | **开发入口**：已锁定决策、API、改动面、验收 |
 
 ---
 
 ## 评估结论
 
-**可行，建议做。** 分类策略与变体切面本就回答不同问题；现网 `is_fashion_variant` 的全部消费者（唯一索引、组合生成 `EXISTS`、款号锁组/锁色、三维不可变）已经按**行标记**工作，只是写入仍从分类抄过来。解开写入后，这些切面不用换钥匙。图片消费端（FO/SO）已经按 `ModelColorKey` 取图，存储仍按 SKU，是同一把错钥匙。
+**可行，建议做。** 变体注记继续由分类发号策略系统写入，避免把 `MaterialForm` 再拆一层开关状态机。图档按「款色资产 / SKU 资产」分入口管理；展示用优先回退，这样现网已挂在 SKU 上的图在不上迁图脚本时仍然可见。
 
 对话中已确认：
 
 | # | 事项 | 结论 |
 |---|------|------|
-| 1 | 能否与分类解耦 | **能**。分类管发号，注记管矩阵身份 |
-| 2 | MANUAL + 已选款号是否自动 true | **否**。选了款号不够，避免退回 V1 |
-| 3 | MANUAL 可否声明变体 | **可**，显式勾选，默认 false |
-| 4 | 勾选后可否改回 false | **可**。EXISTS 是资料面，不是系统异常；方便纠正手误 |
-| 5 | 图片共享切面 | **`is_fashion_variant = true` 的 (productModelId, colorId)** |
-| 6 | 与本款色池 | 不 FK `product_model_colors.id`，**写入/读取做一致性检查** |
-| 7 | 存量迁图 | **仅当时已 true** 的一次性 ETL，copy OSS 到 `product-model/`；运行时禁止 SKU→款色 |
-| 8 | 取消注记不删款色图 | 表行仍在。勾选 true **不**提升 SKU 图；true 只读款色图 |
+| 1 | 用户改 `isFashionVariant` | **不做**。写入仍 `strategy == FASHION_VARIANT` |
+| 2 | MANUAL 勾选占正品格 | **不做**（原组合 ③ 砍掉） |
+| 3 | 仅有 `productModelId` 是否 true | **否**。避免退回 V1 |
+| 4 | 变体尺码 | **必须存在且必须在已绑定尺码组内** |
+| 5 | 图片跟谁走 | **跟上传入口**，不跟注记、不跟分类策略 |
+| 6 | 物料图 API 是否门面到款色表 | **否**。两套 API 各自管，属主校验 |
+| 7 | 存量注记打标 / OSS 迁图 | **不做**。现无 `FASHION_VARIANT` 分类资料；旧图留在 SKU |
+| 8 | 展示缺款色图 | **回退**本 SKU / `min(materialId)` 的 SKU 图 |
+| 9 | 与本款色池 | 不 FK `product_model_colors.id`，**写入做一致性检查** |
+| 10 | 尺码流水 token | 保存公式变体才落库；生成器会给已占格未发号的尺码补位，不改已有编码 |
 
 其余锁定见 [04 §2](./04-实施清单.md)。

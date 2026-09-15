@@ -6,13 +6,15 @@
 
 | 表 | 动作 |
 |----|------|
-| `materials.is_fashion_variant` | **不改列**。改写入规则；补 V2 未执行的存量打标 |
-| `material_images` | 保留。迁完后变体行不再持有行 |
+| `materials.is_fashion_variant` | **不改列、不改写入公式、不做存量打标** |
+| `material_images` | 保留。变体 SKU 仍可持有行（回退与单码图） |
 | `product_model_images` | **新建**。款色图 |
 | `product_model_colors` | 不改。图不 FK 到本表 `id` |
 | `material_categories.code_strategy` | 不改 |
 
 DDL 进 Liquibase `lychee-erp/src/main/resources/db/changelog/v1/2026/`；权威副本同步 `schema_tables/MM/product_model_images.sql`。
+
+无 `FASHION_VARIANT` 分类存量，**不**新开 changeset 补刷注记，**不**改已发布的 `0908-002`，**不做** OSS 迁图。
 
 ---
 
@@ -65,7 +67,7 @@ ALTER TABLE lychee_erp.product_model_images
         FOREIGN KEY (updated_by) REFERENCES lychee_erp.users (id);
 ```
 
-注释：`款色产品图。仅 is_fashion_variant = true 的物料共享；color_id 空表示本款不分色。`
+注释：`款色产品图。按 (款号, 颜色) 共享，不分尺码；color_id 空表示本款不分色。与 materials.is_fashion_variant 无关。`
 
 应用层：同一 (model, color) 第一张图自动 `is_primary = true`；设主图时同键其它行置 false（与现网物料图相同）。
 
@@ -75,63 +77,15 @@ ALTER TABLE lychee_erp.product_model_images
 
 ## 3. 存量
 
-### 3.1 Wave 1：补刷 `is_fashion_variant`（V2 `0908-002` 未执行段）
-
-**不要改已发布的 0908-002。** 新 changeset 只打标，不碰索引。
-
-规则与 V2 设计 5.3 一致，**不要**把 MANUAL 上仅有款号的行刷成 true：
-
-```sql
-WITH RECURSIVE cat_strategy AS (
-    SELECT id, parent_id, code_strategy
-    FROM lychee_erp.material_categories
-    WHERE parent_id IS NULL
-    UNION ALL
-    SELECT c.id, c.parent_id,
-           COALESCE(c.code_strategy, cs.code_strategy)
-    FROM lychee_erp.material_categories c
-    INNER JOIN cat_strategy cs ON c.parent_id = cs.id
-)
-UPDATE lychee_erp.materials m
-SET is_fashion_variant = true
-FROM cat_strategy cs
-WHERE m.material_category_id = cs.id
-  AND cs.code_strategy = 'FASHION_VARIANT'
-  AND m.product_model_id IS NOT NULL
-  AND m.product_size_id IS NOT NULL
-  AND m.is_fashion_variant = false;
-```
-
-若刷完后条件唯一索引报错：同款色码两颗都在变体分类下——预检列出，人工先合并/停用，再执行 UPDATE。这是 V1 无索引时的脏数据，不是本专题新引入的。
-
-### 3.2 Wave 2：存量变体 SKU 图一次性迁入款色表
-
-仅针对 **脚本执行当时** 已是 `is_fashion_variant = true` 且仍挂在 `material_images` 上的行。这是切断旧源的一次性 ETL，**不是**运行时从物料反写款色（勾选 true 禁止 copy）。
-
-**必须搬 OSS。** 不得让新表 `file_path` 继续指向 `{tenant}/material/{skuCode}/...`。
-
-1. **预检**：同一 `(tenant_id, product_model_id, color_id)` 下多个 SKU 的 primary 不同 → 列出，默认 `min(material_id)` 作主图，其余作非主图。`color_id` 须已在本款色池，否则列入异常、不静默迁入。
-2. **按张 copy** 到 `{tenant}/product-model/{modelCode}/{colorId|nocolor}/{新文件名}`，确认可读。
-3. **插入** `product_model_images`，`file_path` **只写新路径**。
-4. 新行齐了之后：删已迁变体上的 `material_images` 行，再删 **旧** OSS。copy 失败则保留旧行，可重跑。
-5. 当时注记 `false` 的 `material_images` **不迁**（勾选 true 也不会自动并入）。
-
-之后运行时：true 只读写款色表。
+**不做。** 现无 `code_strategy = FASHION_VARIANT` 的分类树与待补刷物料；旧图全部留在 `material_images`。用户若要把某色做成共享样图，在本款色抽屉重新上传。运行时禁止 SKU → 款色 copy。
 
 ---
 
 ## 4. DTO
 
-`MaterialRequest` 增加：
+`MaterialRequest` **不增加** `isFashionVariant`。`MaterialResponse.isFashionVariant` 已有，继续回传（只读，来自落库列）。
 
-```java
-/** 非变体分类下是否占用款色码格子。变体分类由服务端强制 true，忽略此字段。 */
-private Boolean isFashionVariant;
-```
-
-`MaterialResponse.isFashionVariant` 已有，继续回传。
-
-款色图响应可复用 `MaterialImageResponse` 形状，或加 `productModelId` / `colorId`、`materialId` 可空。物料门面 GET 变体图时 `materialId` 仍回当前物料，避免前端列表 key 断裂。
+款色图响应可复用 `MaterialImageResponse` 形状，或加 `productModelId` / `colorId`；**不要**把款色图的 `id` 伪装成某颗物料的 `material_images.id`。物料图 GET 只返回该 SKU 行。
 
 ---
 
@@ -139,7 +93,7 @@ private Boolean isFashionVariant;
 
 | 能力 | 模块 |
 |------|------|
-| 注记写入、变体校验、物料图门面 | `lychee-erp-mm` |
-| 实体 / 仓储 / `MaterialImageHelper` 解析 | `lychee-erp-basis` |
+| 变体尺码组校验、物料图 API（仅 SKU 表） | `lychee-erp-mm` |
+| 实体 / 仓储 / `MaterialImageHelper` 解析（款色优先 + SKU 回退） | `lychee-erp-basis` |
 | FO/SO 取图 | PP/SD 只调 Helper，不查 MM Service |
-| 款号本款色图 API | MM `ProductModelController` 或并列 `ProductModelImageController` |
+| 款号本款色图 API | MM `ProductModelImageController`（或并列于 `ProductModelController`） |
