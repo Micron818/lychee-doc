@@ -69,7 +69,9 @@ ALTER TABLE lychee_erp.product_model_images
 
 注释：`款色产品图。按 (款号, 颜色) 共享，不分尺码；color_id 空表示本款不分色。与 materials.is_fashion_variant 无关。`
 
-应用层：同一 (model, color) 第一张图自动 `is_primary = true`；设主图时同键其它行置 false（与现网物料图相同）。
+应用层：同一 (model, color) 第一张图自动 `is_primary = true`。
+
+**设主图不得沿用现网 `saveAll` 同时翻转多行。** 部分唯一索引 `uk_product_model_images_primary_color` / `_nocolor` 在 PostgreSQL 下，若 Flush 先把目标行打成 `true`、再把旧主图打成 `false`，第一个 `UPDATE` 就会撞唯一约束。必须先批量 `UPDATE ... SET is_primary = false` 并 **Flush**，再把目标行 `true` 后 `save`（见 04 §4.1）。现网 `material_images` 没有同类部分唯一索引，SKU 设主图可暂维持 `saveAll`。
 
 `color_id` 只 FK `colors`，**不** FK `product_model_colors`。与本款色池的一致性由服务层保证（见 02 §3.1）：分色必须 ∈ 本款色；不分色必须 NULL。删本款色或删款号时**不** ON DELETE CASCADE 图片；有图则业务 400，用户先删图。`file_path` 必须是 `product-model/` 前缀对象，禁止与 `material_images.file_path` 相同。
 

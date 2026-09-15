@@ -72,5 +72,9 @@ MANUAL / SEQUENTIAL
 | 8 | 展示缺款色图 | **回退**本 SKU / `min(materialId)` 的 SKU 图 |
 | 9 | 与本款色池 | 不 FK `product_model_colors.id`，**写入做一致性检查** |
 | 10 | 尺码流水 token | 保存公式变体才落库；生成器会给已占格未发号的尺码补位，不改已有编码 |
+| 11 | 款色设主图 | 先清主图 Flush，再设目标；禁止 `saveAll` |
+| 12 | 列表填主图 | 提取器传入款/色，Helper 不回表物料 |
+| 13 | 不分色传图 | 本款颜色抽屉顶部面板（方案 A） |
+| 14 | 删图属主 | `deleteImage(materialId, imageId)` / 款色 `(modelId, imageId)` |
 
 其余锁定见 [04 §2](./04-实施清单.md)。
