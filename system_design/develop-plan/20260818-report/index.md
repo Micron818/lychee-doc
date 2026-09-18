@@ -2,6 +2,8 @@
 
 > 编写日期：2026-07-31（P3：2026-08-05；导入框架设计：2026-08-07；生产日报表：2026-08-14；收货单打印：2026-08-18；收付款单打印：2026-08-18；库存盘点报表设计：2026-08-18；FO/SO 型号色号：2026-09-14）
 > 状态：**导出 P0–P3 已实现**；**导入 I0/I1 已实现**（框架 + 物料标准成本导入，2026-08-07）；**生产日报表已实现**（见 [11](./11-示例-生产日报表.md)）；**收货单打印已实现**（见 [12](./12-示例-收货单打印表单.md)）；**收付款单打印已实现**（见 [13](./13-示例-收付款单打印表单.md)）；**库存盘点打印已实现**（见 [14](./14-示例-库存盘点报表.md)）
+>
+> 作业文件交付纠偏（CDN → 应用同源代理）：见 [20260918-export-file-delivery](../20260918-export-file-delivery/README.md)（设计完成，待实现）。
 
 ## 文档索引
 
@@ -29,7 +31,7 @@
 |--------|------|------|
 | Excel 生成库 | **Apache Fesod**（`org.apache.fesod:fesod-sheet:2.0.2-incubating`） | EasyExcel → FastExcel 的官方后继，Apache 2.0 许可，注解驱动 + 流式写入低内存，社区活跃（已入 Apache 孵化器） |
 | 导出执行模型 | **统一导出作业框架**（小数据量同步快速返回 + 大数据量异步作业） | 复用 MRP 已验证的 `@Async` + `@TransactionalEventListener` + 手动租户/安全上下文传递范式；一套框架服务所有后续报表 |
-| 文件交付方式 | **上传 OSS + CDN 签名 URL 下载** | 复用现有 `StorageService`；避免长 HTTP 流式响应；天然支持多实例部署与下载中心重复下载 |
+| 文件交付方式 | **上传 OSS**；作业下载改为 **应用同源代理**（原「OSS + CDN 签名 URL」仅适用于图片） | 作业文件一次性、无缓存命中；用户→CDN 与用户→ERP 可分裂（见 [20260918-export-file-delivery](../20260918-export-file-delivery/README.md)）。图片仍走 CDN |
 | 订购单打印 / 归档 | **服务端 PDF 单一来源**（Thymeleaf + openhtmltopdf）；原页 Modal + iframe 预览，下载走导出作业 | 打印件与归档件像素级一致；版式、水印、三语标签单点维护；预览成本转移到服务端渲染 |
 | 单据 PDF 前端基座 | 共享 `PdfBlobViewer` / `PdfPreviewModal` + `utils/blob`；领域仅薄适配 | 禁止再开 `/print` 深链、前端 HTML 版式或 `autoPrint`；新单据复用同一壳 |
 | 固定版式 Excel | **Fesod `withTemplate` + fill**（`ExcelTemplateWriteSupport`） | 与清单流式写入分流；版式在 `.xlsx` 模板维护；作业管线零改动（见 05） |
@@ -126,6 +128,7 @@
 - 批量 PDF 列表入口（订购单列表勾选多单导出）：后端 Handler 已支持 `ids` 批量，前端待解决列表复选框当前仅允许勾选 DRAFT 单（服务于批量删除/审核）的语义冲突后即可开放。
 - 邮件发送供应商：PDF 已落 OSS，追加邮件通道即可。
 - 过期作业清理定时任务（`@Scheduled`，与 OSS 生命周期规则双保险；导出/导入作业均可覆盖）。
+- **作业文件同源代理下载**（设计见 [20260918-export-file-delivery](../20260918-export-file-delivery/README.md)）：删除 `download-url` / `source-url` / `error-report-url`，改为 `GET /file` 流式；CDN 只留图片。
 - 更多清单导出：只需新增一个 Handler + 前端一个按钮，框架零改动。
 - **更多模板 Excel**：复用 `ExcelTemplateWriteSupport` + 领域模板 + Handler（见 05）；大清单仍走 `ExcelWriteSupport`。
 - **新单据类 PDF**：复用后端 `*PdfRenderer`/模板 + 前端 `PdfPreview*` 基座（见 04 §6）；禁止再开前端打印页双轨。
@@ -146,7 +149,7 @@
 |------|------|
 | 大数据量导出内存溢出 | Fesod 流式写入 + 分页读取（每批 1000 行）+ 单作业行数上限（默认 20 万行，超限报错提示细化筛选） |
 | 异步线程租户上下文丢失导致数据串租户 | 严格复制 MRP 范式：事件携带 `tenantId` + `Authentication`，监听器 `finally` 中清理；Handler 内所有查询走 JPA（`@TenantId` 自动过滤） |
-| 签名 URL 泄露 | 下载 URL 每次通过 API 实时签发，有效期 5 分钟；不落库、不返回长效 URL |
+| 签名 URL 泄露 | 作业文件改为同源 `GET /file`（Bearer + 本人 + 业务权限）；图片仍短效 CDN 签名。原 5 分钟签发方案见历史 01/02 |
 | 租户内越权下载导出文件 | 作业默认仅发起人本人可见（管理员例外）；下载时重验 Handler 业务导出权限；下载留审计日志 |
 | 打印/归档版式漂移 | 版式收敛为 Thymeleaf 模板单一来源；原页 Modal + iframe 预览同一 PDF |
 | 导入大文件/大批量写库 | Fesod 流式读 + `max-rows`/`max-file-size` + 独立 `importTaskExecutor` + 小 batchSize |
