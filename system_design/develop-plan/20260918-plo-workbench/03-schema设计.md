@@ -51,8 +51,13 @@ convertible == true   ↔  blockReason == null
 
 列表查询已保证最新 Run + PRODUCTION + OPEN，故不必再返回 `NOT_LATEST_RUN`。提交时仍要重校验最新 Run（防待转页开着时又跑了一次 MRP）。
 
-搜索参数走 `MrpResult`：`factoryId`、`material.code_or_name`（或 `material.name`）、日期。禁止用 PLO 的 `productMaterial.*`，`DynamicSpecifications` 会解析失败。  
-分页 fetch：`material`（含 `baseUnit`）、`factory`、`mrpRun`。
+搜索参数走 `MrpResult`：`factoryId`、`material.code_or_name`（或 `material.name`）、日期。禁止用 PLO 的 `productMaterial.*`，`DynamicSpecifications` 会解析失败。
+
+分页 fetch 必须带点路径（`Material.baseUnit` 是 LAZY；只 fetch `material` 映射单位时会再打一轮）：
+
+```text
+DynamicSpecifications.fetch("material.baseUnit", "factory", "mrpRun")
+```
 
 ---
 
@@ -62,10 +67,12 @@ convertible == true   ↔  blockReason == null
 POST /planned-orders/from-mrp-results
 Body: [ mrpResultId, ... ]
 
-200: List<PlannedOrderResponse>   // 现网 PLO 响应即可
+200: List<PlannedOrderResponse>   // 契约仍用现网类型；本接口只保证 id / orderNo
 ```
 
 不要做成采购那种 `{ items: [{ mrpResultId, convertQuantity, supplierId, ... }] }`。生产没有行级改写。
+
+`saveAll` 后 `productMaterial` / `factory` 未 hydrate。**不要**为了物料名再查一遍带 fetch 的 PLO。前端成功文案只用 `orders.map(o => o.orderNo)`。映射主表已有字段即可，名称类字段允许为空。
 
 错误（整批回滚）：
 
@@ -108,13 +115,24 @@ materialId = result.materialId
 
 转 MO、删 PROPOSED 回退：现网 `PlannedOrderServiceImpl`，不动。
 
-保护判断：现网 `PlannedOrderRepository.hasProtectedOrder(foItemId, materialId, {FIRMED, CONVERTED})`。
+保护判断语义与现网 `hasProtectedOrder(foItemId, materialId, {FIRMED, CONVERTED})` 相同。  
+`hasProtectedOrder` **留给** `from-mrp-results` 加锁后的逐条校验，不要删。待转分页**禁止**循环调用它。
 
-待转分页出数后对**当前页**算 `convertible` / `blockReason`，必须批量，不要逐行 `findBySupplyTypeAndSupplyId` + `hasProtectedOrder`（一页 20 行会打 40+ 次 SQL）：
+待转分页对当前页算 `convertible` / `blockReason`，保护相关 DB 交互**固定 2 次**（本页无 FO peg 则第 2 次跳过，避免空 `IN`）：
 
 1. `findBySupplyTypeAndSupplyIdIn(MRP_RESULT, 本页 mrpResultIds)`
-2. 内存按 `supplyId` 分组，只取 `demandType=FACTORY_ORDER` 的 `demandId`
-3. 再按 `(foItemId, materialId)` 判保护
+2. 抽出 `foItemIds` / `materialIds`；若 `foItemIds` 非空，再调一次 `findProtectedFoItemMaterialPairs`（新增，见下）
+3. 内存做成 `Set`（建议 key = `foItemId + ':' + materialId`），按行 O(1) 判 `convertible`
+
+`PlannedOrderRepository` 新增：
+
+```text
+List<Object[]> findProtectedFoItemMaterialPairs(foItemIds, materialIds, statuses)
+-- DISTINCT peg1.demandId, p.productMaterialId
+-- JOIN 与现网 hasProtectedOrder 同一条 pegging 链
+-- peg1.demandId IN :foItemIds AND p.productMaterialId IN :materialIds
+-- p.orderStatus IN {FIRMED, CONVERTED}
+```
 
 无 FO pegging 的组件层建议（上层 `demandType=MRP_RESULT` 或 MO 组件需求）：`convertible=true`，`blockReason=null`。与现网循环一致：只在 FO peg 上检查保护。
 
