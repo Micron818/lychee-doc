@@ -140,7 +140,7 @@
 - **收货单打印（✅，仅 Print）**：比照订购单实现 `GET /goods-receipts/{id}/pdf` + `GoodsReceiptPdfRenderer` + 原页 Modal；含仓库 / 批次 / FOC / 来源单；**不印单价金额／币别汇率**；**报工入库不提供打印**；无归档 Export。设计见 [12](./12-示例-收货单打印表单.md)。
 - **收付款单打印（✅，仅 Print）**：比照收货单实现 `GET /payments/{id}/pdf` + `PaymentPdfRenderer` + 原页 Modal；`RECEIPT`/`DISBURSEMENT` 共用模板切换标题；印金额／币别／账户快照／核销明细／金额大写；无行亦可打；无归档 Export。设计见 [13](./13-示例-收付款单打印表单.md)。
 - **库存盘点打印（✅，仅 Print）**：比照收货单实现 `GET /physical-inventories/{id}/pdf` + `PhysicalInventoryPdfRenderer` + 原页 Modal；**按单张盘点单号**；明盘；空明细拒绝；过账补偿列仅不锁库且已过账/已冲销才印；无 Excel、无归档 Export。设计见 [14](./14-示例-库存盘点报表.md)。
-- **客户请款明细（设计中，仅 Print）**：出货单列表工具栏；强制单一客户 + `actualDeliveryDate` 闭区间；跨多张已出货 Delivery 一张尺码矩阵 PDF（净出货量 + 价税 + 出货/行备注 + 账期/默认收款账号）；不印料号列、不印样图、无归档 Export。设计见 [../20260920-客户请款明细/README.md](../20260920-客户请款明细/README.md)。
+- **客户请款明细（设计中，仅 Print）**：出货单列表工具栏；强制单一客户 + `actualDeliveryDate` 闭区间；跨多张已出货 Delivery 一张尺码矩阵 PDF（净出货量 + `LineTaxCalculator` 价税 + 出货/行备注 + 账期/按币别默认收款账号）；左起出货复合格；不印料号列、不印样图、无归档 Export。部分出货本期不进。设计见 [../20260920-客户请款明细/README.md](../20260920-客户请款明细/README.md)。
 - **更多 Excel 导入**：复用 `DataImportHandler` + 模板 + `ExcelImportButton`（见 06）；单据类导入二期评估。
 - ~~标准成本「导出为再导入模板」~~：✅ `FI_MATERIAL_COST` 清单导出（前 8 列对齐导入模板；见 07 §12）。
 
