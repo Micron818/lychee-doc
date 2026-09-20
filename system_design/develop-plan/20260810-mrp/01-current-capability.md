@@ -57,7 +57,8 @@
 | `material_id` / `factory_id` | 建议对象（工厂在结果层，不在 Run 层） |
 | `required_date` / `required_quantity` | 需求日与建议量 |
 | `planned_start_date` / `planned_end_date` | 提前期倒推后的计划起止 |
-| `suggested_action_type` | `PRODUCTION` / `PURCHASE` |
+| `suggested_action_type` | `PRODUCTION` / `PURCHASE`；由物料类型 `isManufactured` 决定，不看 BOM |
+| `has_bom` | 运算快照：自制件当时是否有相对 `runDate` 的有效 APPROVED BOM |
 | `is_converted` | 是否已转单 |
 
 ### 2.3 `mrp_parameters`
@@ -77,7 +78,7 @@
 | 枚举 | 值 | 实际使用 |
 |------|-----|----------|
 | `MrpRunStatus` | RUNNING/COMPLETED/FAILED/CANCELLED | CANCELLED 无写入路径 |
-| `MrpActionType` | PRODUCTION/PURCHASE | 有 BOM→PRODUCTION，否则 PURCHASE |
+| `MrpActionType` | PRODUCTION/PURCHASE | `isManufactured`→PRODUCTION，否则 PURCHASE；BOM 只负责展开 |
 | `MrpSourceType` | FACTORY_ORDER/FORECAST/SAFETY_STOCK/MANUAL | 引擎种子需求仅 FO；其余未参与计算 |
 | `LotSizingProcedure` | LFL/FOQ/POQ | 已实现策略类 |
 | `PlannedOrderStatus` | PROPOSED/FIRMED/CONVERTED | 清理与保护逻辑依赖此状态 |
@@ -161,10 +162,10 @@
 1. 运行前 `lowLevelCodeService.recalculateForCurrentTenant()`（APPROVED BOM）
 2. 按批量规则分桶：LFL/FOQ 按日；POQ 按 `period_days`
 3. 套用到期预计入库 → 扣毛需求 → 低于安全库存则产生净需求
-4. 有有效 BOM（相对 `runDate`）→ `PRODUCTION`，否则 `PURCHASE`
+4. `materialType.isManufactured=true` → `PRODUCTION`，否则 `PURCHASE`（采购件即使误挂 BOM 也不展开）
 5. 提前期：`plannedEndDate = 最早需求日`，`plannedStartDate = 需求日 − leadTimeDays`
 6. Lot-Sizing 策略：`LotForLot` / `FixedQuantity` / `PeriodicQuantity`（含 rounding/min/max）
-7. 写 `MrpResult` + pegging；若 PRODUCTION 则 BOM 展开组件（含 scrap）作为下层需求
+7. 写 `MrpResult`（含 `hasBom` 快照）+ pegging；仅 PRODUCTION 且有有效 BOM 才展开组件（含 scrap）
 
 ### 4.5 状态机
 
@@ -186,6 +187,7 @@ CANCELLED：枚举存在，无业务写入
 - 若 FO pegging 需求侧已有 FIRMED/CONVERTED PLO，则跳过（`hasProtectedOrder`）
 - 新建 PLO：`orderType=MAKE`，`orderStatus=PROPOSED`，带 `mrpRunId`
 - Pegging：`MRP_RESULT → PLANNED_ORDER`；`isConverted=true`
+- PLO→MO：无有效 BOM 时允许转工单（`bomId` 空、无组件），用于仅制程件
 
 ### 5.2 → Purchase Requisition
 

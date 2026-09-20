@@ -13,6 +13,7 @@ CREATE TABLE lychee_erp.mrp_results
 	required_date date NOT NULL,
 	required_quantity numeric(18,6) NOT NULL,
 	suggested_action_type varchar(20) NOT NULL,
+	has_bom boolean NOT NULL DEFAULT false,
 	planned_start_date date NOT NULL,
 	planned_end_date date NOT NULL,
 	converted_quantity numeric(18,6) NOT NULL DEFAULT 0,
@@ -58,6 +59,10 @@ ALTER TABLE lychee_erp.mrp_results ADD CONSTRAINT fk_mrp_results_material
 
 COMMENT ON COLUMN lychee_erp.mrp_results.convert_status
 	IS 'OPEN, PARTIAL, CONVERTED'
+;
+
+COMMENT ON COLUMN lychee_erp.mrp_results.has_bom
+	IS '运算时自制件是否存在相对 runDate 的有效 APPROVED BOM；采购建议恒为 false，PRODUCTION 且 false 表示仅制程'
 ;
 
 COMMENT ON COLUMN lychee_erp.mrp_results.converted_quantity
