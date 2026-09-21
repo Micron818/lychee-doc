@@ -9,7 +9,7 @@
 | 缩写 | 中文 | Việt Nam（待填） | 说明 |
 |------|------|------------------|------|
 | SO | 销售订单 | | Sales Order |
-| DN | 交货单 | | Delivery Note |
+| DN | 交货单 | | 系统作业单据（Outbound Delivery）。打印件标题为 **送货单**（英文 Delivery Note），见 [送货单打印](../system_design/develop-plan/20260921-送货单打印/README.md) |
 | FO | 工厂订单 | | Factory Order |
 | PR | 采购申请 | | 仅内部手工请购；原物料不经 PR |
 | PO | 采购订单 | | 三种诞生方式：MRP / 采购申请 / 手工 |
