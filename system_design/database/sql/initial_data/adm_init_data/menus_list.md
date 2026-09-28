@@ -24,25 +24,26 @@ ORDER BY menus.sort_order::varchar ;
 |3030|MM03|Material units|menu.mm.materialUnits|
 |3040|MM04|Product models|menu.mm.productModels|
 |3050|MM05|Product sizes|menu.mm.productSizes|
-|3060|MM06|Colors|menu.mm.colors|
-|3070|MM07|Materials|menu.mm.materials|
-|3080|MM08|Standard unit conversions|menu.mm.standardUnitConversions|
+|3060|MM06|Product size groups|menu.mm.productSizeGroups|
+|3070|MM07|Colors|menu.mm.colors|
+|3080|MM08|Materials|menu.mm.materials|
 |3090|MM09|Material unit conversions|menu.mm.materialUnitConversions|
-|3100|MM10|Material Factories|menu.mm.materialFactories|
+|3100|MM10|Standard unit conversions|menu.mm.standardUnitConversions|
+|3110|MM11|Material Factories|menu.mm.materialFactories|
 |40|SD|Sales and distribution|menu.sd|
 |4010|SD01|Customer management|menu.sd.customers|
 |4020|SD02|Sales forecasts(SFO)|menu.sd.salesForecasts|
-|4030|SD03|Sales orders(SO)|menu.sd.salesOrders|
+|4030|SD03|Sales orders|menu.sd.salesOrders|
 |4040|SD04|Delivery Notes(DN)|menu.sd.deliveries|
 |50|PP|Production planning|menu.pp|
-|5010|PP01|Bill of materials(BOM)|menu.pp.billOfMaterials|
-|5020|PP02|Factory orders(FO)|menu.pp.factoryOrders|
+|5010|PP01|Bill of materials|menu.pp.billOfMaterials|
+|5020|PP02|Factory orders|menu.pp.factoryOrders|
 |5030|PP03|MRP Parameters|menu.pp.mrpParameters|
 |5040|PP04|MRP Schedules|menu.pp.mrpSchedules|
 |5050|PP05|MRP Runs|menu.pp.mrpRuns|
 |5060|PP06|Planned Orders(PLO)|menu.pp.plannedOrders|
 |5070|PP07|Manufacturing Orders(MO)|menu.pp.productionOrders|
-|5080|PP08|Manufacturing reports(MR)|menu.pp.productionReports|
+|5080|PP08|Production Reports|menu.pp.productionReports|
 |5090|PP09|Backflush Exception Queue|menu.pp.backflushExceptions|
 |60|SCM|Purchase Management|menu.scm|
 |6010|SCM01|Suppliers|menu.scm.suppliers|
@@ -52,7 +53,7 @@ ORDER BY menus.sort_order::varchar ;
 |6050|SCM05|Outsource Orders(OO)|menu.scm.outsourceOrders|
 |70|WM|Warehouse Management|menu.wm|
 |7010|WM01|Warehouse|menu.wm.warehouses|
-|7020|WM02|Goods receipts(GR)|menu.wm.goodsReceipts|
+|7020|WM02|Goods Receipts(GR)|menu.wm.goodsReceipts|
 |7030|WM03|Purchase returns(PRT)|menu.wm.purchaseReturns|
 |7040|WM04|Customer returns(CRT)|menu.wm.customerReturns|
 |7050|WM05|Stock transfer(ST)|menu.wm.stockTransfers|
@@ -79,11 +80,11 @@ ORDER BY menus.sort_order::varchar ;
 |8030|FI.ARAP|AR & AP|menu.fi.arAp|
 |803010|FI3010|AR Invoices|menu.fi.arInvoices|
 |803020|FI3020|AP Invoices|menu.fi.apInvoices|
-|803030|FI3030|AP Credit Memos(CM)|menu.fi.apCreditMemos|
-|803040|FI3040|AR Credit Memos(RM)|menu.fi.arCreditMemos|
+|803030|FI3030|AR Credit Memos(RM)|menu.fi.arCreditMemos|
+|803040|FI3040|AP Credit Memos(CM)|menu.fi.apCreditMemos|
 |803050|FI3050|Payments|menu.fi.payments|
 |803060|FI3060|GR/IR Balance Analysis|menu.fi.grIrBalance|
-|8040|FI.FA|Fixed Assets Management|menu.fi.fixedAssetMgmt|
+|8040|FI.FA|Fixed Assets|menu.fi.fixedAssetMgmt|
 |804010|FI4010|Asset Categories|menu.fi.assetCategories|
 |804020|FI4020|Fixed Assets|menu.fi.fixedAssets|
 |804030|FI4030|Asset Depreciation|menu.fi.assetDepreciations|
@@ -100,3 +101,4 @@ ORDER BY menus.sort_order::varchar ;
 |90|RPT|Report Center|menu.report|
 |9010|RPT01|Export Jobs|menu.report.exportJobs|
 |9020|RPT02|Import Center|menu.report.importJobs|
+|9030|RPT03|Management Monitor|menu.report.monitors|
