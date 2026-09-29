@@ -14,7 +14,7 @@ CREATE TABLE lychee_erp.suppliers
 	supplier_type varchar(20) NOT NULL,
 	active_status varchar(20) NOT NULL,
 	address_local text NULL,
-	phone varchar(20) NULL,
+	phone varchar(100) NULL,
 	email varchar(100) NULL,
 	contact_person varchar(100) NULL,
 	contact_phone varchar(20) NULL,
