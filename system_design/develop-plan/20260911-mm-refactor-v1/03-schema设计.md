@@ -14,7 +14,7 @@
 | `uk_materials_tenant_variant_nocolor` | A | 部分唯一：款+码 且 color IS NULL |
 | `product_models` | A | 加 `size_group_id` |
 | `product_size_groups` / `_items` | A | **新增**；items **无** sku_code，只有 sequence |
-| `product_model_colors` | A | **新增**；`sku_code char(1)`；0 行=不分色 |
+| `product_model_colors` | A | **新增**；`sku_code varchar(3)`，`^[A-Z][A-Z0-9]{0,2}$`；0 行=不分色 |
 | `product_model_size_codes` | A | **新增**；`(款, 色可空, 码) → 01–99` |
 | `colors` / `product_sizes` | — | 不改 |
 
@@ -135,7 +135,7 @@ CREATE TABLE lychee_erp.product_model_colors
     tenant_id        bigint    NOT NULL,
     product_model_id bigint    NOT NULL,
     color_id         bigint    NOT NULL,
-    sku_code         char(1)   NOT NULL,
+    sku_code         varchar(3) NOT NULL,
     sequence         integer   NOT NULL DEFAULT 0,
     created_at       timestamp NULL,
     updated_at       timestamp NULL,
@@ -144,7 +144,7 @@ CREATE TABLE lychee_erp.product_model_colors
     CONSTRAINT pk_product_model_colors PRIMARY KEY (id),
     CONSTRAINT uk_product_model_colors UNIQUE (tenant_id, product_model_id, color_id),
     CONSTRAINT uk_product_model_colors_sku UNIQUE (tenant_id, product_model_id, sku_code),
-    CONSTRAINT ck_product_model_colors_sku CHECK (sku_code ~ '^[A-Z]$'),
+    CONSTRAINT ck_product_model_colors_sku CHECK (sku_code ~ '^[A-Z][A-Z0-9]{0,2}$'),
     CONSTRAINT fk_product_model_colors_model FOREIGN KEY (product_model_id)
         REFERENCES lychee_erp.product_models (id),
     CONSTRAINT fk_product_model_colors_color FOREIGN KEY (color_id)
@@ -157,7 +157,7 @@ CREATE TABLE lychee_erp.product_model_colors
   - 存在 `color_id IS NOT NULL` → 禁止清到 0 行；成品不得再写空颜色
   - 存在 `color_id IS NULL` → 禁止新增本款颜色；成品不得再写颜色
   - 上线前若同一款两种同时存在 → 先清脏数据（两条部分唯一索引**不**拦混用，服务层必须拦）
-- 该款该色仍有物料时禁止改 `sku_code`；无物料时可改字母（下一笔用新字母 + 已占用流水）。
+- 该款该色仍有物料时禁止改 `sku_code`；无物料时可改色号（下一笔用新色号 + 已占用流水）。
 
 ### 3.6 款×色尺码流水
 

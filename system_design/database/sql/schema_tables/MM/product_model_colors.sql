@@ -9,7 +9,7 @@ CREATE TABLE lychee_erp.product_model_colors
 	tenant_id bigint NOT NULL,
 	product_model_id bigint NOT NULL,
 	color_id bigint NOT NULL,
-	sku_code char(1) NOT NULL,
+	sku_code varchar(3) NOT NULL,
 	sequence integer NOT NULL DEFAULT 0,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,
@@ -28,7 +28,7 @@ ALTER TABLE lychee_erp.product_model_colors ADD CONSTRAINT uk_product_model_colo
 ALTER TABLE lychee_erp.product_model_colors ADD CONSTRAINT uk_product_model_colors_sku UNIQUE (tenant_id,product_model_id,sku_code)
 ;
 
-ALTER TABLE lychee_erp.product_model_colors ADD CONSTRAINT ck_product_model_colors_sku CHECK (sku_code ~ '^[A-Z]$')
+ALTER TABLE lychee_erp.product_model_colors ADD CONSTRAINT ck_product_model_colors_sku CHECK (sku_code ~ '^[A-Z][A-Z0-9]{0,2}$')
 ;
 
 CREATE INDEX idx_product_model_colors_model ON lychee_erp.product_model_colors (product_model_id ASC)

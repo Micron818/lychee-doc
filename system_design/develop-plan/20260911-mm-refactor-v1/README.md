@@ -8,7 +8,7 @@
 
 ```text
 款号 ProductModel.code                    例 A12345
-  ├─ 可选：本款颜色 sku_code（1 位 A–Z）     黑→A  白→B     ≠ colors.code
+  ├─ 可选：本款颜色 sku_code（1–3 位，如 A、A1、A01）  黑→A  白→B 或 A1   ≠ colors.code
   │     不区分颜色 → 无此字母
   ├─ 尺码流水（2 位 01–99）
   │     按「该款 + 该色（或不分色）」从最小码编 01
