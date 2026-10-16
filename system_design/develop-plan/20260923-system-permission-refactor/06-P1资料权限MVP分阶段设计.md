@@ -33,7 +33,7 @@
 >
 > - 依据：[01-现状与问题.md](./01-现状与问题.md)、[02-权限现状与交付运维指南.md](./02-权限现状与交付运维指南.md)、03、[05-P1前置完成项.md](./05-P1前置完成项.md)，以及 2026-10-12 的代码。
 > - 与 03 的关系：03 是完整的目标设计。本文决定先做哪些、怎样简化、其余部分什么时候做。已纳入本文阶段的内容以本文为准；阶段 2 各项的做法沿用 03 的对应章节。
-> - 状态：待评审。
+> - 状态：待评审。阶段 0 的本地验证已完成；`.github/workflows/test.yml` 暂不加入，测试只在本机执行。
 
 ---
 
@@ -120,7 +120,7 @@
 | 有效范围查询（9.4） | 阶段 2-10 | MVP 在指派列表显示范围摘要 |
 | 写守卫 LOG 模式（8.11） | 不做 | 存量指派都是"全部"，守卫不会触发；试点出问题用总开关回退 |
 | P1-0 的预置 SYS 角色、删除草稿表、`putIfAbsent`、02 勘误 | 移出本设计 | 与资料范围互不依赖（第八节） |
-| P1-0 的测试 CI 与 Testcontainers | 阶段 0 | 过滤器只能在真实数据库上验证；仓库里目前没有任何数据库集成测试 |
+| P1-0 的测试 CI 与 Testcontainers | 阶段 0 | Testcontainers 基座已在本地跑通（第五节）。CI 工作流暂不加入 |
 
 ### 3. 影响 MVP 的代码事实
 
@@ -137,10 +137,10 @@
 | 出货对账单读取公司银行账户 | `DeliveryBillingStatementServiceImpl` | 工厂级单据会跨维度读取公司级资料；MVP 不登记银行账户 |
 | `mrp_runs.factory_id`、`mrp_schedules.factory_id` 可空，空值表示全部工厂 | `MrpServiceImpl.assertNoConflictingRunningRun` | 登记时要声明空值语义（4.4 节） |
 | 批量删除常按请求 ID 先删明细 | `DeliveryServiceImpl.deleteDeliveryBulk`、`SalesOrderServiceImpl.deleteSalesOrderBulk`、`MrpServiceImpl.deleteMrpRunBulk` | 明细和同一菜单下操作的子表必须登记到单头的路径，写模式才会一起过滤 |
-| 受控表与单据链上的 `@Modifying` 约 16 处 | `MrpResultRepository`、`SalesOrderItemRepository`、`MaterialCostRepository`、`OrderPeggingRepository` 等 | 批量 DML 不经过过滤器，阶段 0 逐个确认传入的 ID 来自已过滤的加载结果 |
+| 受控表与单据链上的 `@Modifying` 约 16 处 | `MrpResultRepository`、`SalesOrderItemRepository`、`MaterialCostRepository`、`OrderPeggingRepository` 等 | 批量 DML 不经过过滤器。阶段 0 已复核，用户路径不用改调用（4.6 节） |
 | 改公司国家码时的未结案检查必须看全量（05 第 2 节） | `CompanyServiceImpl.applyCountryCode` 调用 `RemoteSdOpenDocumentService`、`RemoteScmOpenDocumentService` | 它在 `/basis/companies:update` 的写模式下执行，主资源是公司，不登记；销售、采购、委外订单都不会被过滤 |
 | 按租户共享的 `@Cacheable` 都不含受控资料 | 各组织下拉、科目树、业务伙伴、MRP 参数等缓存 | MVP 不用改缓存；以后登记 MRP 参数时要另行处理（阶段 2-5） |
-| 没有任何 `@SpringBootTest` 或数据库集成测试；CI 只有部署工作流 | `.github/workflows/deploy.yml` | 阶段 0 先建测试基座 |
+| 评估时没有 `@SpringBootTest` 或数据库集成测试；CI 只有部署工作流 | `.github/workflows/deploy.yml` | 本地 Testcontainers 基座已建立（第五节）。CI 工作流仍暂缓 |
 | 原生 SQL 里只剩单据链追溯涉及业务数据 | `OrderPeggingRepository` | 05 已删除 `existsOpenByCompanyId` |
 
 ---
@@ -246,7 +246,13 @@ CREATE UNIQUE INDEX uk_user_role_scopes ON lychee_erp.user_role_scopes
 
 1. 建表；adm 新增实体 `UserRoleScope`。
 2. 回填存量指派：每条现有 `user_roles` 插入一行 `COMPANY / ALL`，SQL 同 03 5.5 节第 2 步（去掉 `include_children` 列）。
-3. 组织列索引：为 4.4 节登记清单中各表的组织列补 `(tenant_id, <组织列>)` 索引，使用 `CREATE INDEX IF NOT EXISTS`。清单由阶段 0 用 `pg_indexes` 对比后确定；明细表要确认单头外键列已有索引。
+3. 组织列索引：为下面还没有 `(tenant_id, <组织列>)` 前缀的表补索引，使用 `CREATE INDEX IF NOT EXISTS`。更长的唯一索引只要以这两列开头，视为已经有。2026-10-16 用本地库 `pg_index` 对比：明细的单头外键列都已有索引，不用再补。`purchase_orders` 现有的 `factory_id` 单列索引、`stock_on_hand` 与 `inventory_balances` 里排在第三列的仓库列，都不算这个前缀。
+
+    | 维度 | 要补索引的表 |
+    |---|---|
+    | 公司 | `sales_orders` |
+    | 工厂 | `purchase_requisitions`、`purchase_orders`、`outsource_orders`、`goods_receipts`、`purchase_returns`、`customer_returns`、`stock_issues`、`stock_issue_returns`、`stock_transfers`、`production_orders`、`production_reports`、`production_backflush_exceptions`、`mrp_runs`、`mrp_schedules`、`mrp_results`、`factory_orders` |
+    | 仓库 | `physical_inventories`、`stock_on_hand`、`stock_transactions`、`inventory_balances` |
 
 **今后凡是写 `user_roles` 的脚本**（租户初始化、数据修补）都要同时插入范围行，否则新指派是"无资料范围"。
 
@@ -323,7 +329,7 @@ public class PurchaseOrderItem extends AuditableEntity { ... }
 - **读模式**启用全部登记实体中、所属维度不是"全部"的过滤器。
 - **写模式**只启用登记在主资源路径下的过滤器：单头、明细，以及同一菜单下操作的子表。
 - 03 用三个按维度共用的过滤器，再给每个资源加一个行过滤器。MVP 改为每个实体一个过滤器，"读全部、写只过滤主资源"就只是启用哪些过滤器的区别。阶段 2 的行规则可以直接扩展同一个过滤器的条件。
-- 连接串用 `currentSchema=lychee_erp`，子查询里的表名不加 schema 前缀，阶段 0 确认。
+- 连接串用 `currentSchema=lychee_erp`。子查询里的表名不加 schema 前缀；委外组件的两层子查询同样可以解析。阶段 0 已在采购订单明细和委外订单组件上确认。
 
 **登记规则：**
 
@@ -374,13 +380,15 @@ public class PurchaseOrderItem extends AuditableEntity { ... }
 | 非事务的共享 EntityManager | `ExportJobServiceImpl.executeExportJob`（`NOT_SUPPORTED`） |
 | 异步线程 | 导出、导入监听器 |
 
-**首选做法：**
+**做法（阶段 0 已选定）：** `entityManagerInitializer` 加上 `DataScope.call` 对已打开 Session 的重新绑定。备选 `@FilterDef(autoEnabled = true)` 未做原型，不采用。
 
-- 在 `LocalContainerEntityManagerFactoryBean` 上设置 Spring 6.1 起提供的 `entityManagerInitializer`：每个 EntityManager 创建时，按当前上下文启用过滤器并绑定参数。
-- 切面写入上下文、`DataScope.call` 切换和恢复时，对当前线程已绑定的 Session（主要是 OSIV 那一个）重新绑定一次。
+- 在 `LocalContainerEntityManagerFactoryBean` 上设置 Spring 6.1 起提供的 `entityManagerInitializer`：每个 EntityManager 创建时，按当前上下文启用过滤器并绑定参数。`REQUIRES_NEW` 因此在新事务里生效；应付发票批量动作里，范围外的发票按不存在处理，失败明细不带单号。
+- 切面写入上下文、`DataScope.call` 切换和恢复时，对当前线程已绑定的 Session 重新绑定一次。OSIV 和 `NOT_SUPPORTED`（异步导出执行）走这条路径，因为 Session 在上下文确定之前就已经打开。
+- 异步线程必须自己调用 `DataScope.call`。没有上下文的线程不启用过滤器，定时作业因此不受限。
+- 在已经打开的 Session 上切换范围之前先 `clear()`。否则过滤启用前装进一级缓存的实体，再次 `find` 仍会返回。
 - "全部"的维度不启用过滤器，不产生任何额外条件；空集合用哨兵值 `-1`，保证条件为假。
-
-**备选：** `@FilterDef(autoEnabled = true)` 加 `@ParamDef(resolver = ...)`，在生成 SQL 时从上下文取参数。这种做法条件里要带"全部"标记，还要确认列表参数和查询计划缓存下的行为。阶段 0 两种都做原型，选定一种。
+- 范围条件加在根实体的 `WHERE`，不进 `LEFT JOIN` 的 `ON`。`DynamicSpecifications.fetch` 的 count 查询不带 fetch join，但带同一条 `WHERE`。第一页没满时 Spring Data 不另发 count。
+- `@TenantId` 与资料范围条件同时出现在 `WHERE`。`findById`、`findAllById`、`existsById` 对范围外记录按不存在处理。`getReferenceById` 以及懒加载的多对一，在访问属性时抛 `EntityNotFoundException`，不返回 null，也不抛 `EntityFilterException`。
 
 ### 6. 写入控制
 
@@ -390,7 +398,7 @@ public class PurchaseOrderItem extends AuditableEntity { ... }
 
 - **生效范围：** 写模式下，对主资源路径下登记了组织字段的实体生效。读模式本不应写受控单头；如果出现（例如导入漏了切换模式），同样按当前范围校验，作为兜底。
 - **新增**（`persist` 时）：组织字段必须在写范围内。ID 是自增列，`save()` 当场执行插入，异常当场抛出；导入处理器逐行 try/catch，越界行自然记为该行失败。
-- **修改**（flush 时）：新值必须在写范围内。旧值已由过滤保证在范围内，只校验新值。flush 或提交时抛出的异常可能被包装，`GlobalExceptionHandler` 沿 cause 链找到它。
+- **修改**（flush 时）：新值必须在写范围内。旧值已由过滤保证在范围内，只校验新值。显式 flush 直接抛出 `DataScopeDeniedException`；提交时包在 `TransactionSystemException` → `RollbackException` 里。`GlobalExceptionHandler` 沿 cause 链找到它，返回 403。`persist` 同样直接抛出，不包装。
 - **删除**不校验：删除前必须先加载，加载已经过滤。
 - 所有单头实体都继承 `AuditableEntity`。没有继承的只有 `SysDocSequence` 和 `ProductionOrderComponent`，前者不受控，后者是明细。
 
@@ -400,7 +408,7 @@ public class PurchaseOrderItem extends AuditableEntity { ... }
 - 系统作业不校验。
 - `StockLedgerReconciliationServiceImpl` 直接 `saveAll`，属于对账工具，不经过这一校验。
 
-**批量写。** 范围外的 ID 查不到，不越权。"先删明细"的写法依靠 4.4 节规则 1：明细登记在同一路径下，只删得到范围内单据的明细。阶段 0 复核受控表上的 `@Modifying`，逐个确认传入的 ID 来自已过滤的加载结果；不符合的改为先加载单头，再用加载到的 ID。
+**批量写。** 范围外的 ID 查不到，不越权。"先删明细"的写法依靠 4.4 节规则 1：明细登记在同一路径下，只删得到范围内单据的明细。阶段 0 复核了受控表和单据链上的 15 处 `@Modifying`：用户路径传入的 ID 都来自已经过滤的加载，不用改调用。`deleteOldProposedOrders`、`deleteEmptyRuns`、`MrpResultRepository.deleteByIds` 只在 MRP 运算里执行，运算不受限。读接口没有对受控表做“查不到就新建”。现存量在过账时补行，工厂和仓库取自已经加载的单头。
 
 **越界：** 抛 `DataScopeDeniedException`（继承 `AccessDeniedException`），返回 403 和 `error.data.scope.denied`，记 WARN 日志，带上租户、用户、权限串、实体、组织值。
 
@@ -503,7 +511,13 @@ lychee:
 
 ## 五、阶段 0：技术验证
 
-**测试基座：** 使用 Testcontainers PostgreSQL，执行全量 Liquibase 迁移。新增 `.github/workflows/test.yml`，在 PR 和推送 main 时执行 `./gradlew test`；镜像构建（Dockerfile `-x test`）不变。
+**状态：** 本地验证已完成（2026-10-16）。`.github/workflows/test.yml` 暂不加入；镜像构建仍使用 Dockerfile 的 `-x test`。
+
+**测试基座：** Testcontainers PostgreSQL 15，执行全量 Liquibase。测试 changelog 在正式脚本前后分别关闭、恢复外键检查，空库才能跑完种子数据。本机命令：
+
+```
+.\gradlew.bat :lychee-erp:test --tests com.lychee.erp.db.* --no-daemon
+```
 
 **验证清单：**
 
@@ -520,7 +534,20 @@ lychee:
 | 9 | 复核受控表与单据链上的 `@Modifying`（约 16 处），以及读接口里"查不到就新建"的写法 | 逐个过清单 |
 | 10 | 数百个仓库 ID 的 IN 列表的执行计划 | 库存余额 |
 
-**完成标准：** 采购订单（单头加明细）、现存量、应付发票批量动作三个原型在集成测试中通过；绑定方式定稿，并把结论补进本文 4.5 节。
+**完成标准：** 采购订单（单头加明细）、现存量、应付发票批量动作三个原型已在 `DataScopePrototypeIT` 通过。绑定方式已写入 4.5 节。
+
+**结论：**
+
+| # | 结论 |
+|---|---|
+| 1、2 | 范围外的按键加载和懒加载多对一都按不存在处理，异常类型是 `EntityNotFoundException` |
+| 3 | 范围条件在 `WHERE`；fetch join 仍是 `LEFT JOIN` |
+| 4 | 子查询不加 schema 前缀；两层子查询有效 |
+| 5、6 | 绑定见 4.5 节。已打开的 Session 切换范围前要 `clear()` |
+| 7 | 写守卫的三种包装和 403 解包见 4.6 节 |
+| 8 | 租户条件与资料范围条件同时出现在 `WHERE` |
+| 9 | 15 处 `@Modifying` 不用改调用，见 4.6 节 |
+| 10 | 400 个仓库 ID 的 `IN` 被收成 `warehouse_id = ANY(bigint[])`。只有租户和仓库时全表扫描；再带 `inventory_period_id` 时走 `idx_inventory_balances_warehouse`。不为此改过滤器。要不要另加 `(tenant_id, warehouse_id)` 索引，阶段 1 再定 |
 
 ---
 
