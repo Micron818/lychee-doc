@@ -44,6 +44,9 @@ CREATE INDEX idx_inventory_balances_period_factory ON lychee_erp.inventory_balan
 CREATE INDEX idx_inventory_balances_warehouse ON lychee_erp.inventory_balances (tenant_id ASC,inventory_period_id ASC,warehouse_id ASC)
 ;
 
+CREATE INDEX idx_inventory_balances_tenant_warehouse ON lychee_erp.inventory_balances (tenant_id ASC,warehouse_id ASC)
+;
+
 ALTER TABLE lychee_erp.inventory_balances ADD CONSTRAINT fk_inventory_balances_tenant
 	FOREIGN KEY (tenant_id) REFERENCES lychee_erp.tenants (id) ON DELETE No Action ON UPDATE No Action
 ;

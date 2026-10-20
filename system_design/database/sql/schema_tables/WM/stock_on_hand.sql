@@ -41,6 +41,9 @@ CREATE INDEX idx_stock_on_hand_material ON lychee_erp.stock_on_hand (material_id
 CREATE INDEX idx_stock_on_hand_mrp ON lychee_erp.stock_on_hand (tenant_id ASC,factory_id ASC,material_id ASC)
 ;
 
+CREATE INDEX idx_stock_on_hand_tenant_warehouse ON lychee_erp.stock_on_hand (tenant_id ASC,warehouse_id ASC)
+;
+
 ALTER TABLE lychee_erp.stock_on_hand ADD CONSTRAINT fk_stock_on_hand_tenant
 	FOREIGN KEY (tenant_id) REFERENCES lychee_erp.tenants (id) ON DELETE No Action ON UPDATE No Action
 ;

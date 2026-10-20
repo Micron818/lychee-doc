@@ -39,6 +39,9 @@ CREATE INDEX idx_outsource_orders_supplier ON lychee_erp.outsource_orders (suppl
 CREATE INDEX idx_outsource_orders_factory ON lychee_erp.outsource_orders (factory_id ASC)
 ;
 
+CREATE INDEX idx_outsource_orders_tenant_factory ON lychee_erp.outsource_orders (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.outsource_orders ADD CONSTRAINT fk_outsource_orders_created_by
 	FOREIGN KEY (created_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
 ;

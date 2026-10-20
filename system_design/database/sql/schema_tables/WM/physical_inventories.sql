@@ -52,6 +52,9 @@ CREATE INDEX idx_physical_inventories_date ON lychee_erp.physical_inventories (t
 CREATE INDEX idx_physical_inventories_period ON lychee_erp.physical_inventories (tenant_id ASC,inventory_period_id ASC)
 ;
 
+CREATE INDEX idx_physical_inventories_tenant_warehouse ON lychee_erp.physical_inventories (tenant_id ASC,warehouse_id ASC)
+;
+
 ALTER TABLE lychee_erp.physical_inventories ADD CONSTRAINT fk_physical_inventories_factories
 	FOREIGN KEY (factory_id) REFERENCES lychee_erp.factories (id) ON DELETE No Action ON UPDATE No Action
 ;

@@ -19,10 +19,21 @@ ADM 模組為 ERP 系統的基礎骨幹，負責管理多租戶 (Multi-tenancy)�
 ### 2.3 系統參數 (options)
 *   (既有架構) `option_categories` 與 `option_values` 提供全系統通用的下拉選單管理 (如幣別、狀態、單位)。
 
+### 2.4 指派資料範圍 (user_role_scopes)
+*   **用途**: 掛在 `user_roles` 指派上的組織資料範圍，維度為公司、工廠、倉庫。刪除指派時範圍一併刪除。
+*   **關鍵欄位**:
+    *   `dimension`: `COMPANY`、`FACTORY`、`WAREHOUSE`。
+    *   `scope_type`: `ALL`（該維度全部）或 `LIST`（指定清單）。
+    *   `value_id`: `LIST` 時必填，指向該維度的主檔 ID；`ALL` 時必須為空。
+*   **設計決策**:
+    *   存量指派回填 `COMPANY` + `ALL`，上線時可見範圍與原先一致。
+    *   資料範圍過濾以 `(tenant_id, 組織列)` 為索引前綴。各業務表上的 `idx_*_tenant_company` / `idx_*_tenant_factory` / `idx_*_tenant_warehouse` 即為此服務；已有以這兩列開頭的更長唯一索引時，不另建。
+
 ## 3. 檔案路徑對照表
 
 | 表格名稱 | SQL 定義檔路徑 | 說明 |
 | :--- | :--- | :--- |
 | **departments** | `docs/database/sql/schema_tables/ADM/departments.sql` | 部門主檔 |
 | **users** | `docs/database/sql/schema_tables/ADM/users.sql` | 使用者主檔 |
+| **user_role_scopes** | `docs/database/sql/schema_tables/ADM/user_role_scopes.sql` | 使用者角色指派的資料範圍 |
 

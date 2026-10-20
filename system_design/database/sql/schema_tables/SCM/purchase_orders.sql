@@ -40,6 +40,9 @@ ALTER TABLE lychee_erp.purchase_orders ADD CONSTRAINT uk_purchase_orders_tenant 
 CREATE INDEX IXFK_purchase_orders_factories ON lychee_erp.purchase_orders (factory_id ASC)
 ;
 
+CREATE INDEX idx_purchase_orders_tenant_factory ON lychee_erp.purchase_orders (tenant_id ASC,factory_id ASC)
+;
+
 CREATE INDEX idx_purchase_orders_supplier ON lychee_erp.purchase_orders (supplier_id ASC)
 ;
 

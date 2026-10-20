@@ -32,6 +32,9 @@ ALTER TABLE lychee_erp.stock_transfers ADD CONSTRAINT uk_stock_transfers_tenant_
 CREATE INDEX idx_stock_transfers_date ON lychee_erp.stock_transfers (transfer_date ASC)
 ;
 
+CREATE INDEX idx_stock_transfers_tenant_factory ON lychee_erp.stock_transfers (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.stock_transfers ADD CONSTRAINT fk_stock_transfers_created_by
 	FOREIGN KEY (created_by) REFERENCES lychee_erp.users (id) ON DELETE No Action ON UPDATE No Action
 ;

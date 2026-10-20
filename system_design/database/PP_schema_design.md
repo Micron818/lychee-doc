@@ -74,9 +74,10 @@ PP 模組負責管理生產製造相關的基礎資料與流程。本模組設�
     *   `version`: 版本號 (如 V1.0, 2023-Q1)。
     *   `is_active`: 標記是否為當前生效的主要版本。
 
-### 3.6 MRP 運算紀錄 (mrp_runs / mrp_results)
-*   `mrp_runs`: 記錄每次 MRP 的執行參數。
+### 3.6 MRP 運算紀錄 (mrp_runs / mrp_results / mrp_schedules)
+*   `mrp_runs`: 記錄每次 MRP 的執行參數。`factory_id` 可空，資料範圍依工廠過濾。`planning_horizon_days` 為計劃展望天數；`trigger_source` 預設 `MANUAL`；`run_mode` 預設 `OPERATIVE`；`triggered_by` 記錄觸發人。
 *   `mrp_results`: (可選) 暫存詳細運算過程或例外訊息，但主要產出已實體化為 `planned_orders`。
+*   `mrp_schedules`: MRP 排程。`factory_id` 可空，資料範圍依工廠過濾。
 
 ## 4. 關鍵選項值建議 (Reference Data)
 
@@ -113,4 +114,5 @@ PP 模組負責管理生產製造相關的基礎資料與流程。本模組設�
 | **bill_of_materials** | `docs/database/sql/schema_tables/PP/bill_of_materials.sql` | BOM 表頭 |
 | **bom_items** | `docs/database/sql/schema_tables/PP/bom_items.sql` | BOM 表身 |
 | **mrp_runs** | `docs/database/sql/schema_tables/PP/mrp_runs.sql` | MRP 執行紀錄 |
+| **mrp_schedules** | `docs/database/sql/schema_tables/PP/mrp_schedules.sql` | MRP 排程 |
 

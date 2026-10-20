@@ -44,6 +44,9 @@ CREATE INDEX idx_customer_returns_original_issue ON lychee_erp.customer_returns 
 CREATE INDEX idx_customer_returns_journal_entry ON lychee_erp.customer_returns (journal_entry_id ASC)
 ;
 
+CREATE INDEX idx_customer_returns_tenant_factory ON lychee_erp.customer_returns (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.customer_returns ADD CONSTRAINT fk_customer_returns_tenant
 	FOREIGN KEY (tenant_id) REFERENCES lychee_erp.tenants (id) ON DELETE No Action ON UPDATE No Action
 ;

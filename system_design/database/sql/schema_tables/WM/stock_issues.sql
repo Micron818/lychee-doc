@@ -37,6 +37,9 @@ CREATE INDEX idx_stock_issues_date ON lychee_erp.stock_issues (issue_date ASC)
 CREATE INDEX idx_stock_issues_department ON lychee_erp.stock_issues (department_id ASC)
 ;
 
+CREATE INDEX idx_stock_issues_tenant_factory ON lychee_erp.stock_issues (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.stock_issues ADD CONSTRAINT fk_stock_issues_tenant
 	FOREIGN KEY (tenant_id) REFERENCES lychee_erp.tenants (id) ON DELETE No Action ON UPDATE No Action
 ;

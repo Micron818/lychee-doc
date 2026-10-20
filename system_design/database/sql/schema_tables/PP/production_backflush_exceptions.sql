@@ -36,6 +36,9 @@ CREATE INDEX idx_prod_backflush_exc_order_id ON lychee_erp.production_backflush_
 CREATE INDEX idx_prod_backflush_exc_tenant_id ON lychee_erp.production_backflush_exceptions (tenant_id ASC)
 ;
 
+CREATE INDEX idx_production_backflush_exceptions_tenant_factory ON lychee_erp.production_backflush_exceptions (tenant_id ASC,factory_id ASC)
+;
+
 COMMENT ON COLUMN lychee_erp.production_backflush_exceptions.status
 	IS 'PENDING,RESOLVED,IGNORED'
 ;

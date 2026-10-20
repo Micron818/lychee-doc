@@ -34,6 +34,7 @@ CREATE TABLE lychee_erp.sales_orders (
 	CONSTRAINT uk_sales_orders_tenant_code UNIQUE (tenant_id, order_no)
 );
 CREATE INDEX idx_sales_orders_company ON lychee_erp.sales_orders USING btree (company_id);
+CREATE INDEX idx_sales_orders_tenant_company ON lychee_erp.sales_orders USING btree (tenant_id, company_id);
 CREATE INDEX idx_sales_orders_customer ON lychee_erp.sales_orders USING btree (customer_id);
 CREATE INDEX idx_sales_orders_order_date ON lychee_erp.sales_orders USING btree (order_date);
 CREATE INDEX idx_sales_orders_order_status ON lychee_erp.sales_orders USING btree (order_status);

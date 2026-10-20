@@ -41,6 +41,9 @@ CREATE INDEX idx_mrp_results_material ON lychee_erp.mrp_results (material_id ASC
 CREATE INDEX ix_mrp_results_factory_convert ON lychee_erp.mrp_results (factory_id ASC, convert_status ASC)
 ;
 
+CREATE INDEX idx_mrp_results_tenant_factory ON lychee_erp.mrp_results (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.mrp_results ADD CONSTRAINT fk_mrp_results_factories
     FOREIGN KEY (factory_id) REFERENCES lychee_erp.factories (id) ON DELETE No Action ON UPDATE No Action
 ;

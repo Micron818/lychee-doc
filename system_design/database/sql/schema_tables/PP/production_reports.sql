@@ -47,6 +47,9 @@ CREATE INDEX IXFK_production_reports_production_orders ON lychee_erp.production_
 CREATE INDEX idx_prod_reports_date ON lychee_erp.production_reports (tenant_id ASC,report_date ASC)
 ;
 
+CREATE INDEX idx_production_reports_tenant_factory ON lychee_erp.production_reports (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.production_reports ADD CONSTRAINT fk_production_reports_material_units
 	FOREIGN KEY (unit_id) REFERENCES lychee_erp.material_units (id) ON DELETE No Action ON UPDATE No Action
 ;

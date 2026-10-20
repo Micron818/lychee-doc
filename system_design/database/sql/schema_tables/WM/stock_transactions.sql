@@ -52,6 +52,9 @@ CREATE INDEX idx_stock_transactions_source ON lychee_erp.stock_transactions (ten
 CREATE INDEX idx_stock_transactions_source_item ON lychee_erp.stock_transactions (tenant_id ASC,source_doc_type ASC,source_doc_item_id ASC)
 ;
 
+CREATE INDEX idx_stock_transactions_tenant_warehouse ON lychee_erp.stock_transactions (tenant_id ASC,warehouse_id ASC)
+;
+
 ALTER TABLE lychee_erp.stock_transactions ADD CONSTRAINT fk_stock_transactions_tenant
 	FOREIGN KEY (tenant_id) REFERENCES lychee_erp.tenants (id) ON DELETE No Action ON UPDATE No Action
 ;

@@ -45,6 +45,9 @@ CREATE INDEX idx_factory_orders_order_status ON lychee_erp.factory_orders (order
 CREATE INDEX idx_factory_orders_priority ON lychee_erp.factory_orders (priority ASC)
 ;
 
+CREATE INDEX idx_factory_orders_tenant_factory ON lychee_erp.factory_orders (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.factory_orders ADD CONSTRAINT fk_factory_orders_customer
 	FOREIGN KEY (customer_id) REFERENCES lychee_erp.customers (id) ON DELETE No Action ON UPDATE No Action
 ;

@@ -49,6 +49,9 @@ CREATE INDEX ixfk_production_orders_factories ON lychee_erp.production_orders (f
 CREATE INDEX idx_production_orders_status ON lychee_erp.production_orders (order_status ASC)
 ;
 
+CREATE INDEX idx_production_orders_tenant_factory ON lychee_erp.production_orders (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.production_orders ADD CONSTRAINT fk_production_orders_bom
 	FOREIGN KEY (bom_id) REFERENCES lychee_erp.bill_of_materials (id) ON DELETE No Action ON UPDATE No Action
 ;

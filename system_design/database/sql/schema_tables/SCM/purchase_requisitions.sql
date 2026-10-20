@@ -34,6 +34,9 @@ CREATE INDEX IXFK_purchase_requisitions_departments ON lychee_erp.purchase_requi
 CREATE INDEX IXFK_purchase_requisitions_factories ON lychee_erp.purchase_requisitions (factory_id ASC)
 ;
 
+CREATE INDEX idx_purchase_requisitions_tenant_factory ON lychee_erp.purchase_requisitions (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.purchase_requisitions ADD CONSTRAINT fk_purchase_requisitions_departments
 	FOREIGN KEY (department_id) REFERENCES lychee_erp.departments (id) ON DELETE No Action ON UPDATE No Action
 ;

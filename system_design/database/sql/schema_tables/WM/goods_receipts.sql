@@ -36,6 +36,9 @@ ALTER TABLE lychee_erp.goods_receipts ADD CONSTRAINT uk_goods_receipts UNIQUE (t
 CREATE INDEX idx_goods_receipts_supplier ON lychee_erp.goods_receipts (supplier_id ASC)
 ;
 
+CREATE INDEX idx_goods_receipts_tenant_factory ON lychee_erp.goods_receipts (tenant_id ASC,factory_id ASC)
+;
+
 ALTER TABLE lychee_erp.goods_receipts ADD CONSTRAINT fk_goods_receipts_supplier
 	FOREIGN KEY (supplier_id) REFERENCES lychee_erp.suppliers (id) ON DELETE No Action ON UPDATE No Action
 ;
