@@ -36,7 +36,7 @@
 | 字段 | 说明 |
 |------|------|
 | `run_code` | 单据号（`DocumentTypeEnum.MRP_RUN`） |
-| `run_date` | 运算基准日（兼作 BOM 有效日） |
+| `run_date` | 运算基准日（计划期间从这一天起算；BOM 是否有效看各建议的计划开工日） |
 | `description` | 可选说明 |
 | `factory_id` | 可选；空=全租户工厂 |
 | `planning_horizon_days` | 可选计划期间（天）；空=不截断初始需求 |
@@ -58,7 +58,7 @@
 | `required_date` / `required_quantity` | 需求日与建议量 |
 | `planned_start_date` / `planned_end_date` | 提前期倒推后的计划起止 |
 | `suggested_action_type` | `PRODUCTION` / `PURCHASE`；由物料类型 `isManufactured` 决定，不看 BOM |
-| `has_bom` | 运算快照：自制件当时是否有相对 `runDate` 的有效 APPROVED BOM |
+| `has_bom` | 运算快照：自制件在计划开工日是否有有效的 APPROVED BOM |
 | `is_converted` | 是否已转单 |
 
 ### 2.3 `mrp_parameters`
@@ -124,7 +124,8 @@
 | `MrpResult` | 已转单但关联 PLO 仍为 `PROPOSED`（可按厂） |
 | MRP 生成的 PR | DRAFT 类旧申请（可按厂） |
 | `PlannedOrder` | `mrpRunId IS NOT NULL` 且 `PROPOSED`（可按厂） |
-| 空 Run | 非 RUNNING 且无结果 |
+
+无建议行的 `COMPLETED` / `FAILED` 运算保留，用来标识该范围的最新运算。
 
 **保留：** FIRMED/CONVERTED 的 PLO、已审批/部分执行的 PR、以及对应已固化结果。
 
@@ -137,9 +138,14 @@
    - 日期：item `dueDate`
 
 2. **在制工单组件（MO component open qty）**  
-   - MO：`RELEASED` / `IN_PROGRESS`  
+   - MO：`CREATED` / `RELEASED` / `IN_PROGRESS`（转工单时已增加厂订单已分配量，未下达的工单也要继续供料）  
    - 开量：`requiredQuantity - issuedQuantity`  
-   - Pegging demand：`PRODUCTION_ORDER` + component id
+   - Pegging demand：`PRODUCTION_ORDER` + 工单头 id
+
+3. **已确定计划工单的子件**  
+   - 仅 `FIRMED` 且 `MAKE`；`CONVERTED` 已变成工单，不再展开  
+   - 按计划开工日的有效 BOM 展开启用子件，需求日为开工日  
+   - Pegging demand：`PLANNED_ORDER` + 计划工单 id
 
 **未接入计算：** 销售订单直接需求、预测、独立安全库存需求行、手工需求。  
 安全库存以参数 `safety_stock_quantity` 作为净算下限，不是独立需求行。
@@ -152,20 +158,20 @@
 | 已确认计划订单 | `PlannedOrderStatus.FIRMED` |
 | 采购申请 | APPROVED/PARTIAL，开量 = 申请 − 已订 |
 | 采购订单 | APPROVED/PARTIAL，开量 = 订购 − 已收 |
-| 生产工单成品 | RELEASED/IN_PROGRESS；若已由 FO→MRP→PLO→MO 链路 pegging 则跳过防双重计入 |
-| 委外单 | ISSUED/PARTIAL；同样有 FO-peg 跳过逻辑 |
+| 生产工单成品 | `CREATED` / `RELEASED` / `IN_PROGRESS`；已由 FO→MRP→PLO→MO 挂钩的部分不重复计入，批量结余仍作为供给 |
+| 委外单 | ISSUED/PARTIAL；同样只排除厂订单已挂钩的数量，结余仍作为供给 |
 
 ### 4.4 净算 / 批量 / 展开
 
 按 `(factoryId, materialId)`，LLC 自低到高：
 
 1. 运行前 `lowLevelCodeService.recalculateForCurrentTenant()`（APPROVED BOM）
-2. 按批量规则分桶：LFL/FOQ 按日；POQ 按 `period_days`
-3. 套用到期预计入库 → 扣毛需求 → 低于安全库存则产生净需求
+2. 按事件日净算：先加上当日及之前的预计入库，再扣当日需求。LFL/FOQ 只覆盖当天缺口；POQ 在缺料日汇总 `[缺料日, 缺料日 + periodDays)` 内按时点算出的净需求
+3. 低于安全库存才产生净需求。建议日是这次缺料日，也是该张建议实际 peg 到的最早需求日
 4. `materialType.isManufactured=true` → `PRODUCTION`，否则 `PURCHASE`（采购件即使误挂 BOM 也不展开）
-5. 提前期：`plannedEndDate = 最早需求日`，`plannedStartDate = 需求日 − leadTimeDays`
-6. Lot-Sizing 策略：`LotForLot` / `FixedQuantity` / `PeriodicQuantity`（含 rounding/min/max）
-7. 写 `MrpResult`（含 `hasBom` 快照）+ pegging；仅 PRODUCTION 且有有效 BOM 才展开组件（含 scrap）
+5. 提前期按天向上取整：`plannedEndDate = 建议日`，`plannedStartDate = 建议日 − ceil(leadTimeDays)`
+6. Lot-Sizing 策略：`LotForLot` / `FixedQuantity` / `PeriodicQuantity`（含 rounding/min/max）。最大批量可拆成多张建议；批量结果不能缩小缺口时运算失败
+7. 写 `MrpResult`（`hasBom` 表示计划开工日有批准的 BOM）+ pegging。仅 PRODUCTION 且该开工日有有效 BOM 才展开**启用**子件（含 scrap，数量保留 6 位小数）。低阶码循环随新子件升高，不设固定层数上限
 
 ### 4.5 状态机
 
