@@ -127,7 +127,7 @@
 
 无建议行的 `COMPLETED` / `FAILED` 运算保留，用来标识该范围的最新运算。
 
-**保留：** FIRMED/CONVERTED 的 PLO、已审批/部分执行的 PR、以及对应已固化结果。
+**保留：** FIRMED/CONVERTED 的 PLO、采购订单（`DRAFT` / `APPROVED` / `PARTIAL`）、已审批/部分执行的 PR，以及对应已固化结果。采购订单不在本次清理范围内。
 
 ### 4.2 需求来源（已接入）
 
@@ -156,8 +156,8 @@
 |------|----------|
 | 现有库存 | `RemoteStockOnHandService.getTotalAvailableQuantity` |
 | 已确认计划订单 | `PlannedOrderStatus.FIRMED` |
-| 采购申请 | APPROVED/PARTIAL，开量 = 申请 − 已订 |
-| 采购订单 | APPROVED/PARTIAL，开量 = 订购 − 已收 |
+| 采购申请 | `APPROVED` / `PARTIAL`，开量 = 申请 − 已订。`DRAFT` 申请由 §4.1 清掉，不进入供给 |
+| 采购订单 | `DRAFT` / `APPROVED` / `PARTIAL`，开量 = 订购 − 已收。`COMPLETED` / `CLOSED` 不进入供给。草稿单转出后会留下来，计入供给后，下次再生运算只建议差额 |
 | 生产工单成品 | `CREATED` / `RELEASED` / `IN_PROGRESS`；已由 FO→MRP→PLO→MO 挂钩的部分不重复计入，批量结余仍作为供给 |
 | 委外单 | ISSUED/PARTIAL；同样只排除厂订单已挂钩的数量，结余仍作为供给 |
 

@@ -171,7 +171,7 @@
 
 - 夜间 / 周初：SCHEDULED Regenerative（全量）
 - 白天：NET_CHANGE
-- FIRMED PLO / 已审批 PR 保护规则与今日一致，不削弱
+- FIRMED PLO、采购订单（`DRAFT` / `APPROVED` / `PARTIAL`）、已审批 PR 的供给规则与今日一致，不削弱
 
 **完成标准：** 改一张 FO 交期后，相关料号建议更新，无需全租户重算；夜间全量仍可校准。
 
@@ -224,23 +224,24 @@
 2. PRODUCTION 结果可转 PROPOSED PLO，并建立 `MRP_RESULT→PLANNED_ORDER` pegging  
 3. PURCHASE 结果可转 DRAFT PR，pegging 指向 PR item  
 4. FIRMED PLO 不被下次 Regenerative 清掉，并计入供给  
-5. 已转单且供给已固化的结果不被误删  
-6. 批量删除含已转单结果的 Run → 业务校验失败  
+5. 已转出的草稿采购订单（`DRAFT`）计入供给；同一笔原料需求再次运算时只建议差额，不另出一张全量采购建议  
+6. 已转单且供给已固化的结果不被误删  
+7. 批量删除含已转单结果的 Run → 业务校验失败  
 
 ### Phase 1+
 
-7. 厂 A RUNNING 时，同厂再创建 → 拒绝  
-8. 厂 A 运算不清理厂 B 未转单建议  
-9. 全厂 RUNNING 时，任意单厂创建 → 拒绝  
+8. 厂 A RUNNING 时，同厂再创建 → 拒绝  
+9. 厂 A 运算不清理厂 B 未转单建议  
+10. 全厂 RUNNING 时，任意单厂创建 → 拒绝  
 
 ### Phase 2+
 
-10. 启用排程后，到点自动产生 `triggerSource=SCHEDULED` 的 COMPLETED Run  
-11. 排程与手动互斥行为符合配置  
+11. 启用排程后，到点自动产生 `triggerSource=SCHEDULED` 的 COMPLETED Run  
+12. 排程与手动互斥行为符合配置  
 
 ### Phase 4+
 
-12. 仅变更 FO 交期 → Net Change 更新相关料建议，无关料结果保持  
+13. 仅变更 FO 交期 → Net Change 更新相关料建议，无关料结果保持  
 
 ---
 
@@ -281,6 +282,7 @@
 | 2 | 互斥冲突时跳过还是排队？ | **跳过并告警**（创建接口返回业务错误；定时任务记日志跳过）。 |
 | 3 | 是否预留 `runMode=SIMULATION`？ | **是**。Phase 1 加字段与枚举；SIMULATION 逻辑后置，创建时暂拒。 |
 | 4 | Net Change 脏标第一批来源？ | FO 变更 + BOM 批准 + MRP 参数变更（Phase 4）。 |
+| 5 | 草稿采购订单算不算供给？ | **算。** `DRAFT` / `APPROVED` / `PARTIAL` 的未收数量都是供给。草稿单不会被下次运算删除；不计供给会把同一笔原料需求再建议一次。`COMPLETED` / `CLOSED` 不计。采购申请仍只计 `APPROVED` / `PARTIAL`。 |
 
 互斥细化（Phase 1 实现）：
 
