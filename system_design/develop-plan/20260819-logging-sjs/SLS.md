@@ -56,6 +56,15 @@ SLS Project lychee-prod / Logstore lychee-backend
 | Logtail 配置名    | `lychee-backend`            |
 | 机器组 / 用户自定义 ID | `lychee-prod-app`           |
 
+`lychee-prod` 就是 khh 正式栈，本波不改名。新栈各自新建 Project，Logstore 名仍可用 `lychee-backend`，过滤标签不变。
+
+| 栈 | Project | 机器组 / 用户自定义 ID |
+|----|---------|------------------------|
+| khh-prod（现网） | `lychee-prod` | `lychee-prod-app` |
+| khh-test | `lychee-khh-test` | `lychee-khh-test-app` |
+| demo | `lychee-demo` | `lychee-demo-app` |
+
+安装命令只把 `ALIYUN_LOGTAIL_USER_DEFINED_ID` 换成该栈的机器组标识。RAM 只读策略按需要访问的 Project 追加 `acs:log:*:*:project/<名字>` 与 `project/<名字>/*`。
 
 容器过滤用的是 Compose **自动标签**，不是 `container_name` Label（该 Label 不存在）：
 
