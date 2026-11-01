@@ -11,6 +11,7 @@ CREATE TABLE lychee_erp.companies
 	name varchar(100) NOT NULL,
 	tax_id varchar(50) NULL,
 	address text NULL,
+	source_locale varchar(10) NOT NULL DEFAULT 'en',
 	phone varchar(20) NULL,
 	email varchar(100) NULL,
 	parent_id bigint NULL,
@@ -84,6 +85,10 @@ COMMENT ON COLUMN lychee_erp.companies.logo_file_path
 
 COMMENT ON COLUMN lychee_erp.companies.logo_file_name
 	IS 'Original file name of the company letterhead logo'
+;
+
+COMMENT ON COLUMN lychee_erp.companies.source_locale
+	IS 'Source language of name and address: en, zh_CN, vi'
 ;
 
  
