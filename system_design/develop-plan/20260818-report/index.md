@@ -146,7 +146,7 @@
 - **库存盘点打印（✅，仅 Print）**：比照收货单实现 `GET /physical-inventories/{id}/pdf` + `PhysicalInventoryPdfRenderer` + 原页 Modal；**按单张盘点单号**；明盘；空明细拒绝；过账补偿列仅不锁库且已过账/已冲销才印；无 Excel、无归档 Export。设计见 [14](./14-示例-库存盘点报表.md)。
 - **领料单打印（✅，仅 Print）**：比照收货单实现 `GET /stock-issues/{id}/pdf` + `StockIssuePdfRenderer` + 原页 Modal；**按单张领料单号**；**Letter 纵向 216×279mm 多联穿孔纸、针式**（页尺寸对齐送货单）；内部领用，不印公司地址 / 电话 / 税号 / logo；签核含制单（印姓名）与审核空白栏；仓务联只印数量 / 仓库 / 批次 / 来源；**不印单价成本与已退数量**；**报工倒冲不提供打印**；`SALES_DELIVERY` 打内部拣货联，不替代送货单；无 Excel、无归档 Export。设计见 [16](./16-示例-领料单打印表单.md)。
 - **客户请款明细（✅ PDF 已实现）**：出货单列表工具栏；强制单一客户 + `actualDeliveryDate` 闭区间；跨多张已出货 Delivery 一张尺码矩阵 PDF（净出货量 + `LineTaxCalculator` 价税 + 出货/行备注 + 账期/按币别默认收款账号）；左起出货复合格；不印料号列、不印样图、无归档 Export。部分出货本期不进。设计见 [../20260920-客户请款明细/README.md](../20260920-客户请款明细/README.md)。Excel（栏位拆开、尺码分行、同步下载）见 [05](../20260920-客户请款明细/05-Excel导出.md)（**已实现**）。
-- **送货单打印（⬜ 待实现，仅 Print）**：单张交货单 `GET /sd/deliveries/{id}/pdf`；打印标题「送货单」；列表操作列 + 详情抽屉；尺码矩阵、不印价税/样图/料号列；数量认 `transactionQuantity`；签核制单/送货人/客户签收；无 POD、无归档 Export。设计见 [../20260921-送货单打印/README.md](../20260921-送货单打印/README.md)。
+- **送货单打印（✅，仅 Print）**：单张交货单 `GET /sd/deliveries/{id}/pdf`；打印标题「送货单」；列表操作列 + 详情抽屉；每个物料一行（物料名称 / 客户 PO / 客户订单号 / 内部参号 / 单位 / 数量），不印尺码矩阵、价税、样图、客户代码；数量认 `transactionQuantity`；签核客户签收 / 送货人 / 制单；无 POD、无归档 Export。设计见 [../20260921-送货单打印/README.md](../20260921-送货单打印/README.md)。
 - **更多 Excel 导入**：复用 `DataImportHandler` + 模板 + `ExcelImportButton`（见 06）；单据类导入二期评估。
 - ~~标准成本「导出为再导入模板」~~：✅ `FI_MATERIAL_COST` 清单导出（前 8 列对齐导入模板；见 07 §12）。
 
