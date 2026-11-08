@@ -54,17 +54,19 @@ SLS Project lychee-prod / Logstore lychee-backend
 | Project        | `lychee-prod`               |
 | Logstore       | `lychee-backend`            |
 | Logtail 配置名    | `lychee-backend`            |
-| 机器组 / 用户自定义 ID | `lychee-prod-app`           |
+| 机器组 / 用户自定义 ID | `lychee-khh-prod-app`       |
 
-`lychee-prod` 就是 khh 正式栈，本波不改名。新栈各自新建 Project，Logstore 名仍可用 `lychee-backend`，过滤标签不变。
+`lychee-prod` 就是 khh 正式栈的 Project，本波不改名。新栈各自新建 Project，Logstore 名仍可用 `lychee-backend`，过滤标签不变。
+
+机器组用户自定义标识统一为 `lychee-<STACK_ID>-app`。`bootstrap-ecs.sh` 未传 `--logtail-id` 时按此写入 `ALIYUN_LOGTAIL_USER_DEFINED_ID`。
 
 | 栈 | Project | 机器组 / 用户自定义 ID |
 |----|---------|------------------------|
-| khh-prod（现网） | `lychee-prod` | `lychee-prod-app` |
+| khh-prod（现网） | `lychee-prod` | `lychee-khh-prod-app` |
 | khh-test | `lychee-khh-test` | `lychee-khh-test-app` |
 | demo | `lychee-demo` | `lychee-demo-app` |
 
-安装命令只把 `ALIYUN_LOGTAIL_USER_DEFINED_ID` 换成该栈的机器组标识。RAM 只读策略按需要访问的 Project 追加 `acs:log:*:*:project/<名字>` 与 `project/<名字>/*`。
+RAM 只读策略按需要访问的 Project 追加 `acs:log:*:*:project/<名字>` 与 `project/<名字>/*`。
 
 容器过滤用的是 Compose **自动标签**，不是 `container_name` Label（该 Label 不存在）：
 
@@ -89,7 +91,7 @@ docker run -d \
     -v /var/run/docker.sock:/var/run/docker.sock \
     --env ALIYUN_LOGTAIL_CONFIG=/etc/ilogtail/conf/ap-southeast-1/ilogtail_config.json \
     --env ALIYUN_LOGTAIL_USER_ID=<阿里云账号ID> \
-    --env ALIYUN_LOGTAIL_USER_DEFINED_ID=lychee-prod-app \
+    --env ALIYUN_LOGTAIL_USER_DEFINED_ID=lychee-khh-prod-app \
     aliyun-observability-release-registry.ap-southeast-1.cr.aliyuncs.com/loongcollector/loongcollector:v3.3.3.0-f44ebb3-aliyun
 ```
 
@@ -102,20 +104,20 @@ docker update --memory=256m loongcollector
 说明：
 
 - 镜像地域与 SLS Project 一致（新加坡）。
-- `ALIYUN_LOGTAIL_USER_DEFINED_ID` 必须与 SLS 机器组标识 `lychee-prod-app` 相同。
+- `ALIYUN_LOGTAIL_USER_DEFINED_ID` 必须与 SLS 机器组标识相同。khh-prod 为 `lychee-khh-prod-app`。
 - `/:/logtail_host:ro` 与 `docker.sock` 为官方 Docker 安装所需挂载，用于读容器 stdout。
 - `--memory=256m`：现网约 60MiB，256MiB 足够；与业务 Compose 一样卡住 Java/采集器，把约 4GiB 主机余量留给 Postgres 缓存。
 - `--restart always`：采集器应按基础设施常驻。崩溃、Docker 守护进程重启、主机 reboot 后都会拉起；这与阿里云 LoongCollector Docker 安装说明一致。`unless-stopped` 在有人 `docker stop` 后，reboot 也不会再起来，排障时容易漏采。需要临时停采集用 `docker stop loongcollector` 即可，当前会话内不会立刻被拉起；reboot 后会再启动（这是 `always` 与 `unless-stopped` 的差别）。
 - LoongCollector **不要**写入业务 `docker-compose.yml`。业务容器内存上限见该文件：`backend` 1g、`keycloak` 768m、`nginx`/`frontend` 64m；`postgres` 不设 limit。
 
-SLS：机器组类型选 **用户自定义标识**，标识填 `lychee-prod-app`。
+SLS：机器组类型选 **用户自定义标识**，标识填 `lychee-<STACK_ID>-app`（khh-prod 为 `lychee-khh-prod-app`）。
 
 ## 5. Logtail 配置
 
 数据接入类型：**多行-文本日志**；输入：**Docker 标准输出**（`service_docker_stdout`）。  
 不要选「主机文本文件」，也不要按 `/var/lib/docker/containers/<哈希>/` 填路径。
 
-配置名 `lychee-backend`，机器组 `lychee-prod-app`，目标 Logstore `lychee-backend`：
+配置名 `lychee-backend`，机器组 `lychee-khh-prod-app`，目标 Logstore `lychee-backend`：
 
 ```json
 {
