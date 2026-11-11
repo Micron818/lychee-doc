@@ -154,7 +154,7 @@
 
 | 供给 | 取数要点 |
 |------|----------|
-| 现有库存 | `RemoteStockOnHandService.getTotalAvailableQuantity` |
+| 现有库存 | `RemoteStockOnHandService.getTotalAvailableQuantity`：启用且 `isMrpRelevant` 的仓库，可用量 = physical − reserved − blocked − qa。停用仓、不参与 MRP 的仓不计入。需求与预计入库仍按工厂，不按仓库过滤 |
 | 已确认计划订单 | `PlannedOrderStatus.FIRMED` |
 | 采购申请 | `APPROVED` / `PARTIAL`，开量 = 申请 − 已订。`DRAFT` 申请由 §4.1 清掉，不进入供给 |
 | 采购订单 | `DRAFT` / `APPROVED` / `PARTIAL`，开量 = 订购 − 已收。`COMPLETED` / `CLOSED` 不进入供给。草稿单转出后会留下来，计入供给后，下次再生运算只建议差额 |
