@@ -4,36 +4,35 @@
 > 修订：2026-08-28  
 > 状态：**骨架与剧本按现行菜单整体整理**；采购主路径已改为订单页工作台（vi 待同步）
 > 语言策略：**仅维护中文（zh）与越南文（vi）两套**；先完成中文，再同步越南文  
-> 功能范围：以现行菜单清单 [`menus_20260808-simple.md`](../system_design/backend/database/sql/initial_data/adm_init_data/menus_20260808-simple.md) 为整体对照；菜单文案以系统界面当前中文名为准
+> 功能范围：以系统界面当前中文菜单名为准
 
 ## 目标
 
-面向终端用户与关键管理员，提供可课堂讲授、可自学跟练的操作文档。  
-与 [`system_design/`](../system_design/)（研发设计）、`lychee-backend/docs/`（schema / 实现计划）分离：**本文档只讲「谁、何时、点哪里、结果怎样」**。
+面向终端用户与关键管理员，提供可课堂讲授、可自学跟练的操作文档。本文档只讲「谁、何时、点哪里、结果怎样」。
 
 ## 如何浏览（VitePress）
 
-在仓库根目录 `lychee-doc` 执行：
+在 `lychee-doc/site` 执行：
 
 ```bash
 pnpm install
 pnpm docs:dev
 ```
 
-然后打开本地站点，从 [训练首页](./) 或站点导航「用户训练」进入。正式环境将部署构建产物（见仓库根 [`README.md`](../README.md)）。
+然后打开本地站点，从 [训练首页](./) 或站点导航「用户训练」进入。构建说明见 `site/README.md`。
 
 ## 语言与版本同步
 
 | 约定 | 说明 |
 |------|------|
-| 主语言 | 中文，目录 [`zh/`](./zh/) |
+| 主语言 | 中文，从 [整体流程](./zh/00-overview/) 进入 |
 | 第二语言 | 越南文，目录 [`vi/`](./vi/)，中文稳定后再翻译 |
 | 不维护 | 英文用户手册（系统界面三语文案仍可保留 en） |
 | 同步规则 | 以中文为源；改中文后必须在 PR / 变更记录中标注「待同步 vi」；vi 文件路径与 zh 一一对应 |
 | 术语 | 统一见 [`glossary.md`](./glossary.md)；缩写（SO/PO/GR 等）两语共用 |
 | 菜单名 | 一律用系统界面中文名；勿直接使用 SQL 菜单表英文 `name` |
 
-写作规范与截图约定见 [`00-conventions.md`](./00-conventions.md)。
+写作规范与截图约定写在仓库内的 `00-conventions.md`，不随主站发布。
 
 ## 文档分层
 
@@ -121,7 +120,7 @@ pnpm docs:dev
 
 ## 资产
 
-截图统一放在 [`assets/screenshots/`](./assets/screenshots/)，按模块分子目录；规范见约定文档。
+截图统一放在 `assets/screenshots/`，按模块分子目录；规范见 `00-conventions.md`。
 
 ## 进度约定
 

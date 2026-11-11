@@ -1,44 +1,10 @@
 # Lychee Doc
 
-Lychee ERP 文档仓库：用户教育训练 + 系统设计。  
-浏览站点基于 **VitePress**（SSG）。流程图使用 Markdown 的 mermaid 围栏代码块，由 `vitepress-plugin-mermaid` 渲染。
-
-## 目录
+一个仓库，两块内容。
 
 | 路径 | 说明 |
 |------|------|
-| [`user_training/`](./user_training/) | 用户训练（中文源，越南文后续同步） |
-| [`system_design/`](./system_design/) | 系统设计（研发向） |
-| [`.vitepress/`](./.vitepress/) | VitePress 配置 |
+| [`system_design/`](./system_design/) | 研发设计与库表。Markdown，不编译、不发布 |
+| [`site/`](./site/) | 主站。VitePress，含系统介绍 `intro/` 与用户训练 `user_training/` |
 
-> 各目录站点首页文件必须命名为 **`index.md`**（不是 `README.md`）。VitePress 只会把 `index.md` 映射为 `/path/`。
-
-## 本地浏览（推荐给培训师）
-
-```bash
-cd lychee-doc
-pnpm install
-pnpm docs:dev
-```
-
-浏览器打开终端提示的本地地址（默认 `http://localhost:5173/`）。
-
-| 命令 | 说明 |
-|------|------|
-| `pnpm docs:dev` | 本地开发预览（热更新） |
-| `pnpm docs:build` | 构建静态站点到 `.vitepress/dist` |
-| `pnpm docs:preview` | 预览构建产物 |
-
-若使用 npm：`npm install` / `npm run docs:dev`。
-
-## 部署
-
-1. CI 或本机执行 `pnpm docs:build`
-2. 将 `.vitepress/dist` 发布到 Nginx 静态目录或 OSS
-3. 建议独立域名或路径，例如 `https://docs.example.com/` 或 `/training/`
-
-## 语言策略
-
-- 用户训练仅维护 **中文（zh）** 与 **越南文（vi）**
-- 中文为源；`user_training/vi` 与 `zh` 路径镜像同步
-- 不维护英文用户手册
+本地预览和构建在 `site/` 下执行，见 [`site/README.md`](./site/README.md)。

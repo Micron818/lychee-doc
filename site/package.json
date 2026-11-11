@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Lychee ERP documentation site (VitePress)",
+  "description": "Lychee ERP public site: product intro and user training (VitePress)",
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",

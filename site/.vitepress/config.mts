@@ -2,12 +2,21 @@ import { defineConfig, type DefaultTheme } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 /**
- * Lychee Doc — VitePress
+ * 主站 VitePress。项目根是 `site/`，仓库里的 `system_design/` 在源目录之外，不参与构建。
  *
- * 内容目录保持 user_training/zh 与 user_training/vi 镜像约定。
- * 站点默认语言为中文；越南文入口挂在导航，待内容就绪后再升级为完整 locales 镜像。
+ * 内容：`intro/` 系统介绍，`user_training/` 用户训练。
+ * 中文为源；越南文入口挂在导航，待内容就绪后再升级为完整 locales。
  * Mermaid：```mermaid 代码块由 vitepress-plugin-mermaid 渲染为流程图。
  */
+function introSidebar(): DefaultTheme.SidebarItem[] {
+  return [
+    {
+      text: '系统介绍',
+      items: [{ text: '产品概览', link: '/intro/' }],
+    },
+  ]
+}
+
 function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
   return [
     {
@@ -15,7 +24,6 @@ function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         { text: '训练首页', link: '/user_training/' },
-        { text: '写作约定', link: '/user_training/00-conventions' },
         { text: '术语表', link: '/user_training/glossary' },
       ],
     },
@@ -96,111 +104,92 @@ function userTrainingSidebar(): DefaultTheme.SidebarItem[] {
     {
       text: '越南文',
       collapsed: true,
-      items: [
-        { text: '进度说明', link: '/user_training/vi/' },
-      ],
-    },
-  ]
-}
-
-function systemDesignSidebar(): DefaultTheme.SidebarItem[] {
-  return [
-    {
-      text: '报表与导出',
-      collapsed: false,
-      items: [
-        { text: '规划总览', link: '/system_design/report/' },
-        { text: '01 技术选型评估', link: '/system_design/report/01-技术选型评估' },
-        { text: '02 导出框架总体设计', link: '/system_design/report/02-导出框架总体设计' },
-        { text: '03 供应商 Excel 导出', link: '/system_design/report/03-示例-供应商Excel导出' },
-        { text: '04 订购单打印表单', link: '/system_design/report/04-示例-订购单打印表单' },
-      ],
+      items: [{ text: '进度说明', link: '/user_training/vi/' }],
     },
   ]
 }
 
 export default withMermaid({
   ...defineConfig({
-  title: 'ERP 文档',
-  description: 'Lychee ERP 用户训练与系统设计文档',
-  lang: 'zh-CN',
-  cleanUrls: true,
-  ignoreDeadLinks: true,
-  lastUpdated: true,
-  // 仓库根 README 仅供 Git；站点目录首页必须使用 index.md（README.md 不会映射为 /path/）
-  srcExclude: ['README.md', '**/assets/**'],
+    title: 'Lychee ERP',
+    description: 'Lychee ERP 系统介绍与用户训练',
+    lang: 'zh-CN',
+    cleanUrls: true,
+    lastUpdated: true,
+    // README 与截图目录不作为页面。写作约定只给仓库内阅读，不发布。
+    srcExclude: ['README.md', '**/assets/**', 'user_training/00-conventions.md'],
 
-  head: [['meta', { name: 'theme-color', content: '#1a5f4a' }]],
+    head: [['meta', { name: 'theme-color', content: '#1a5f4a' }]],
 
-  // pnpm 下预构建 mermaid，避免开发态 ambiguous export
-  vite: {
-    optimizeDeps: {
-      include: ['mermaid'],
-    },
-  },
-
-  themeConfig: {
-    logo: undefined,
-    siteTitle: 'ERP Doc',
-
-    nav: [
-      { text: '首页', link: '/' },
-      { text: '用户训练', link: '/user_training/', activeMatch: '/user_training/' },
-      { text: '系统设计', link: '/system_design/report/', activeMatch: '/system_design/' },
-      { text: '术语表', link: '/user_training/glossary' },
-      { text: 'Tiếng Việt', link: '/user_training/vi/' },
-    ],
-
-    sidebar: {
-      '/user_training/': userTrainingSidebar(),
-      '/system_design/': systemDesignSidebar(),
+    // pnpm 下预构建 mermaid，避免开发态 ambiguous export
+    vite: {
+      optimizeDeps: {
+        include: ['mermaid'],
+      },
     },
 
-    search: {
-      provider: 'local',
-      options: {
-        locales: {
-          root: {
-            translations: {
-              button: { buttonText: '搜索', buttonAriaLabel: '搜索文档' },
-              modal: {
-                noResultsText: '没有找到相关结果',
-                resetButtonTitle: '清除查询',
-                footer: {
-                  selectText: '选择',
-                  navigateText: '切换',
-                  closeText: '关闭',
+    themeConfig: {
+      logo: undefined,
+      siteTitle: 'Lychee',
+
+      nav: [
+        { text: '首页', link: '/' },
+        { text: '系统介绍', link: '/intro/', activeMatch: '/intro/' },
+        { text: '用户训练', link: '/user_training/', activeMatch: '/user_training/' },
+        { text: '术语表', link: '/user_training/glossary' },
+        { text: 'Tiếng Việt', link: '/user_training/vi/' },
+      ],
+
+      sidebar: {
+        '/intro/': introSidebar(),
+        '/user_training/': userTrainingSidebar(),
+      },
+
+      search: {
+        provider: 'local',
+        options: {
+          locales: {
+            root: {
+              translations: {
+                button: { buttonText: '搜索', buttonAriaLabel: '搜索文档' },
+                modal: {
+                  noResultsText: '没有找到相关结果',
+                  resetButtonTitle: '清除查询',
+                  footer: {
+                    selectText: '选择',
+                    navigateText: '切换',
+                    closeText: '关闭',
+                  },
                 },
               },
             },
           },
         },
       },
+
+      outline: {
+        label: '本页目录',
+        level: [2, 3],
+      },
+
+      docFooter: {
+        prev: '上一页',
+        next: '下一页',
+      },
+
+      lastUpdated: {
+        text: '最后更新',
+        formatOptions: { dateStyle: 'medium', timeStyle: 'short' },
+      },
+
+      returnToTopLabel: '回到顶部',
+      sidebarMenuLabel: '菜单',
+      darkModeSwitchLabel: '主题',
+      lightModeSwitchTitle: '切换到浅色',
+      darkModeSwitchTitle: '切换到深色',
+
+      socialLinks: [],
     },
-
-    outline: {
-      label: '本页目录',
-      level: [2, 3],
-    },
-
-    docFooter: {
-      prev: '上一页',
-      next: '下一页',
-    },
-
-    lastUpdated: {
-      text: '最后更新',
-      formatOptions: { dateStyle: 'medium', timeStyle: 'short' },
-    },
-
-    returnToTopLabel: '回到顶部',
-    sidebarMenuLabel: '菜单',
-    darkModeSwitchLabel: '主题',
-    lightModeSwitchTitle: '切换到浅色',
-    darkModeSwitchTitle: '切换到深色',
-
-    socialLinks: [],
-  },
   }),
   // Mermaid 默认主题；深色模式由插件按 body.dark 切换
   mermaid: {

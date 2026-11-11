@@ -6,11 +6,11 @@
 
 ## Quy tắc đồng bộ
 
-1. **Nguồn sự thật**：thư mục [`../zh/`](../zh/).  
+1. **Nguồn sự thật**：bản tiếng Trung, bắt đầu từ [tổng quan](../zh/00-overview/).  
 2. Cấu trúc thư mục / tên file của `vi/` phải **một-một** với `zh/`.  
 3. Không thêm/bớt bước nghiệp vụ khi dịch； chỉ đổi ngôn ngữ.  
 4. Thuật ngữ dùng chung bảng [`../glossary.md`](../glossary.md)（điền cột Việt khi bắt đầu dịch）.  
-5. Ảnh chụp màn hình dùng chung [`../assets/screenshots/`](../assets/screenshots/)（không nhân đôi theo ngôn ngữ, trừ khi UI khác biệt bắt buộc）.
+5. Ảnh chụp màn hình dùng chung thư mục `assets/screenshots/`（không nhân đôi theo ngôn ngữ, trừ khi UI khác biệt bắt buộc）.
 
 ## Bảng tiến độ dịch (cập nhật khi bắt đầu)
 
@@ -28,4 +28,4 @@
 ## Liên kết
 
 - Tổng quan（中文）：[`../`](../)  
-- Quy ước viết：[`../00-conventions.md`](../00-conventions.md)
+- Quy ước viết：`00-conventions.md` trong kho tài liệu, không đưa lên trang công khai.

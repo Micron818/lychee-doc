@@ -1,6 +1,6 @@
 # 用户训练文档写作约定
 
-> 适用于 `lychee-doc/user_training/` 下全部文档。
+> 适用于 `lychee-doc/site/user_training/` 下全部文档。本文件不随主站发布。
 
 ## 1. 语言
 
@@ -71,7 +71,7 @@ Mermaid 须使用围栏代码块语言标记为 `mermaid`（由 `vitepress-plugi
 
 | 文档位置 | 读者 | 内容 |
 |----------|------|------|
-| `lychee-doc/user_training/` | 用户、实施、培训师 | 操作步骤、验收、禁忌 |
+| `lychee-doc/site/user_training/` | 用户、实施、培训师 | 操作步骤、验收、禁忌 |
 | `lychee-doc/system_design/` | 研发 | 技术方案、SPI、架构 |
 | `lychee-backend/docs/` | 研发 | Schema、状态机、实现计划 |
 
