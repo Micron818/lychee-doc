@@ -18,7 +18,7 @@ khh-prod（已有，大租户）               khh-test（大租户测试）    
                                        auth-demo.lycheetech.com      {标签}-test.lycheetech.com
                                                                      auth-test.lycheetech.com
 
-lycheetech.com：产品介绍与帮助站，不属于任何栈。khh-prod 切换当天停用它的 ERP 入口，不做跳转。
+lycheetech.com：产品介绍与帮助站，不属于任何栈。khh-prod 切换当天停用它的 ERP 入口，不做跳转。站点设计见 [20261111-产品主站](../20261111-产品主站/设计.md)。
 ```
 
 khh 保持独立库、独立 Keycloak、独立 OSS。演示和小租户不进 khh 的机器。小租户正式、测试各准备一台共用栈，本波不购买。

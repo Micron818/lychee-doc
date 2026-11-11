@@ -28,7 +28,7 @@ pnpm docs:dev
 
 ## 发布
 
-`pnpm docs:build` 的产物发到产品站。系统设计文档不在产物里。
+`.github/workflows/site.yml` 在拉取请求里只构建。合并到 `main` 且改动了 `site/` 时，把 `.vitepress/dist` 同步到产品站。系统设计文档不在产物里。
 
 ## 语言
 

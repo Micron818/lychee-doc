@@ -1,0 +1,130 @@
+name: Site
+
+# Build the public site from site/. Publish to the site bucket only from main.
+# Does not build images or deploy khh-test, demo, or khh-prod.
+#
+# Secrets (this bucket and CDN refresh only):
+#   ALIYUN_ACCESS_KEY_ID
+#   ALIYUN_ACCESS_KEY_SECRET
+
+on:
+  pull_request:
+    paths:
+      - "site/**"
+      - ".github/workflows/site.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "site/**"
+      - ".github/workflows/site.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: site/pnpm-lock.yaml
+
+      - name: Install and build
+        working-directory: site
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm docs:build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: site/.vitepress/dist
+          retention-days: 5
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: site-publish
+      cancel-in-progress: false
+    env:
+      ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+      ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+      OSS_ENDPOINT: oss-ap-southeast-1.aliyuncs.com
+      OSS_BUCKET: lycheetech-site
+    steps:
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: site-dist
+
+      - name: Resolve dist directory
+        id: dist
+        run: |
+          if [[ -f site-dist/index.html ]]; then
+            echo "dir=site-dist" >> "$GITHUB_OUTPUT"
+          elif [[ -f site-dist/site/.vitepress/dist/index.html ]]; then
+            echo "dir=site-dist/site/.vitepress/dist" >> "$GITHUB_OUTPUT"
+          else
+            find site-dist -type f -name index.html -print
+            echo "index.html not found in artifact" >&2
+            exit 1
+          fi
+
+      - name: Install ossutil
+        run: |
+          curl -fsSL -o /tmp/ossutil https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64
+          chmod +x /tmp/ossutil
+          sudo mv /tmp/ossutil /usr/local/bin/ossutil
+          ossutil --version
+
+      - name: Install Alibaba Cloud CLI
+        run: |
+          curl -fsSL -o /tmp/aliyun.tgz https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
+          tar -xzf /tmp/aliyun.tgz -C /tmp
+          sudo mv /tmp/aliyun /usr/local/bin/aliyun
+          aliyun version
+
+      - name: Sync to OSS
+        run: |
+          oss() {
+            ossutil \
+              -e "$OSS_ENDPOINT" \
+              -i "$ALIYUN_ACCESS_KEY_ID" \
+              -k "$ALIYUN_ACCESS_KEY_SECRET" \
+              "$@"
+          }
+          src="${{ steps.dist.outputs.dir }}"
+          dest="oss://${OSS_BUCKET}/"
+          oss sync "$src" "$dest" --delete --force
+          oss set-meta "$dest" "Cache-Control:no-cache" -r -f -u --include "*.html"
+          oss set-meta "${dest}vp-icons.css" "Cache-Control:no-cache" -u -f
+          oss set-meta "${dest}hashmap.json" "Cache-Control:no-cache" -u -f
+          oss set-meta "${dest}assets/" "Cache-Control:public, max-age=31536000, immutable" \
+            -r -f -u --include "*.js" --include "*.css" --include "*.woff2"
+
+      - name: Refresh CDN HTML
+        run: |
+          aliyun configure set \
+            --profile default \
+            --mode AK \
+            --region cn-hangzhou \
+            --access-key-id "$ALIYUN_ACCESS_KEY_ID" \
+            --access-key-secret "$ALIYUN_ACCESS_KEY_SECRET"
+          aliyun cdn RefreshObjectCaches \
+            --ObjectType Directory \
+            --ObjectPath "$(printf '%s\n' 'https://lycheetech.com/' 'https://www.lycheetech.com/')"
