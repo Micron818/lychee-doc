@@ -63,7 +63,8 @@ jobs:
     env:
       ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
       ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-      OSS_ENDPOINT: oss-ap-southeast-1.aliyuncs.com
+      OSS_ENDPOINT: https://oss-ap-southeast-1.aliyuncs.com
+      OSS_REGION: ap-southeast-1
       OSS_BUCKET: lycheetech-site
     steps:
       - name: Download dist
@@ -87,10 +88,12 @@ jobs:
 
       - name: Install ossutil
         run: |
-          curl -fsSL -o /tmp/ossutil https://gosspublic.alicdn.com/ossutil/1.7.19/ossutil64
-          chmod +x /tmp/ossutil
-          sudo mv /tmp/ossutil /usr/local/bin/ossutil
-          ossutil --version
+          version=2.4.1
+          curl -fsSL -o /tmp/ossutil.zip "https://gosspublic.alicdn.com/ossutil/v2/${version}/ossutil-${version}-linux-amd64.zip"
+          unzip -q /tmp/ossutil.zip -d /tmp
+          sudo mv "/tmp/ossutil-${version}-linux-amd64/ossutil" /usr/local/bin/ossutil
+          sudo chmod 755 /usr/local/bin/ossutil
+          ossutil version
 
       - name: Install Alibaba Cloud CLI
         run: |
@@ -101,21 +104,22 @@ jobs:
 
       - name: Sync to OSS
         run: |
-          oss() {
-            ossutil \
-              -e "$OSS_ENDPOINT" \
-              -i "$ALIYUN_ACCESS_KEY_ID" \
-              -k "$ALIYUN_ACCESS_KEY_SECRET" \
-              "$@"
-          }
+          if [[ -z "$ALIYUN_ACCESS_KEY_ID" || -z "$ALIYUN_ACCESS_KEY_SECRET" ]]; then
+            echo "Set GitHub secrets ALIYUN_ACCESS_KEY_ID and ALIYUN_ACCESS_KEY_SECRET before publishing." >&2
+            exit 1
+          fi
+          export OSS_ACCESS_KEY_ID="$ALIYUN_ACCESS_KEY_ID"
+          export OSS_ACCESS_KEY_SECRET="$ALIYUN_ACCESS_KEY_SECRET"
           src="${{ steps.dist.outputs.dir }}"
           dest="oss://${OSS_BUCKET}/"
-          oss sync "$src" "$dest" --delete --force
-          oss set-meta "$dest" "Cache-Control:no-cache" -r -f -u --include "*.html"
-          oss set-meta "${dest}vp-icons.css" "Cache-Control:no-cache" -u -f
-          oss set-meta "${dest}hashmap.json" "Cache-Control:no-cache" -u -f
-          oss set-meta "${dest}assets/" "Cache-Control:public, max-age=31536000, immutable" \
-            -r -f -u --include "*.js" --include "*.css" --include "*.woff2"
+          ossutil sync "$src" "$dest" --delete --force
+          ossutil set-props "$dest" --cache-control "no-cache" --include "*.html" --metadata-directive update -r -f
+          ossutil set-props "${dest}vp-icons.css" --cache-control "no-cache" --metadata-directive update -f
+          ossutil set-props "${dest}hashmap.json" --cache-control "no-cache" --metadata-directive update -f
+          ossutil set-props "${dest}assets/" \
+            --cache-control "public, max-age=31536000, immutable" \
+            --include "*.js" --include "*.css" --include "*.woff2" \
+            --metadata-directive update -r -f
 
       - name: Refresh CDN HTML
         run: |
