@@ -112,14 +112,15 @@ jobs:
           export OSS_ACCESS_KEY_SECRET="$ALIYUN_ACCESS_KEY_SECRET"
           src="${{ steps.dist.outputs.dir }}"
           dest="oss://${OSS_BUCKET}/"
-          ossutil sync "$src" "$dest" --delete --force
-          ossutil set-props "$dest" --cache-control "no-cache" --include "*.html" --metadata-directive update -r -f
-          ossutil set-props "${dest}vp-icons.css" --cache-control "no-cache" --metadata-directive update -f
-          ossutil set-props "${dest}hashmap.json" --cache-control "no-cache" --metadata-directive update -f
+          ossutil sync "$src" "$dest" --delete --force --job 32
+          ossutil set-props "$dest" \
+            --cache-control "no-cache" \
+            --include "*.html" --include "vp-icons.css" --include "hashmap.json" \
+            --metadata-directive update -r -f --job 32
           ossutil set-props "${dest}assets/" \
             --cache-control "public, max-age=31536000, immutable" \
             --include "*.js" --include "*.css" --include "*.woff2" \
-            --metadata-directive update -r -f
+            --metadata-directive update -r -f --job 32
 
       - name: Refresh CDN HTML
         run: |
