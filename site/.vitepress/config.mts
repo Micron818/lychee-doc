@@ -118,7 +118,10 @@ export default withMermaid({
     // README 与截图目录不作为页面。写作约定只给仓库内阅读，不发布。
     srcExclude: ['README.md', '**/assets/**', 'user_training/00-conventions.md'],
 
-    head: [['meta', { name: 'theme-color', content: '#1a5f4a' }]],
+    head: [
+      ['link', { rel: 'icon', type: 'image/png', href: '/LycheeTech.png' }],
+      ['meta', { name: 'theme-color', content: '#1a5f4a' }],
+    ],
 
     // pnpm 下预构建 mermaid，避免开发态 ambiguous export
     vite: {
