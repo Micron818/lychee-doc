@@ -10,6 +10,7 @@ CREATE TABLE lychee_erp.sales_orders (
 	expected_delivery_date date NULL,
 	customer_id int8 NOT NULL,
 	customer_po_no varchar(50) NOT NULL,
+	customer_po_date date NOT NULL,
 	sales_person_id int8 NULL,
 	currency_option_id int8 NULL,
 	exchange_rate numeric(18, 6) DEFAULT 1 NOT NULL,
