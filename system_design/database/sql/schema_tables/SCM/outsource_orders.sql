@@ -18,6 +18,8 @@ CREATE TABLE lychee_erp.outsource_orders
 	currency_option_id bigint NULL,
 	exchange_rate numeric(18,6) NOT NULL   DEFAULT 1,
 	payment_term_id bigint NULL,
+	billing_address text NULL,
+	shipping_address text NULL,
 	remarks text NULL,
 	created_at timestamp without time zone NULL,
 	updated_at timestamp without time zone NULL,

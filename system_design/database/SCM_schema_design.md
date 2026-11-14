@@ -102,6 +102,10 @@ Source List + 簡版採購信息記錄。**不要**把預設供應商塞進 `mat
 
 外包加工：表頭供應商 + 收回件明細 + 發料組件（`is_supplier_provided` 區分代料）。設計細節見 [委外加工系統設計](../chartExp/委外加工/委外加工系統設計.md)。
 
+*   **表頭地址快照**（可空 `text`，與採購單相同）:
+    *   `billing_address`: 開單時取供應商 `address_local`，空白則 `address_en`。歷史單按此回填。
+    *   `shipping_address`: 手工新增時取當前用戶所屬公司地址。歷史單按制單人 `created_by` 的公司地址回填。
+
 ### 3.6 收貨單（WM，非 SCM 表）
 
 P2P 的到貨過帳在 WM：`goods_receipts` / `goods_receipt_items`。
