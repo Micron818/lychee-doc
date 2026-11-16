@@ -164,6 +164,18 @@ SLS：机器组类型选 **用户自定义标识**，标识填 `lychee-<STACK_ID
 
 Logstore 索引：开启全文索引；字段 `traceId` 类型 **text**（processor 已写出该字段）。
 
+### 5.1 PDF 服务
+
+不新建 Project，不改上面的 `lychee-backend` 配置。在同一机器组上另建 Logstore `lychee-pdf` 和同名 Logtail。`IncludeLabel` 为 `com.docker.compose.service=pdf`。日志行以 ISO 时间开头，trace 放在方括号里，所以 `BeginLineRegex` 与 `processor_regex` 和 backend 相同。索引全文，`traceId` 为 text。
+
+PDF 服务 stdout 示例：
+
+```text
+2026-11-16T06:00:00.000Z INFO [01J00000000000000000000000] templateId=sample/hello durationMs=120 bytes=1024
+```
+
+控制台操作：每个已有 Project（`lychee-prod`、`lychee-khh-test`、`lychee-demo`）各做一遍。采集器已经在读 Docker stdout，不用改 `docker-compose.yml` 里的 LoongCollector。
+
 ## 6. 查询
 
 1. 控制台：[SLS](https://sls.console.aliyun.com/) → Project `lychee-prod` → Logstore `lychee-backend`。
