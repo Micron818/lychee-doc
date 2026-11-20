@@ -1,6 +1,6 @@
 # 07. 测试栈共用正式 Keycloak
 
-> 变更日期：2026-11-20。**状态：设计。** 未开工。
+> 变更日期：2026-11-20。**状态：代码已落地，主机切换未做。**
 > 修订 [02](./02-目标架构.md) 里「每栈一个 Keycloak、测试栈自有 issuer」，以及 [03](./03-环境契约.md) §8、§9 的测试账号对应。
 > 2026-11-20：认证地址只由 `ISSUER_HOST` 决定，脚本不设配对表。本机起不起 Keycloak、起不起 `pdf`，由 `COMPOSE_PROFILES` 决定，不再设 `ISSUER_MODE`。02 里「把这一对写进配对表」改为只改该测试栈的 `.env`。
 > 同日补充：`COMPOSE_FILE` 写入 `.env`；`COMPOSE_PROFILES` 不允许空白。补上 `khh-test` 的切换顺序、4GB 内存账、备份恢复和 Nginx 模板。
@@ -218,17 +218,17 @@ mem_limit: ${PDF_MEM_LIMIT:-1536m}
 
 ## 7. 实施清单
 
-- [ ] 正式 realm `kimhiephoa` 的 client `lychee-erp-web` 登记测试站的回调、登出和 Web Origin。登出回跳显式包含 `https://khh.lycheetech.com` 与 `https://khh-test.lycheetech.com`，不用 `+` 代替根路径。Account theme 确认为 `lychee`。以后每加一个要登录该 realm 的 Host，只在这台 Keycloak 的 client 上登记对应三项，并核对登出回跳是该 Host 的根地址。
-- [ ] `.env.example` 增加 `COMPOSE_PROFILES` 与 `COMPOSE_FILE` 的说明。`COMPOSE_PROFILES` 键必须存在，值可以为空，不允许空白字符，名字只能是 `keycloak`、`pdf`。`COMPOSE_FILE` 固定为 `docker-compose.yml:docker-compose.issuer.yml`。列出可选的 `KEYCLOAK_MEM_LIMIT`、`BACKEND_MEM_LIMIT`、`FRONTEND_MEM_LIMIT`、`NGINX_MEM_LIMIT`、`PDF_MEM_LIMIT`。不增加 `ISSUER_MODE`，不写配对表。`khh-test` 的 `.env` 写成 §3。`khh-prod`、`demo` 按 §1 与 §6 写 `COMPOSE_PROFILES`。
-- [ ] `.gitignore` 增加 `deploy/docker-compose.issuer.yml`。
-- [ ] `read-env.sh` 提供 `COMPOSE_PROFILES` 的解析，按 §3 拒绝空白、未知名字和重复。`render-stack-config.sh`、`deploy-service.sh`、`restore_from_oss.sh`、`backup_to_oss.sh` 都调用它。
-- [ ] `render-stack-config.sh`：校验 `COMPOSE_FILE`。含 `keycloak` 时沿用本机签发的放置校验，issuer 进 `server_name`，`/oidc/` 反代，写出带 `extra_hosts` 的 `docker-compose.issuer.yml`。不含 `keycloak` 时，`ISSUER_HOST` 不得出现在本机 `TENANT_HOSTS`，issuer 不进 `server_name`，`/oidc/` 为 404，生成文件为 `services: {}`。不核 `STACK_ID` 与 `ISSUER_HOST` 的组合。
-- [ ] `docker/nginx/stack.conf.template`：`/oidc/` 能按上面两种结果生成。含 `keycloak` 时恢复 `/oidc/admin/` 与 `/oidc/realms/master/` 的 404。
-- [ ] `docker-compose.yml`：`keycloak` 使用 profile `keycloak`，`pdf` 使用 profile `pdf`；去掉 backend、nginx 对 keycloak 的 `depends_on`；去掉写死的 `extra_hosts`；`mem_limit` 改为 §4 的变量；恢复 `KC_HOSTNAME_ADMIN`；改掉文件头「三台都升到约 8GB 才部署」的注释。
-- [ ] `deploy-service.sh` 不设置 `COMPOSE_FILE`，也不传单独的 `-f`。发布 `pdf` 时，若名单不含 `pdf`，在 `render-stack-config.sh` 成功之后、拉取镜像和改写标签之前退出，并写明名单不含 `pdf`。
-- [ ] `backup_to_oss.sh`：名单不含 `keycloak` 时只备份 `lychee_erp`。
-- [ ] `restore_from_oss.sh`：`compose()` 去掉单独的 `-f`。名单不含 `keycloak` 时，`--idp-map` 失败退出，确认文案不写 IdP 改写，并拒绝 `keycloak_` 备份。`--from-prod` 不改写 `users.idp_user_id`。
-- [ ] `lychee-infra/README.md`：`khh-test` 的 issuer 改为 `khh.lycheetech.com`，不再写测试栈自带 issuer，也不再把 `--idp-map` 写成恢复后的必要步骤。删掉「三台升到约 8GB 之前不要部署带 `pdf` 的 compose」。启动步骤改为先 `render-stack-config.sh`，再依靠 `.env` 里的 `COMPOSE_FILE` 执行 `docker compose up -d`。
+- [x] 正式 realm `kimhiephoa` 的 client `lychee-erp-web` 登记测试站的回调、登出和 Web Origin。登出回跳显式包含 `https://khh.lycheetech.com` 与 `https://khh-test.lycheetech.com`，不用 `+` 代替根路径。Account theme 确认为 `lychee`。以后每加一个要登录该 realm 的 Host，只在这台 Keycloak 的 client 上登记对应三项，并核对登出回跳是该 Host 的根地址。
+- [x] `.env.example` 增加 `COMPOSE_PROFILES` 与 `COMPOSE_FILE` 的说明。`COMPOSE_PROFILES` 键必须存在，值可以为空，不允许空白字符，名字只能是 `keycloak`、`pdf`。`COMPOSE_FILE` 固定为 `docker-compose.yml:docker-compose.issuer.yml`。列出可选的 `KEYCLOAK_MEM_LIMIT`、`BACKEND_MEM_LIMIT`、`FRONTEND_MEM_LIMIT`、`NGINX_MEM_LIMIT`、`PDF_MEM_LIMIT`。不增加 `ISSUER_MODE`，不写配对表。`khh-test` 的 `.env` 写成 §3。`khh-prod`、`demo` 按 §1 与 §6 写 `COMPOSE_PROFILES`。
+- [x] `.gitignore` 增加 `deploy/docker-compose.issuer.yml`。
+- [x] `read-env.sh` 提供 `COMPOSE_PROFILES` 的解析，按 §3 拒绝空白、未知名字和重复。`render-stack-config.sh`、`deploy-service.sh`、`restore_from_oss.sh`、`backup_to_oss.sh` 都调用它。
+- [x] `render-stack-config.sh`：校验 `COMPOSE_FILE`。含 `keycloak` 时沿用本机签发的放置校验，issuer 进 `server_name`，`/oidc/` 反代，写出带 `extra_hosts` 的 `docker-compose.issuer.yml`。不含 `keycloak` 时，`ISSUER_HOST` 不得出现在本机 `TENANT_HOSTS`，issuer 不进 `server_name`，`/oidc/` 为 404，生成文件为 `services: {}`。不核 `STACK_ID` 与 `ISSUER_HOST` 的组合。
+- [x] `docker/nginx/stack.conf.template`：`/oidc/` 能按上面两种结果生成。含 `keycloak` 时恢复 `/oidc/admin/` 与 `/oidc/realms/master/` 的 404。
+- [x] `docker-compose.yml`：`keycloak` 使用 profile `keycloak`，`pdf` 使用 profile `pdf`；去掉 backend、nginx 对 keycloak 的 `depends_on`；去掉写死的 `extra_hosts`；`mem_limit` 改为 §4 的变量；恢复 `KC_HOSTNAME_ADMIN`；改掉文件头「三台都升到约 8GB 才部署」的注释。
+- [x] `deploy-service.sh` 不设置 `COMPOSE_FILE`，也不传单独的 `-f`。发布 `pdf` 时，若名单不含 `pdf`，在 `render-stack-config.sh` 成功之后、拉取镜像和改写标签之前退出，并写明名单不含 `pdf`。
+- [x] `backup_to_oss.sh`：名单不含 `keycloak` 时只备份 `lychee_erp`。
+- [x] `restore_from_oss.sh`：`compose()` 去掉单独的 `-f`。名单不含 `keycloak` 时，`--idp-map` 失败退出，确认文案不写 IdP 改写，并拒绝 `keycloak_` 备份。`--from-prod` 不改写 `users.idp_user_id`。
+- [x] `lychee-infra/README.md`：`khh-test` 的 issuer 改为 `khh.lycheetech.com`，不再写测试栈自带 issuer，也不再把 `--idp-map` 写成恢复后的必要步骤。删掉「三台升到约 8GB 之前不要部署带 `pdf` 的 compose」。启动步骤改为先 `render-stack-config.sh`，再依靠 `.env` 里的 `COMPOSE_FILE` 执行 `docker compose up -d`。
 - [ ] 按 §6 切换 `khh-test`：删除 `lychee-keycloak`，整栈 `docker compose up -d`。确认 `https://khh-test.lycheetech.com/oidc/` 为 404，登录跳到 `khh.lycheetech.com` 后回到测试站，同一用户能打开测试库里的数据。个人中心的返回链接回到测试站。
 - [ ] 用该用户的 token 调一次正式站 API，确认会通过。这是 §2 的边界，用来核对而不是要修掉。同一浏览器先登录两边，再在测试站退出，确认正式站会跳到登录页。
 - [ ] `khh-prod` 未到约 8GB、`demo` 仍是 4GB 时，`COMPOSE_PROFILES` 不含 `pdf`。`khh-prod` 升配后按 §6 先发布 `pdf` 标签，再整栈启动。
