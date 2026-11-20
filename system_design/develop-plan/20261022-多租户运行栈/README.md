@@ -13,15 +13,17 @@
 现在                                  本波要加                        以后有小租户再加
 khh-prod（已有，大租户）               khh-test（大租户测试）           shared-prod
   khh.lycheetech.com（入口兼 issuer）    khh-test.lycheetech.com         {标签}.lycheetech.com
-                                     demo（演示，共用形态）            auth.lycheetech.com（issuer）
+                                     demo（演示，共用形态）            auth.lycheetech.com（issuer，测试栈共用）
                                        demo.lycheetech.com           shared-test
                                        auth-demo.lycheetech.com      {标签}-test.lycheetech.com
-                                                                     auth-test.lycheetech.com
+                                                                     不跑 Keycloak
 
 lycheetech.com：产品介绍与帮助站，不属于任何栈。khh-prod 切换当天停用它的 ERP 入口，不做跳转。站点设计见 [20261111-产品主站](../20261111-产品主站/设计.md)。
 ```
 
 khh 保持独立库、独立 Keycloak、独立 OSS。演示和小租户不进 khh 的机器。小租户正式、测试各准备一台共用栈，本波不购买。
+
+> **后续变更（2026-11-19）**：测试栈不自管 Keycloak，统一用配对正式栈的 issuer。`khh-test` 用 `khh.lycheetech.com/oidc`；以后的 `shared-test` 用 `auth.lycheetech.com/oidc`，不设 `auth-test`。`demo` 仍本机。业务库和 OSS 仍然分开。见 [07](./07-测试栈共用正式Keycloak.md)。
 
 数据库以现有库重新生成 Liquibase 基线，空库可以直接建出来；新租户由开通函数从模板租户复制系统配置。各栈的 Keycloak 库互不复制，khh-test 只从正式恢复业务库。
 
@@ -33,6 +35,7 @@ khh 保持独立库、独立 Keycloak、独立 OSS。演示和小租户不进 kh
 | [04-实施清单.md](./04-实施清单.md) | **开发入口**：本波做数据库基线、khh-test、demo 和 khh-prod 切换；共用栈只留契约 |
 | [05-khh正式issuer切换.md](./05-khh正式issuer切换.md) | 先行步骤：正式 issuer 改到 `khh.lycheetech.com/oidc` |
 | [06-数据库基线与租户开通.md](./06-数据库基线与租户开通.md) | Liquibase 重新基线、模板租户、开通函数、增量规则 |
+| [07-测试栈共用正式Keycloak.md](./07-测试栈共用正式Keycloak.md) | **设计**：测试栈不自管 Keycloak，issuer 用配对正式栈。先落 `khh-test`，主机维持约 4GB |
 
 相关实现（设计时点）：
 

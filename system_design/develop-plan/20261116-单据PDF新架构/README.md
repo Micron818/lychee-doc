@@ -30,7 +30,7 @@ Java *PdfRenderer
 - 作业文件同源下载：[../20260918-export-file-delivery/README.md](../20260918-export-file-delivery/README.md)
 - 现行预览基座：[../20260818-report/04-示例-订购单打印表单.md](../20260818-report/04-示例-订购单打印表单.md)
 
-**状态：P0 代码已落地，尚未部署。** 三台主机升到约 8GB、并且各机 `.env` 写上同一把 `LYCHEE_PDF_TOKEN` 之前，不要接入 PDF 容器。
+**状态：P0 代码已落地，尚未部署。** 正式机升到约 8GB、并且各机 `.env` 写上同一把 `LYCHEE_PDF_TOKEN` 之前，不要在正式机接入 PDF 容器。测试机维持约 4GB、停掉本机 Keycloak 后再接入，见 [07-测试栈共用正式Keycloak](../20261022-多租户运行栈/07-测试栈共用正式Keycloak.md)。演示机本次不接入。
 
 | 文档 | 说明 |
 |------|------|
