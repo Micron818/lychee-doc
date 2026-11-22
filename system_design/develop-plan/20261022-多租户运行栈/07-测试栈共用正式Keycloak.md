@@ -141,7 +141,7 @@ Compose 从 `deploy/.env` 读取 `COMPOSE_PROFILES`。`docker compose up -d` 不
 
 `khh-test` 上已有的 `lychee-keycloak` 容器用 `docker rm -f lychee-keycloak` 删除，不只是 stop。停着的容器以后被 start 会重新占用 768m，并对外提供一套已经不用的 Keycloak。`docker compose up -d` 不会替这份名单停掉已经在跑、但不在当前 profile 里的旧容器。keycloak 库和数据目录留在测试机，本次不删。Postgres 仍创建 `keycloak` 角色和库。Compose 先对整份文件做插值，再按 profile 过滤，因此 `KC_DB_PASSWORD`、`PDF_IMAGE`、`PDF_TAG`、`LYCHEE_PDF_TOKEN` 等键留在 `.env`，名单不含对应 profile 时也要有。`PDF_TAG=00000000` 能通过插值，但不是可以拉取的标签。以后新建的测试栈沿用同一份初始化脚本，库可以照旧创建，只是没有进程使用。
 
-`/oidc/admin/` 与 master realm 的管理入口只留在 `COMPOSE_PROFILES` 含 `keycloak` 的机器上，并且只经 SSH 隧道。现仓 `stack.conf.template` 里这两处 `return 404` 和 `docker-compose.yml` 里的 `KC_HOSTNAME_ADMIN` 都还注释着。实施时在含 `keycloak` 的生成结果里恢复：`KC_HOSTNAME_ADMIN=http://127.0.0.1:8080/oidc`，Nginx 对 `/oidc/admin/` 与 `/oidc/realms/master/` 返回 404，其余 `/oidc/` 反代到 Keycloak。不含 `keycloak` 时整个 `location /oidc/` 为 404。模板要有这一个分支，不能把反代写死。
+`/oidc/admin/` 与 master realm 的管理入口只留在 `COMPOSE_PROFILES` 含 `keycloak` 的机器上，并且只经 SSH 隧道。现仓 `stack.conf.template` 里这两处 `return 404` 和 `docker-compose.yml` 里的 `KC_HOSTNAME_ADMIN` 都还注释着。实施时在含 `keycloak` 的生成结果里恢复：`KC_HOSTNAME_ADMIN=http://127.0.0.1:8080/oidc`，Nginx 对 `/oidc/admin/` 与 `/oidc/realms/master/` 返回 404，其余 `/oidc/` 反代到 Keycloak；并在主机用 `kcadm.sh` 一次性把 `master` realm 的 `attributes.frontendUrl` 设为 `http://127.0.0.1:8080/oidc`（[03 §8](./03-环境契约.md)「管理入口」），避免管理台加载 `master` 的 `step1.html` 时回退到公网 `KC_HOSTNAME` 命中 404。不含 `keycloak` 的栈整个 `location /oidc/` 为 404。模板要有这一个分支，不能把反代写死。
 
 内存限额用变量，缺省就是现在的数。要改的栈在 `.env` 覆盖。`JAVA_OPTS_APPEND` 与 `JAVA_TOOL_OPTIONS` 仍是 `MaxRAMPercentage=70.0`，随 cgroup 限额变化。Postgres 不设上限。
 
@@ -231,4 +231,4 @@ mem_limit: ${PDF_MEM_LIMIT:-1536m}
 - [x] `lychee-infra/README.md`：`khh-test` 的 issuer 改为 `khh.lycheetech.com`，不再写测试栈自带 issuer，也不再把 `--idp-map` 写成恢复后的必要步骤。删掉「三台升到约 8GB 之前不要部署带 `pdf` 的 compose」。启动步骤改为先 `render-stack-config.sh`，再依靠 `.env` 里的 `COMPOSE_FILE` 执行 `docker compose up -d`。
 - [ ] 按 §6 切换 `khh-test`：删除 `lychee-keycloak`，整栈 `docker compose up -d`。确认 `https://khh-test.lycheetech.com/oidc/` 为 404，登录跳到 `khh.lycheetech.com` 后回到测试站，同一用户能打开测试库里的数据。个人中心的返回链接回到测试站。
 - [ ] 用该用户的 token 调一次正式站 API，确认会通过。这是 §2 的边界，用来核对而不是要修掉。同一浏览器先登录两边，再在测试站退出，确认正式站会跳到登录页。
-- [ ] `khh-prod` 未到约 8GB、`demo` 仍是 4GB 时，`COMPOSE_PROFILES` 不含 `pdf`。`khh-prod` 升配后按 §6 先发布 `pdf` 标签，再整栈启动。
+- [ ] `khh-prod` 未到约 8GB、`demo` 仍是 4GB 时，`COMPOSE_PROFILES` 不含 `pdf`。含 `keycloak` 的栈（`khh-prod`、`demo`）确认已用 `kcadm.sh` 把 `master` realm 的 `attributes.frontendUrl` 设为 `http://127.0.0.1:8080/oidc`，经 SSH 隧道能正常打开管理台。`khh-prod` 升配后按 §6 先发布 `pdf` 标签，再整栈启动。
