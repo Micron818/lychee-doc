@@ -5,7 +5,7 @@
 >
 > 作业文件交付纠偏（CDN → 应用同源代理）：见 [20260918-export-file-delivery](../20260918-export-file-delivery/README.md)（**已实现**）。
 >
-> 新单据 PDF 渲染（HTML5 + Chromium，存量 Thymeleaf 逐张迁移）：见 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md)（**设计**）。
+> 新单据 PDF 渲染（HTML5 + Chromium，`lychee-pdf`）：见 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md)（**已切换**。进程内 Thymeleaf + openhtmltopdf 已删除）。
 
 ## 文档索引
 
@@ -32,7 +32,7 @@
 | [../20260920-客户请款明细/README.md](../20260920-客户请款明细/README.md) | **PDF 已实现**：客户请款明细（已出货 Delivery 尺码矩阵，仅预览打印）。Excel 见 [05](../20260920-客户请款明细/05-Excel导出.md)（已实现） |
 | [../20260921-送货单打印/README.md](../20260921-送货单打印/README.md) | **已实现**：单张交货单送货单 PDF（客户签收；仅打印、无归档） |
 | [../20260922-manager-monitor/README.md](../20260922-manager-monitor/README.md) | **设计**：管理者监测页（系统健康按需加指标；每日生产进度只读汇总）。入口在 report，查询留在各业务模块 |
-| [../20261116-单据PDF新架构/README.md](../20261116-单据PDF新架构/README.md) | **设计**：新单据 PDF 用 HTML5 + TypeScript + Playwright / Chromium；存量 openhtmltopdf 模板逐张迁移。导出作业与前端预览壳不变 |
+| [../20261116-单据PDF新架构/README.md](../20261116-单据PDF新架构/README.md) | **已切换**：单据 PDF 用 HTML5 + TypeScript + Playwright / Chromium。进程内 openhtmltopdf 已删除。导出作业与前端预览壳不变 |
 | [../20261116-销售订单月汇总表/设计.md](../20261116-销售订单月汇总表/设计.md) | **已实现**：P1。公司 + 订单年月；明细换算为公司本位币；数量按单位合计，金额先按状态再总合计。销售明细表只改名称 |
 
 ## 核心决策摘要
@@ -42,7 +42,7 @@
 | Excel 生成库 | **Apache Fesod**（`org.apache.fesod:fesod-sheet:2.0.2-incubating`） | EasyExcel → FastExcel 的官方后继，Apache 2.0 许可，注解驱动 + 流式写入低内存，社区活跃（已入 Apache 孵化器） |
 | 导出执行模型 | **统一导出作业框架**（小数据量同步快速返回 + 大数据量异步作业） | 复用 MRP 已验证的 `@Async` + `@TransactionalEventListener` + 手动租户/安全上下文传递范式；一套框架服务所有后续报表 |
 | 文件交付方式 | **上传 OSS**；作业文件改为应用代理（见 [20260918-export-file-delivery](../20260918-export-file-delivery/README.md)）；CDN 仅图片 | 作业文件一次性、无缓存命中；用户→CDN 与用户→ERP 可分裂。图片仍走 CDN |
-| 订购单打印 / 归档 | **服务端 PDF 单一来源**；原页 Modal + iframe 预览，下载走导出作业。存量引擎为 Thymeleaf + openhtmltopdf；新单据见 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md) | 打印件与归档件像素级一致；版式单点维护；预览成本在服务端 |
+| 订购单打印 / 归档 | **服务端 PDF 单一来源**；原页 Modal + iframe 预览，下载走导出作业。渲染见 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md) | 打印件与归档件像素级一致；版式单点维护；预览成本在服务端 |
 | 单据 PDF 前端基座 | 共享 `PdfBlobViewer` / `PdfPreviewModal` + `utils/blob`；领域仅薄适配 | 禁止再开 `/print` 深链、前端 HTML 版式或 `autoPrint`；新单据复用同一壳 |
 | 固定版式 Excel | **Fesod `withTemplate` + fill**（`ExcelTemplateWriteSupport`） | 与清单流式写入分流；版式在 `.xlsx` 模板维护；作业管线零改动（见 05） |
 | 后端代码位置 | 新增 Gradle 模块 **`lychee-erp-report`**（作业编排）+ SPI 接口与 Excel 工具置于 `lychee-erp-common`，各领域模块实现自己的导出 Handler | 与现有按领域分模块的结构一致；report 模块不依赖任何领域模块，避免循环依赖 |
@@ -54,7 +54,7 @@
 ## 报表需求分类（决定架构分层）
 
 1. **清单类导出**（已实现）：列表页当前筛选条件下的全量数据导出 Excel。示例：供应商资料导出（`ExcelWriteSupport`）。
-2. **单据类打印**（已实现）：单张业务单据的固定版式表单。示例：订购单 / 收货单 / 收付款单 / 库存盘点单 PDF（`PdfRenderSupport`）。
+2. **单据类打印**（已实现）：单张业务单据的固定版式表单。示例：订购单 / 收货单 / 收付款单 / 库存盘点单 PDF（`ChromiumPdfClient` → `lychee-pdf`）。下文各示例里的 Thymeleaf 路径是迁移前的实现记录，渲染方式以 [20261116](../20261116-单据PDF新架构/02-目标架构.md) 为准。
 3. **固定版式 Excel / 模板填充**（P3）：标题区 + 明细列表 + 合计等套打 xlsx。示例：进耗存汇总表（`ExcelTemplateWriteSupport`）。
 4. **管理者监测**（设计见 [20260922-manager-monitor](../20260922-manager-monitor/README.md)）：同步只读汇总页，不是导出作业。健康指标按需注册；每日生产进度由 pp 查询。导出 Handler SPI 不承担这块。
 5. **Excel 资料导入**（设计完成，待实现）：系统模板 + 上传作业 + 行级校验落库 + 错误报告。示例：物料标准成本（见 [06](./06-导入框架总体设计.md) / [07](./07-示例-物料标准成本导入.md)）。
@@ -81,9 +81,13 @@
 ### P2 — 订购单服务端 PDF（✅ 已实现，2026-07-31）
 
 1. ✅ 依赖：`io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.40` + `org.thymeleaf:thymeleaf-spring6`（置于 `lychee-erp-common`）。
-2. ✅ 框架扩展：`ExportFileFormat` + `DataExportHandler.fileFormat()`；`PdfRenderSupport` + 内嵌 Noto 字体。
+2. ✅ 框架扩展：`ExportFileFormat` + `DataExportHandler.fileFormat()`；当时为 `PdfRenderSupport` + 内嵌 Noto 字体。二者已在 [单据 PDF 换引擎](#单据-pdf-换引擎) 删除。
 3. ✅ scm：`SCM_PURCHASE_ORDER_PDF` Handler + Thymeleaf 模板；「下载 PDF」走导出作业留历史。
 4. ⬜ 上线前：为 `/scm/purchase-orders` 追加 `export` 动作权限。
+
+### 单据 PDF 换引擎
+
+2026-11-28：11 张存量单据与销售订单月汇总表改为 `lychee-pdf`。已删除 `PdfRenderSupport`、Thymeleaf 打印模板、classpath Noto 字体、`openhtmltopdf-pdfbox` 与 `thymeleaf-spring6`。预览壳与导出作业不变。见 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md)。
 
 ### 版式收敛 — 打印页改为服务端 PDF 预览（✅ 已实现，2026-08-03）
 
@@ -141,7 +145,7 @@
 - **作业文件同源代理下载**（✅ 见 [20260918-export-file-delivery](../20260918-export-file-delivery/README.md)）：删除 `download-url` / `source-url` / `error-report-url`，改为 `GET /file` 流式；CDN 只留图片。
 - 更多清单导出：只需新增一个 Handler + 前端一个按钮，框架零改动。
 - **更多模板 Excel**：复用 `ExcelTemplateWriteSupport` + 领域模板 + Handler（见 05）；大清单仍走 `ExcelWriteSupport`。
-- **新单据类 PDF**：对外仍是 `*PdfRenderer` + 前端 `PdfPreview*`（见 04 §6），禁止再开前端打印页双轨。**新报表的版式与渲染**走 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md)（HTML5 + Chromium，服务为 `lychee-pdf`）。存量 Thymeleaf 模板按该目录的顺序逐张迁移，迁完之前继续 `PdfRenderSupport`。
+- **单据 PDF**：对外仍是 `*PdfRenderer` + 前端 `PdfPreview*`（见 04 §6），禁止再开前端打印页双轨。版式与渲染走 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md)（HTML5 + Chromium，服务为 `lychee-pdf`）。禁止再引入 Thymeleaf 打印模板或进程内 HTML→PDF。
 - **请购单打印（仅 Print）**：比照订购单实现 `GET /purchase-requisitions/{id}/pdf` + `PurchaseRequisitionPdfRenderer` + 原页 Modal；无 `ExportHandler` / 无「下载 PDF」（无归档需求时省略导出层）。
 - **工厂订单报表（✅）**：`FactoryOrder` 接单确认 PDF（尺码矩阵 + 型号/PO/颜色 rowspan 合并 + 仅数量合计 + 样图 + A4 landscape）；设计见 [08](./08-示例-工厂订单报表.md)。型号列本款色字母 + 样图按色：见 [15](./15-工厂订单与销售订单型号色号展示.md)（✅）。
 - **销售订单报表（✅）**：列表工具栏预览/打印；强制单一客户 + 订单日期区间；跨多 SO 一张尺码矩阵（含币别/单价/金额）；无归档 Export；设计见 [09](./09-示例-销售订单报表.md)。型号列本款色字母 + 样图按色：见 [15](./15-工厂订单与销售订单型号色号展示.md)（✅）。
@@ -165,8 +169,8 @@
 | 异步线程租户上下文丢失导致数据串租户 | 严格复制 MRP 范式：事件携带 `tenantId` + `Authentication`，监听器 `finally` 中清理；Handler 内所有查询走 JPA（`@TenantId` 自动过滤） |
 | 签名 URL 泄露 | 作业文件改为同源 `GET /file`（Bearer + 本人 + 业务权限）；图片仍短效 CDN 签名。原 5 分钟签发方案见历史 01/02 |
 | 租户内越权下载导出文件 | 作业默认仅发起人本人可见（管理员例外）；下载时重验 Handler 业务导出权限；下载留审计日志 |
-| 打印/归档版式漂移 | 每张报表只有一个渲染入口；预览与归档共用它。存量是 Thymeleaf，新报表是 `lychee-pdf` 中的 HTML5 模板。禁止同一张报表两套引擎 |
-| PDF 服务不可用 | 新报表预览/归档失败并提示稍后重试，不回退 openhtmltopdf。存量单据不调用该服务。见 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md) |
+| 打印/归档版式漂移 | 每张报表只有一个渲染入口；预览与归档共用它。版式在 `lychee-pdf` 的 HTML5 模板 |
+| PDF 服务不可用 | 单据预览与归档失败并提示稍后重试，不在 JVM 内另渲染。见 [20261116-单据PDF新架构](../20261116-单据PDF新架构/README.md) |
 | 导入大文件/大批量写库 | Fesod 流式读 + `max-rows`/`max-file-size` + 独立 `importTaskExecutor` + 小 batchSize |
 | 导入模板列头被改 / 跨语言错配 | 强制系统模板；按作业 locale 校验列头；按 index 绑定字段 |
 | 与单据「导入」按钮语义混淆 | 新建 `ExcelImportButton`；保留现有 `ImportButton` 给从他单导入 |

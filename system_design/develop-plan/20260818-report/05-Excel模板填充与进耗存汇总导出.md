@@ -20,7 +20,7 @@
 | 场景 | 写入路径 |
 |------|----------|
 | 清单 header+data（供应商） | `ExcelWriteSupport.writePaged` |
-| 单据打印/归档（订购单） | `PdfRenderSupport` + Thymeleaf |
+| 单据打印/归档（订购单） | `ChromiumPdfClient` → `lychee-pdf` |
 | **固定版式 xlsx（进耗存汇总）** | **`ExcelTemplateWriteSupport` + `.xlsx` 模板** |
 
 作业层（创建 / 同步·异步分流 / OSS / 导出中心 / 权限）**零改动**；仅新增 Handler + 写入工具 + 前端按钮。
@@ -355,8 +355,8 @@ public class InventoryBalanceExportItem {
 lychee-erp-common
 └─ com.lychee.erp.common.export
    ├─ ExcelWriteSupport.java              // 既有：清单流式
-   ├─ ExcelTemplateWriteSupport.java      // 新增：模板填充
-   └─ PdfRenderSupport.java               // 既有：PDF
+   ├─ ExcelTemplateWriteSupport.java      // 模板填充
+   └─ ChromiumPdfClient.java              // 单据 PDF 客户端；版式在 lychee-pdf
 
 lychee-erp-wm
 └─ com.lychee.erp.wm.export
